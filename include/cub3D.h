@@ -54,7 +54,7 @@ typedef struct	s_game
 	t_scene		scene;
 	char		*error_message; // no error if NULL
 	char		*error_extramessage; // no extra info if NULL
-}					t_game;
+}				t_game;
 
 int			set_return_error(t_game *game, char *message);
 int			set_return_error_extra(t_game *game, char *message, char *extramessage);

@@ -21,9 +21,9 @@
 
 char	*get_next_line(int fd);
 char	*ft_read_rest_str(int fd, char *rest_str);
-char	*ft_strchr(char *s, int c);
-char	*ft_strjoin(char *rest_str, char *buf);
-size_t	ft_strlen(char *s);
+// char	*ft_strchr(char *s, int c);
+// char	*ft_strjoin(char *rest_str, char *buf);
+// size_t	ft_strlen(char *s);
 char	*ft_get_line(char *rest_str);
 char	*ft_new_rest_str(char *rest_str);
 

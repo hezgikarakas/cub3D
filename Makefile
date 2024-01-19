@@ -12,12 +12,14 @@
 
 NAME = cub3D
 
-SRCS =  src/main.c
+SRCS =  src/main.c \
+		src/parse_level.c \
+		src/error.c
 
 OBJS = ${SRCS:.c=.o}
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iincludes
+CFLAGS = -Wall -Wextra -Werror -Iinclude -Ilibft
 
 RM = rm -rf
 

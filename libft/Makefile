@@ -52,5 +52,5 @@ re:				fclean all
 
 extra:			$(OBJS) $(EXTRA_OBJS)
 			@echo "Linking with get_next_line!"
-			ar rcs $(NAME) $(EXTRA_OBJS)
+			ar rcs $(NAME) $(OBJS) $(EXTRA_OBJS)
 
