@@ -29,17 +29,11 @@ SRCS			= 	ft_isalpha.c	ft_isdigit.c	ft_isalnum.c \
 
 OBJS			= $(SRCS:%.c=%.o)
 
-BONUS			=	ft_lstnew.c	ft_lstadd_front.c	ft_lstsize.c \
-				ft_lstlast.c	ft_lstadd_back.c	ft_lstdelone.c \
-				ft_lstclear.c	ft_lstiter.c	ft_lstmap.c
-
-BONUS_OBJS		= $(BONUS:.c=.o)
-
 EXTRA			= get_next_line_bonus.c get_next_line_utils_bonus.c
 
 EXTRA_OBJS		= $(EXTRA:.c=.o)
 
-.PHONY:			all clean fclean re bonus extra
+.PHONY:			all clean fclean re extra
 
 all:			$(NAME)
 
@@ -49,18 +43,14 @@ $(NAME):		$(OBJS)
 			@echo "Done!"
 
 clean:
-			rm -rf $(OBJS) $(BONUS_OBJS) $(EXTRA_OBJS)
+			rm -rf $(OBJS) $(EXTRA_OBJS)
 
 fclean: 		clean
 			rm -rf $(NAME)
 
 re:				fclean all
 
-bonus:			$(OBJS) $(BONUS_OBJS)
-			@echo "Linking with bonus!"
-			ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
-
-extra:			$(OBJS) $(BONUS_OBJS) $(EXTRA_OBJS)
-			@echo "Linking with bonus and get_next_line!"
-			ar rcs $(NAME) $(BONUS_OBJS) $(EXTRA_OBJS)
+extra:			$(OBJS) $(EXTRA_OBJS)
+			@echo "Linking with get_next_line!"
+			ar rcs $(NAME) $(EXTRA_OBJS)
 
