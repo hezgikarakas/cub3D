@@ -3,39 +3,53 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hakaraka <hakaraka@student.42.fr>          +#+  +:+       +#+         #
+#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/01/19 10:21:52 by hakaraka          #+#    #+#              #
-#    Updated: 2024/01/19 10:28:42 by hakaraka         ###   ########.fr        #
+#    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
+#    Updated: 2024/01/19 16:53:06 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
+SRCS = src/main.c src/error.c src/parse_level.c src/draw.c
+OBJS = $(SRCS:.c=.o)
+HDR = ./include/$(NAME).h
+COMPILER = cc
+CFLAGS = -Wall -Wextra -Werror
+RM = rm -f
+LIBFT_PATH = ./include/libft_gio/
+LIBFT = $(LIBFT_PATH)libft.a
+MLX_PATH = ./include/minilibx-linux/
+MLX = $(MLX_PATH)libmlx_Linux.a
 
-SRCS =  src/main.c \
-		src/parse_level.c \
-		src/error.c
+all:	$(NAME)
 
-OBJS = ${SRCS:.c=.o}
+$(NAME):	$(MLX) $(LIBFT) $(OBJS) $(HDR)
+	@echo "\033[1;34m- compiling executable: $(NAME)\033[0m"
+	@$(COMPILER) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX) -lXext -lX11 -lm -o $@
+	@echo "\033[1;32m- complete!\033[0m"
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iinclude -Ilibft
+%.o:	%.cpp
+	@echo "\033[1;34m- compiling object: $<\033[0m"
+	@$(COMPILER) $(CFLAGS) -o $@ -c $<
 
-RM = rm -rf
+$(LIBFT):
+	@make --no-print-directory all -C $(LIBFT_PATH)
 
-all: ${NAME}
-${NAME}: ${OBJS}
-	${MAKE} -C ./libft extra
-	${CC} ${CFLAGS} ${OBJS} ./libft/libft.a -o ${NAME}
+$(MLX):
+	@make --no-print-directory -C $(MLX_PATH)
 
-clean: 
-	@${MAKE} -C ./libft fclean
-	@${RM} ${OBJS}
+clean:
+	@make --no-print-directory clean -C $(LIBFT_PATH)
+	@make --no-print-directory clean -C $(MLX_PATH)
+	@$(RM) $(OBJS)
+	@echo "\033[1;31m- objects removed\033[0m"
 
-fclean: clean
-	@${RM} ./libft/libft.a
-	@${RM} ${NAME}
+fclean:	clean
+	@make --no-print-directory fclean -C $(LIBFT_PATH)
+	@$(RM) $(NAME)
+	@echo "\033[1;31m- $(NAME) removed\033[0m"
 
-re: fclean all
+re:	fclean all
 
-.PHONY: all clean fclean re
+.PHONY:	all clean fclean re

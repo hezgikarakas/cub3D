@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_level.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: karakasschueller <karakasschueller@stud    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/19 22:15:58 by karakasschu      ###   ########.fr       */
+/*   Updated: 2024/01/19 14:58:47 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
-
+#include "./../include/cub3D.h"
 
 int		interpret_arguments(int an, char **ac, t_game *game, char **map_fn)
 {
