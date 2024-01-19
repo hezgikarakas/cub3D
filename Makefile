@@ -3,37 +3,37 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hakaraka <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: hakaraka <hakaraka@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/12/06 08:37:56 by hakaraka          #+#    #+#              #
-#    Updated: 2022/12/06 08:38:00 by hakaraka         ###   ########.fr        #
+#    Created: 2024/01/19 10:21:52 by hakaraka          #+#    #+#              #
+#    Updated: 2024/01/19 10:28:42 by hakaraka         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		= libftprintf.a
-CC		= cc
-CFLAGS		= -Wall -Wextra -Werror
-SRCS		= ft_printf.c	ft_printwords.c	ft_printnumbers.c
-OBJS		= $(SRCS:.c=.o)
-RM		= rm -rf
-AR		= ar -rcs
+NAME = cub3D
 
-all     : $(NAME)
+SRCS =  src/main.c
 
-$(NAME) : $(OBJS)
-	@echo "Linking $@"
-	$(AR) $(NAME) $(OBJS)
-	@echo "Done!"
+OBJS = ${SRCS:.c=.o}
 
-%.o	: %.c
-	$(CC) $(CFLAGS) -o $@ -c $<
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -Iincludes
 
-clean   :
-	$(RM) $(OBJS)
+RM = rm -rf
 
-fclean	: clean
-	$(RM) $(NAME)
+all: ${NAME}
+${NAME}: ${OBJS}
+	${MAKE} -C ./libft extra
+	${CC} ${CFLAGS} ${OBJS} ./libft/libft.a -o ${NAME}
 
-re	: fclean all
+clean: 
+	@${MAKE} -C ./libft fclean
+	@${RM} ${OBJS}
 
-.PHONY  : all clean fclean re
+fclean: clean
+	@${RM} ./libft/libft.a
+	@${RM} ${NAME}
+
+re: fclean all
+
+.PHONY: all clean fclean re
