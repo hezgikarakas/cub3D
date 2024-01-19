@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/19 14:59:01 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:40:26 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	print_error(char *s1, char *s2)
 
 /* set error message in game to specified message, if it is not yet set
    return 1 */
-int		set_return_error(t_game *game, char *message)
+int	set_return_error(t_game *game, char *message)
 {
 	if (!game->error_message)
 	{
@@ -36,7 +36,7 @@ int		set_return_error(t_game *game, char *message)
 
 /* as above but with additional info (an error + the name of the file triggering the error)
    return 1 */
-int		set_return_error_extra(t_game *game, char *message, char *extramessage)
+int	set_return_error_extra(t_game *game, char *message, char *extramessage)
 {
 	if (!game->error_message)
 	{
@@ -47,9 +47,9 @@ int		set_return_error_extra(t_game *game, char *message, char *extramessage)
 }
 
 /* print error message in game and return 1 */
-int			print_return_error(t_game *game)
+int	print_return_error(t_game *game)
 {
-	if (game->error_message) 
+	if (game->error_message)
 	{
 		if (game->error_message)
 			print_error(game->error_message, game->error_extramessage);

@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/19 16:03:36 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:42:11 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,14 @@ void	initialize(t_data *data, char *mapname)
 	}
 }
 
-int main(int argc, char** argv)
+int	main(int argc, char** argv)
 {
+	t_data	*data;
+
 	(void)argc;
 	(void)argv;
 	// char*		map_fn;
 	// t_game		game;
-	t_data	*data;
 
 	// ft_memset(&game, 0, sizeof(t_game));
 	// if (interpret_arguments(an, ac, &game, &map_fn))
