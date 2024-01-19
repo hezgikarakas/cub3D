@@ -19,7 +19,7 @@ int		interpret_arguments(int an, char **ac, t_game *game, char **map_fn)
 		return (set_return_error(game, "Expecting one argument (map file)"));
 	if (ft_strncmp(ac[1] + ft_strlen(ac[1]) - 4, ".cub", 4))
 		return (set_return_error_extra(game,
-			"Expecting .cub file ending for map, found file name", ac[1]));
+			"Expecting .cub file ending for map, found file name ", ac[1]));
 	*map_fn = ac[1];
 	return (0);
 }
@@ -83,7 +83,7 @@ static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 	{
 			// TODO free parts of parts and parts
 			return (set_return_error_extra(
-				ph->game, "Expect 3 color components, found the following color spec", rest));
+				ph->game, "Expect 3 color components, found the following color spec ", rest));
 	}
 	// TODO free parts of parts and parts
 	ph->interpreted_this_line = 1;
