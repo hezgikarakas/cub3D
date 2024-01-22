@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:38:53 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/01/19 17:39:17 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/22 06:29:04 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
 
+//draws pixels to image
 static void	img_pixel_put(t_img *img, int x, int y, int color)
 {
 	char	*pixel;
@@ -23,36 +24,63 @@ static void	img_pixel_put(t_img *img, int x, int y, int color)
 	}
 }
 
-//test
-static void	test_cube(t_data *data)
+//returns color gradient increment
+static int	gradient_increment(int start, int end, int stepc, int stepn)
 {
-	for (int x = WINDOW_WIDTH/2-20; x <= WINDOW_WIDTH/2+20; x++){
-		for (int y = 20; y <= 60; y++){
-			img_pixel_put(&data->img, x, y, 0xBEBEEE);
+	float	step_r;
+	float	step_g;
+	float	step_b;
+
+	step_r = (float)(((end >> 16) & 0xFF) -
+				((start >> 16) & 0xFF)) /(float)stepc;
+	step_g = (float)(((end >> 8) & 0xFF) -
+				((start >> 8) & 0xFF)) / (float)stepc;
+	step_b = (float)((end & 0xFF) - (start & 0xFF)) / (float)stepc;
+	return  (((int)(((start >> 16) & 0xFF) + stepn * step_r) << 16) +
+			((int)(((start >> 8) & 0xFF) + stepn * step_g) << 8) +
+			((int)(((start >> 0) & 0xFF) + stepn * step_b) << 0));
+}
+
+//draws sky and floor with slight gradient
+static void	draw_background(t_data *data)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < WINDOW_HEIGHT)
+	{
+		x = 0;
+		while (x < WINDOW_WIDTH)
+		{
+			if (y < WINDOW_HEIGHT/2)
+				img_pixel_put(&data->img, x, y,
+					gradient_increment(data->scene.colors[1][0],
+					gradient_increment(data->scene.colors[1][0], 0, 4, 3),
+					WINDOW_HEIGHT/2, y));
+			else
+				img_pixel_put(&data->img, x, y,
+					gradient_increment(gradient_increment(
+						data->scene.colors[0][0],0, 4, 3), data->scene.colors[0][0],
+						WINDOW_HEIGHT/2, y - WINDOW_HEIGHT/2));
+			x++;
 		}
+		y++;
 	}
 }
 
+//rendering loop
 int	render(t_data *data)
 {
 	data->img.mlx_img = mlx_new_image(data->ptrs.mlx, WINDOW_WIDTH,
 			WINDOW_HEIGHT);
 	data->img.addr = mlx_get_data_addr(data->img.mlx_img, &data->img.bpp,
 			&data->img.line_len, &data->img.endian);
-	//test
-	for (int i = 30; i <= WINDOW_WIDTH - 30; i++){
-		img_pixel_put(&data->img, i, WINDOW_HEIGHT / 2, 0xBEBEEE);
-	}
-	test_cube(data);
-	//test end
+	draw_background(data);
+	//draw foreground
+	//draw ui
 	mlx_put_image_to_window(data->ptrs.mlx, data->ptrs.win,
 		data->img.mlx_img, 0, 0);
 	mlx_destroy_image(data->ptrs.mlx, data->img.mlx_img);
-	//test
-	mlx_string_put(data->ptrs.mlx, data->ptrs.win,
-		WINDOW_WIDTH/2-10, 45, 0x000000, "TEST");
-	mlx_string_put(data->ptrs.mlx, data->ptrs.win,
-		WINDOW_WIDTH/2-10, WINDOW_HEIGHT/2-5, 0xff0000, "TEST");
-	//test end
 	return (0);
 }

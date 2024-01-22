@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/19 17:29:29 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/22 03:56:36 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,24 @@
 # define NUMBER_OF_COLORS 2
 
 // contains mlx and window pointers
-typedef struct s_ptrs
+typedef struct	s_ptrs
 {
 	void *mlx;
 	void *win;
-} t_ptrs;
-
+}				t_ptrs;
 
 // contains everything neccessary to draw into image
 // some variables might not be needed
-typedef struct s_img
+typedef struct	s_img
 {
 	void *mlx_img;
 	char *addr;
 	int bpp;
 	int line_len;
 	int endian;
-} t_img;
+}				t_img;
 
-// allows passing img and data together without combining them into one
-typedef struct s_data{
-	t_ptrs	ptrs;
-	t_img	img;
-	// t_map	map;
-}				t_data;
-
-typedef struct s_player
+typedef struct	s_player
 {
 	double	x;
 	double	y;
@@ -61,15 +53,15 @@ typedef struct s_player
 	double	look_y;
 }				t_player;
 
-typedef struct		s_image
+typedef struct	s_image
 {
 	char*	filename; // texture file name, needs to be freed on exit, is allocated by parse_level.c
 	void*	img;
 	int		width;
 	int		height;
-}					t_image;
+}				t_image;
 
-typedef struct s_scene
+typedef struct	s_scene
 {
 	t_player	player;
 	t_image		textures[NUMBER_OF_TEXTURES]; // currently: [north wall, east wall, south wall, west wall]
@@ -81,12 +73,18 @@ typedef struct s_scene
 
 typedef struct	s_game
 {
-	void		*mlx;
-	void		*mlx_win;
-	t_scene		scene;
+	t_scene	scene;
 	char		*error_message; // no error if NULL
 	char		*error_extramessage; // no extra info if NULL
 }				t_game;
+
+typedef struct	s_data{
+	t_ptrs	ptrs;
+	t_img	img;
+	t_scene	scene;
+	char	*temp_floor;
+	char	*temp_sky;
+}				t_data;
 
 // draw.c
 int	render(t_data *data);
