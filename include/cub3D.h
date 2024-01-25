@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/22 03:56:36 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/25 15:41:20 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,37 @@
 
 # include "./minilibx-linux/mlx.h"
 # include "./libft_gio/libft.h"
-// # include "./libft/get_next_line_bonus.h"
+//	# include "./libft/get_next_line_bonus.h"
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <math.h>
+# include <X11/keysym.h>
 
-// screen resolution
-# define WINDOW_WIDTH 320
-# define WINDOW_HEIGHT 200
+//	screen resolution
+# define WINDOW_WIDTH 640
+# define WINDOW_HEIGHT 480
+
+//	default values
+// # define DEFAULT_FLOOR 0x37dd08
+# define DEFAULT_FLOOR 0x57f292
+# define DEFAULT_FLOOR_GRADIENT 0x07775f
+// # define DEFAULT_SKY 0x07c2ed
+# define DEFAULT_SKY 0x5f61e8
+# define DEFAULT_SKY_GRADIENT 0xf25792
+# define DEFAULT_WALL 0xbebeee
 
 # define NUMBER_OF_TEXTURES 4
 # define NUMBER_OF_COLORS 2
 
-// contains mlx and window pointers
+//	contains mlx and window pointers
 typedef struct	s_ptrs
 {
 	void *mlx;
 	void *win;
 }				t_ptrs;
 
-// contains everything neccessary to draw into image
-// some variables might not be needed
+//	contains everything neccessary to draw into image
 typedef struct	s_img
 {
 	void *mlx_img;
@@ -45,57 +55,99 @@ typedef struct	s_img
 	int endian;
 }				t_img;
 
+//	contains all variables pertaining to the player
 typedef struct	s_player
 {
-	double	x;
-	double	y;
+	double	pos_x;
+	double	pos_y;
 	double	look_x;
 	double	look_y;
+	double	plane_x;
+	double	plane_y;
+	double	movespeed;
+	double	rotspeed;
 }				t_player;
 
-typedef struct	s_image
+//	contains all variables for textures
+// renamed this to avoid confusion with t_img
+typedef struct	s_texture
 {
 	char*	filename; // texture file name, needs to be freed on exit, is allocated by parse_level.c
 	void*	img;
 	int		width;
 	int		height;
-}				t_image;
+}				t_texture;
 
+//	contains everything to do with the map
+//	created this struct because having all map related stuff in its own struct felt more intuitive but im now questioning if this might have been a mistake
+typedef struct	s_map
+{
+	char	*map_name;
+	int		**map;// [y coordinate][x coordinate]
+	int		map_width;
+	int		map_height;
+}				t_map;
+
+//	contains everything that exists in the game world
 typedef struct	s_scene
 {
 	t_player	player;
-	t_image		textures[NUMBER_OF_TEXTURES]; // currently: [north wall, east wall, south wall, west wall]
+	t_map		map;
+	t_texture	textures[NUMBER_OF_TEXTURES]; // currently: [north wall, east wall, south wall, west wall]
 	int			colors[NUMBER_OF_COLORS][3]; // [floor, ceiling][red, green, blue]
-	int			**map; // [y coordinate][x coordinate]
-	int			map_width;
-	int			map_height;
+	// i think i would prefer having seperate ceiling and floor colour variables instead of one array
+	// that way it is easier to see which is which at one glance
+	int			ceiling_colour;
+	int			floor_colour;
 }				t_scene;
 
+//	contains all variables used in raycasting
+typedef struct	s_rc
+{
+	double	camera_x;
+	double	raydir_x;
+	double	raydir_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double	perpwalldist;
+	int		map_x;
+	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		wall_hit;
+	int		side_hit;
+}				t_rc;
+
+//	contains everything that exists outside the game world
 typedef struct	s_game
 {
-	t_scene	scene;
+	t_ptrs		ptrs;
+	t_img		img;
+	t_scene		scene;
+	t_player	player;
+	t_rc		*rc;
+	//if using the new error function i suggested these two variables would be redundand i think
 	char		*error_message; // no error if NULL
 	char		*error_extramessage; // no extra info if NULL
 }				t_game;
 
-typedef struct	s_data{
-	t_ptrs	ptrs;
-	t_img	img;
-	t_scene	scene;
-	char	*temp_floor;
-	char	*temp_sky;
-}				t_data;
-
-// draw.c
-int	render(t_data *data);
-
-int			set_return_error(t_game *game, char *message);
-int			set_return_error_extra(t_game *game, char *message, char *extramessage);
-int			print_return_error(t_game *game);
-int			interpret_arguments(int an, char **ac, t_game *game, char **map_fn);
+//	draw.c
+int	render(t_game *game);
+//	controls.c
+int	handle_keypress(int keysym, t_game *game);
+int	close_window(t_game *game);
+//	error.c
+int	error_return(int type, char *error_message, int error_code);
+int	set_return_error(t_game *game, char *message);
+int	set_return_error_extra(t_game *game, char *message, char *extramessage);
+int	print_return_error(t_game *game);
+//	parse_level.c
+int			validate_arguments(int an, char **ac, t_game *game);
+int			parse_level(char *map_fn, t_game *game);
+int	**allocate_map(int rows, int cols); //this function used to be static, i changed it to be able to use it in my temporary bypass function,
+										//should be changed back to static once it is no longer needed there
 // int			init_scene(char *map_fn, t_game *game);
-int			parse_level(char *map_fn, t_game *game);
-int			interpret_arguments(int an, char **ac, t_game *game, char **map_fn);
-int			parse_level(char *map_fn, t_game *game);
 
 #endif

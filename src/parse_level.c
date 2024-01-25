@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   parse_level.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/19 14:58:47 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/24 15:00:06 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
+
+//	suggestion for a differently structured parser, using newly suggestend error funtion and calling subsequent functions needed to interpret arguments directly
+
+//	i wrote this while in the night i couldnt sleep, i dont remember what purpose i had in mind for it
+
+//	saves arguments to their respective variables
+// int process_arguments(int ac, char **av, t_game *game)
+// {
+// 	//map parser
+// 	//texture parser
+// 	//floor and ceiling colour parser
+// }
+
+// int		validate_arguments(int ac, char **av, t_game *game)
+// {
+// 	if (ac != 2)
+// 		return(error_return(0, "invalid number of arguments", 3));
+// 	if (ft_strncmp(av[1] + ft_strlen(av[1]) - 4, ".cub", 4))
+// 		return(error_return(0, "map file must have .cub ending", 4));
+// 	game->scene.map.map_name = av[1];
+// 	return (process_arguments(ac, av, game));
+// }
+
 
 int		interpret_arguments(int an, char **ac, t_game *game, char **map_fn)
 {
@@ -26,7 +49,7 @@ int		interpret_arguments(int an, char **ac, t_game *game, char **map_fn)
 typedef struct s_parse_helper
 {
 	t_game *game;
-	t_image *textures;
+	t_texture *textures;
 	int found_colors[2];
 	int found_map_start;
 	int found_map_end;
@@ -89,7 +112,7 @@ static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 	return (0);
 }
 
-static int pass1_parse_texture(t_parse_helper* ph, t_image *texture, char *rest)
+static int pass1_parse_texture(t_parse_helper* ph, t_texture *texture, char *rest)
 {
 	char *s;
 
@@ -175,8 +198,8 @@ static int pass1_finalize(t_parse_helper* ph, int* map_start_line)
 	if (!ph->found_colors[0] || !ph->found_colors[1])
 		return (set_return_error(ph->game, "Expect floor and ceiling colors"));
 	*map_start_line = ph->map_start_idx;
-	ph->game->scene.map_height = ph->map_end_idx - ph->map_start_idx;
-	ph->game->scene.map_width = ph->map_max_line_length;
+	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
+	ph->game->scene.map.map_width = ph->map_max_line_length;
 	//printf("found a map of height %d and width %d, starting in line %d of the map file\n", ph->game->scene->map_height, ph->game->scene->map_width, *map_start_line);
 	return (0);
 }
@@ -275,8 +298,8 @@ int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int dy)
 	if (ph2->found_player)
 		return (set_return_error(ph2->game, "Found more than one player"));
 
-	ph2->scene->player.x = x;
-	ph2->scene->player.y = y;
+	ph2->scene->player.pos_x = x;
+	ph2->scene->player.pos_y = y;
 	ph2->scene->player.look_x = dx;
 	ph2->scene->player.look_y = dy;
 	ph2->found_player = 1;
@@ -314,14 +337,14 @@ int pass2_do_map_line(char *line, int y, t_convert_helper* ph2)
 	int x;
 
 	// reset line in map to -1 (space = outside of map)
-	ft_memset(ph2->scene->map[y], 0, sizeof(int) * ph2->scene->map_width);
+	ft_memset(ph2->scene->map.map[y], 0, sizeof(int) * ph2->scene->map.map_width);
 	x = 0;
-	while (line[x] && line[x] != '\n' && x < ph2->scene->map_width)
+	while (line[x] && line[x] != '\n' && x < ph2->scene->map.map_width)
 	{
 		// printf("at x %d y %d converting '%c'\n", x, y, line[x]);
 		if (pass2_handle_player(line[x], x, y, ph2))
 			return(1);
-		if (pass2_convert_one_field(line[x], &ph2->scene->map[y][x], ph2))
+		if (pass2_convert_one_field(line[x], &ph2->scene->map.map[y][x], ph2))
 			return(1);
 
 		x++;
@@ -356,7 +379,7 @@ int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx)
 	ph2.game = game;
 	ph2.scene = &game->scene;
 
-	while (ph2.line_idx < (map_start_idx + ph2.scene->map_height))
+	while (ph2.line_idx < (map_start_idx + ph2.scene->map.map_height))
 	{
 		line_temp = get_next_line(map_fd);
 		if (line_temp == NULL)
@@ -395,7 +418,7 @@ int parse_final_checks(t_scene* scn)
 /** split here into files ********************************************************/
 /*********************************************************************************/
 
-static int	**allocate_map(int rows, int cols)
+int	**allocate_map(int rows, int cols)
 {
 	int	i;
 	int **m;
@@ -429,8 +452,8 @@ int		parse_level(char *map_fn, t_game *game)
 	if (parse_mapfile_pass_1(map_fn, game, &map_start_line))
 		return (set_return_error(game, "parsing pass 1 failed"));
 
-	scn->map = allocate_map(scn->map_height, scn->map_width);
-	if (!scn->map)
+	scn->map.map = allocate_map(scn->map.map_height, scn->map.map_width);
+	if (!scn->map.map)
 		return (set_return_error(game, "allocating map failed")); 
 
 	if (parse_mapfile_pass_2(map_fn, game, map_start_line))

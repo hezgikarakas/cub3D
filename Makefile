@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
+#    By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/01/19 16:53:06 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/01/25 14:16:25 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
-SRCS = src/main.c src/error.c src/parse_level.c src/draw.c
+SRCS = src/main.c src/error.c src/draw.c src/parse_level.c src/controls.c
 OBJS = $(SRCS:.c=.o)
 HDR = ./include/$(NAME).h
 COMPILER = cc
@@ -41,7 +41,6 @@ $(MLX):
 
 clean:
 	@make --no-print-directory clean -C $(LIBFT_PATH)
-	@make --no-print-directory clean -C $(MLX_PATH)
 	@$(RM) $(OBJS)
 	@echo "\033[1;31m- objects removed\033[0m"
 
@@ -51,5 +50,8 @@ fclean:	clean
 	@echo "\033[1;31m- $(NAME) removed\033[0m"
 
 re:	fclean all
+	@make --no-print-directory clean -C $(MLX_PATH)
+
+remlx:	fclean all
 
 .PHONY:	all clean fclean re

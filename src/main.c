@@ -6,83 +6,113 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/22 06:24:30 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/25 15:09:49 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
 
-// called when closing window
-static int	close_window(t_data *data)
-{
-	mlx_loop_end(data->ptrs.mlx);
-	return (0);
-}
-
-// handles keypresses
-static int	handle_keypress(int keysym, t_data *data)
-{
-	if (keysym == 0xff1b)
-		close_window(data);
-	return (0);
-}
-
 //sets window name and inits mlx pointers
-void	initialize(t_data *data, char *mapname)
+void	initialize(t_game *game, char *mapname)
 {
+	//need to change exit to return here to avoid leaks
 	char	*name;
 
+	game->rc = (t_rc *)malloc(sizeof(t_rc));
+	if (!game->rc)
+		exit(1);
 	name = ft_strjoin("CUBE3D - ", mapname);
-	data->ptrs.mlx = mlx_init();
-	if (data->ptrs.mlx == NULL)
+	game->ptrs.mlx = mlx_init();
+	if (game->ptrs.mlx == NULL)
 	{
 		perror("mlx init failed");
 		exit(2);
 	}
-	data->ptrs.win = mlx_new_window(data->ptrs.mlx, WINDOW_WIDTH,
+	game->ptrs.win = mlx_new_window(game->ptrs.mlx, WINDOW_WIDTH,
 			WINDOW_HEIGHT, name);
 	free(name);
-	if (data->ptrs.win == NULL)
+	if (game->ptrs.win == NULL)
 	{
-		free(data->ptrs.mlx);
+		free(game->ptrs.mlx);
 		perror("window creation failed");
 		exit(3);
 	}
 }
-
-static void	temp_interpreter_bypass(int ac, char **av, t_data *data)
+// function to be removed once input parser is fully functional and connected to renderer
+static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
 {
 	if (ac || av || !ac)
 	{
-		data->scene.colors[1][0] = 0x07c2ed;
-		data->scene.colors[0][0] = 0x37dd08;
+		game->player.pos_x = 3;
+		game->player.pos_y = 5;
+		game->player.look_x = -1;
+		game->player.look_y = 0;
+		game->player.plane_x = 0;
+		game->player.plane_y = 0.66;
+		game->player.movespeed = 0.5;
+		game->player.rotspeed = 0.1;
+		game->scene.colors[0][0] = DEFAULT_FLOOR;
+		game->scene.colors[1][0] = DEFAULT_SKY;
+		game->scene.map.map_height = 20;
+		game->scene.map.map_width = 20;
+		game->scene.map.map = allocate_map(game->scene.map.map_height, game->scene.map.map_width);
+		for (int x = 0; x < game->scene.map.map_height; x++){
+			for (int y = 0; y < game->scene.map.map_width; y++){
+				int tile = 0;
+				if (x == 0 || x == game->scene.map.map_height-1
+					|| y == 0 || y == game->scene.map.map_width-1)
+					tile = 1;
+				game->scene.map.map[x][y] = tile;
+			}
+		}
+		game->scene.map.map[2][1] = 1;
+		game->scene.map.map[2][2] = 1;
+		game->scene.map.map[1][2] = 1;
+		game->scene.map.map[14][1] = 1;
+		game->scene.map.map[14][2] = 1;
+		game->scene.map.map[14][4] = 1;
+		game->scene.map.map[14][5] = 1;
+		game->scene.map.map[14][6] = 1;
+		game->scene.map.map[15][6] = 1;
+		game->scene.map.map[16][6] = 1;
+		game->scene.map.map[17][6] = 1;
+		game->scene.map.map[18][6] = 1;
+		game->scene.map.map[13][13] = 1;
+		for (int i = 0; i < game->scene.map.map_height; i++){
+			for (int j = 0; j < game->scene.map.map_width; j++){
+				if (game->scene.map.map[i][j] == 1)
+					printf("\033[1;31;40m%i \033[0m", game->scene.map.map[i][j]);
+				else
+					printf("\033[40m%i \033[0m", game->scene.map.map[i][j]);
+			}
+			printf("\n");
+		}
 	}
 }
 
-int	main(int argc, char** argv)
+int	main(int argc, char **argv)
 {
-	t_data	*data;
-	// t_game		game;
-	// char*		map_fn;
+	t_game	*game;
+	int		ret;
 
-	// ft_memset(&game, 0, sizeof(t_game));
-	data = (t_data *)malloc(sizeof(t_data));
-	if (!data)
+	game = (t_game *)malloc(sizeof(t_game));
+	if (!game)
+		return (error_return(1, "game struct malloc failed", 1));
+	// ret = validate_arguments(argc, argv, game);
+	ret = 0;
+	if (ret == 0)
 	{
-		perror("malloc failed");
-		return (1);
+		temp_interpreter_bypass(argc, argv, game);
+		initialize(game, "test");
+		mlx_loop_hook(game->ptrs.mlx, &render, game);
+		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);
+		mlx_hook(game->ptrs.win, 17, 0L, &close_window, game);
+		mlx_loop(game->ptrs.mlx);
+		mlx_destroy_window(game->ptrs.mlx, game->ptrs.win);
+		mlx_destroy_display(game->ptrs.mlx);
 	}
-	// if (interpret_arguments(argc, argv, &game, &map_fn))
-	// 	return (print_return_error(&game));
-	temp_interpreter_bypass(argc, argv, data);
-	initialize(data, "test");
-	mlx_loop_hook(data->ptrs.mlx, &render, data);
-	mlx_hook(data->ptrs.win, 2, 1L << 0, &handle_keypress, data);
-	mlx_hook(data->ptrs.win, 17, 0L, &close_window, data);
-	mlx_loop(data->ptrs.mlx);
-	mlx_destroy_window(data->ptrs.mlx, data->ptrs.win);
-	mlx_destroy_display(data->ptrs.mlx);
-	free(data->ptrs.mlx);
-	free(data);
-	return (0);
+	free(game->ptrs.mlx);
+	free(game->rc);
+	free(game);
+	return (ret);
 }

@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/19 17:40:26 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/25 14:17:02 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
+
+//	suggestion of new error function, would only require 
+//1 function instead of 3, currently in use in main
+int	error_return(int type, char *error_message, int error_code)
+{
+	char	*full_message;
+
+	full_message = ft_strjoin("ERROR: ", error_message);
+	if (type == 1)
+		perror(full_message);
+	else
+		ft_putstr_fd(full_message, 2);
+	if (full_message[sizeof(full_message)] != '\n')
+		ft_putchar_fd('\n', 2);
+	free(full_message);
+	return (error_code);
+}
 
 static void	print_error(char *s1, char *s2)
 {
@@ -34,8 +51,8 @@ int	set_return_error(t_game *game, char *message)
 	return (1);
 }
 
-/* as above but with additional info (an error + the name of the file triggering the error)
-   return 1 */
+/*	as above but with additional info
+	(an error + the name of the file triggering the error) return 1 */
 int	set_return_error_extra(t_game *game, char *message, char *extramessage)
 {
 	if (!game->error_message)
