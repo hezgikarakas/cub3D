@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/25 16:28:03 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:44:23 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	initialize(t_game *game, char *mapname)
 	}
 	game->player.plane_x = 0;
 	game->player.plane_y = 0.66;
-	game->player.movespeed = 0.3;
+	game->player.movespeed = 0.1;
 	game->player.rotspeed = 0.05;
 }
 // function to be removed once input parser is fully functional and connected to renderer
