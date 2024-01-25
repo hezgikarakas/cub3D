@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/25 15:09:49 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:28:03 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ void	initialize(t_game *game, char *mapname)
 		perror("window creation failed");
 		exit(3);
 	}
+	game->player.plane_x = 0;
+	game->player.plane_y = 0.66;
+	game->player.movespeed = 0.3;
+	game->player.rotspeed = 0.05;
 }
 // function to be removed once input parser is fully functional and connected to renderer
 static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
@@ -47,10 +51,6 @@ static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->player.pos_y = 5;
 		game->player.look_x = -1;
 		game->player.look_y = 0;
-		game->player.plane_x = 0;
-		game->player.plane_y = 0.66;
-		game->player.movespeed = 0.5;
-		game->player.rotspeed = 0.1;
 		game->scene.colors[0][0] = DEFAULT_FLOOR;
 		game->scene.colors[1][0] = DEFAULT_SKY;
 		game->scene.map.map_height = 20;
@@ -77,7 +77,14 @@ static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->scene.map.map[16][6] = 1;
 		game->scene.map.map[17][6] = 1;
 		game->scene.map.map[18][6] = 1;
+		game->scene.map.map[5][13] = 1;
+		game->scene.map.map[5][14] = 1;
+		game->scene.map.map[6][13] = 1;
+		game->scene.map.map[6][14] = 1;
+		game->scene.map.map[13][16] = 1;
 		game->scene.map.map[13][13] = 1;
+		game->scene.map.map[16][13] = 1;
+		game->scene.map.map[16][16] = 1;
 		for (int i = 0; i < game->scene.map.map_height; i++){
 			for (int j = 0; j < game->scene.map.map_width; j++){
 				if (game->scene.map.map[i][j] == 1)
