@@ -91,7 +91,7 @@ typedef struct	s_map
 //	contains everything that exists in the game world
 typedef struct	s_scene
 {
-	t_player	player;
+	//t_player	player; // was in scene, now in game, both is fine, moving all to game
 	t_map		map;
 	t_texture	textures[NUMBER_OF_TEXTURES]; // currently: [north wall, east wall, south wall, west wall]
 	int			colors[NUMBER_OF_COLORS][3]; // [floor, ceiling][red, green, blue]

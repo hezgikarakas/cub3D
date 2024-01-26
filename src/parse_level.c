@@ -284,10 +284,10 @@ int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int dy)
 	if (ph2->found_player)
 		return (set_return_error(ph2->game, "Found more than one player"));
 
-	ph2->scene->player.pos_x = y; // temporary fix until map display is fixed
-	ph2->scene->player.pos_y = x; // temporary fix until map display is fixed
-	ph2->scene->player.look_x = dx;
-	ph2->scene->player.look_y = dy;
+	ph2->game->player.pos_x = x + 0.5; // walls are exactly on given x/y location, so move player by half a grid cell
+	ph2->game->player.pos_y = y + 0.5; // TODO there might be a better way to fix this (putting no +0.5 here and moving walls) but maybe this way is the best way
+	ph2->game->player.look_x = dx;
+	ph2->game->player.look_y = dy;
 	ph2->found_player = 1;
 
 	return (0);
