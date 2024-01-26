@@ -19,6 +19,7 @@ void	initialize(t_game *game, char *mapname)
 	char	*name;
 
 	game->rc = (t_rc *)malloc(sizeof(t_rc));
+	ft_memset(game->rc, 0, sizeof(t_rc)); // otherwise valgrind will complain a lot
 	if (!game->rc)
 		exit(1);
 	name = ft_strjoin("CUBE3D - ", mapname);
@@ -43,7 +44,8 @@ void	initialize(t_game *game, char *mapname)
 	game->player.rotspeed = 0.05;
 }
 // function to be removed once input parser is fully functional and connected to renderer
-static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
+// not static or we cannot comment it out below ;)
+int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 {
 	if (ac || av || !ac)
 	{
@@ -56,6 +58,7 @@ static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->scene.map.map_height = 20;
 		game->scene.map.map_width = 20;
 		game->scene.map.map = allocate_map(game->scene.map.map_height, game->scene.map.map_width);
+		// you initialize map[x][y] but it should be map[y][x] which is more logical (line-based reading)
 		for (int x = 0; x < game->scene.map.map_height; x++){
 			for (int y = 0; y < game->scene.map.map_width; y++){
 				int tile = 0;
@@ -85,15 +88,21 @@ static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->scene.map.map[13][13] = 1;
 		game->scene.map.map[16][13] = 1;
 		game->scene.map.map[16][16] = 1;
-		for (int i = 0; i < game->scene.map.map_height; i++){
-			for (int j = 0; j < game->scene.map.map_width; j++){
-				if (game->scene.map.map[i][j] == 1)
-					printf("\033[1;31;40m%i \033[0m", game->scene.map.map[i][j]);
-				else
-					printf("\033[40m%i \033[0m", game->scene.map.map[i][j]);
-			}
-			printf("\n");
+	}
+	return (0); // always successful
+}
+
+void print_map_on_stdout(t_game* game)
+{
+	// here it is correctly done: map[y][x] (first the lines, then the columns)
+	for (int i = 0; i < game->scene.map.map_height; i++){
+		for (int j = 0; j < game->scene.map.map_width; j++){
+			if (game->scene.map.map[i][j] == 1)
+				printf("\033[1;31;40m%i \033[0m", game->scene.map.map[i][j]);
+			else
+				printf("\033[40m%i \033[0m", game->scene.map.map[i][j]);
 		}
+		printf("\n");
 	}
 }
 
@@ -103,13 +112,15 @@ int	main(int argc, char **argv)
 	int		ret;
 
 	game = (t_game *)malloc(sizeof(t_game));
+	ft_memset(game, 0, sizeof(t_game)); // otherwise valgrind will complain a lot
 	if (!game)
 		return (error_return(1, "game struct malloc failed", 1));
-	// ret = validate_arguments(argc, argv, game);
-	ret = 0;
+	ret = process_arguments(argc, argv, game);
+//	ret = temp_interpreter_bypass(argc, argv, game);
+
 	if (ret == 0)
 	{
-		temp_interpreter_bypass(argc, argv, game);
+		print_map_on_stdout(game);
 		initialize(game, "test");
 		mlx_loop_hook(game->ptrs.mlx, &render, game);
 		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);

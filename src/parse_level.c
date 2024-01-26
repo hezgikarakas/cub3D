@@ -12,38 +12,24 @@
 
 #include "./../include/cub3D.h"
 
-//	suggestion for a differently structured parser, using newly suggestend error funtion and calling subsequent functions needed to interpret arguments directly
-
-//	i wrote this while in the night i couldnt sleep, i dont remember what purpose i had in mind for it
-
-//	saves arguments to their respective variables
-// int process_arguments(int ac, char **av, t_game *game)
-// {
-// 	//map parser
-// 	//texture parser
-// 	//floor and ceiling colour parser
-// }
-
-// int		validate_arguments(int ac, char **av, t_game *game)
-// {
-// 	if (ac != 2)
-// 		return(error_return(0, "invalid number of arguments", 3));
-// 	if (ft_strncmp(av[1] + ft_strlen(av[1]) - 4, ".cub", 4))
-// 		return(error_return(0, "map file must have .cub ending", 4));
-// 	game->scene.map.map_name = av[1];
-// 	return (process_arguments(ac, av, game));
-// }
-
-
-int		interpret_arguments(int an, char **ac, t_game *game, char **map_fn)
+static int		validate_arguments(int ac, char **av, t_game *game)
 {
-	if (an != 2)
-		return (set_return_error(game, "Expecting one argument (map file)"));
-	if (ft_strncmp(ac[1] + ft_strlen(ac[1]) - 4, ".cub", 4))
-		return (set_return_error_extra(game,
-			"Expecting .cub file ending for map, found file name ", ac[1]));
-	*map_fn = ac[1];
-	return (0);
+	if (ac != 2)
+		return (set_return_error(game, "invalid number of arguments"));
+	if (ft_strncmp(av[1] + ft_strlen(av[1]) - 4, ".cub", 4))
+		return (set_return_error_extra(game, "map file must have .cub ending, found ", av[1]));
+
+	return(0);
+}
+
+int	process_arguments(int ac, char **av, t_game *game)
+{
+	if (validate_arguments(ac, av, game))
+		return (1);
+
+	game->scene.map.map_name = av[1];
+	
+	return (parse_level(game->scene.map.map_name, game));
 }
 
 typedef struct s_parse_helper
@@ -298,8 +284,8 @@ int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int dy)
 	if (ph2->found_player)
 		return (set_return_error(ph2->game, "Found more than one player"));
 
-	ph2->scene->player.pos_x = x;
-	ph2->scene->player.pos_y = y;
+	ph2->scene->player.pos_x = y; // temporary fix until map display is fixed
+	ph2->scene->player.pos_y = x; // temporary fix until map display is fixed
 	ph2->scene->player.look_x = dx;
 	ph2->scene->player.look_y = dy;
 	ph2->found_player = 1;
@@ -389,6 +375,7 @@ int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx)
 				break;
 		ph2.line_idx++;
 		free(line_temp);
+		line_temp = NULL;
 	}
 	if (line_temp)
 		free(line_temp);

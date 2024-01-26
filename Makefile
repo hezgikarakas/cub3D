@@ -15,7 +15,7 @@ SRCS = src/main.c src/error.c src/draw.c src/parse_level.c src/controls.c
 OBJS = $(SRCS:.c=.o)
 HDR = ./include/$(NAME).h
 COMPILER = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -ggdb
 RM = rm -f
 LIBFT_PATH = ./include/libft_gio/
 LIBFT = $(LIBFT_PATH)libft.a

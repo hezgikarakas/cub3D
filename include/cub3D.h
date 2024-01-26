@@ -127,7 +127,7 @@ typedef struct	s_game
 	t_img		img;
 	t_scene		scene;
 	t_player	player;
-	t_rc		*rc;
+	t_rc		*rc; // why pointer? why not use without * then we do not need malloc
 	//if using the new error function i suggested these two variables would be redundand i think
 	char		*error_message; // no error if NULL
 	char		*error_extramessage; // no extra info if NULL
@@ -144,7 +144,7 @@ int	set_return_error(t_game *game, char *message);
 int	set_return_error_extra(t_game *game, char *message, char *extramessage);
 int	print_return_error(t_game *game);
 //	parse_level.c
-int			validate_arguments(int an, char **ac, t_game *game);
+int	process_arguments(int ac, char **av, t_game *game);
 int			parse_level(char *map_fn, t_game *game);
 int	**allocate_map(int rows, int cols); //this function used to be static, i changed it to be able to use it in my temporary bypass function,
 										//should be changed back to static once it is no longer needed there

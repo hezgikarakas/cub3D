@@ -13,6 +13,15 @@
 #include "./../include/cub3D.h"
 
 //	suggestion of new error function, would only require 
+
+// the subject requires the following
+//   If any misconfiguration of any kind is encountered in the file the program
+//   must exit properly and return "Error\n" followed by an explicit error message
+//   of your choice
+// My approach allows to collect error information before printing it, so it
+// guarantees that the first output is "Error\n" followed by some collected detailed error message.
+// I think the additional functions do not hurt, print_return is only used in main.
+
 //1 function instead of 3, currently in use in main
 int	error_return(int type, char *error_message, int error_code)
 {
