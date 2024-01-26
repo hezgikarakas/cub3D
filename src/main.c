@@ -116,9 +116,11 @@ int	main(int argc, char **argv)
 	ft_memset(game, 0, sizeof(t_game)); // otherwise valgrind will complain a lot
 	if (!game)
 		return (error_return(1, "game struct malloc failed", 1));
-	ret = process_arguments(argc, argv, game);
-//	ret = temp_interpreter_bypass(argc, argv, game);
-
+	// for now we do the temporary hardcoded map if there are no arguments, otherwise the map parsing
+	if (argc == 1)
+		ret = temp_interpreter_bypass(argc, argv, game);
+	else
+		ret = process_arguments(argc, argv, game);
 	if (ret == 0)
 	{
 		print_map_on_stdout(game);
