@@ -145,7 +145,7 @@ static int	dda_algorithm(t_rc *rc, t_game *game)
 			rc->map_y += rc->step_y;
 			rc->side_hit = 1;
 		}
-		if (game->scene.map.map[rc->map_x][rc->map_y] > 0)
+		if (game->scene.map.map[rc->map_y][rc->map_x] > 0)
 			rc->wall_hit = 1;
 	}
 	if (rc->side_hit == 0)
