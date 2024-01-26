@@ -124,7 +124,6 @@ static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
 	int		linelength;
 
 	//printf("classifying line %s", line_temp);
-	ph->line_idx++;
 	s = ft_strtrim(line_temp, " \t\r\n");
 	if (!s || s[0] == 0)
 	{
@@ -171,10 +170,13 @@ static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
 		if (ph->found_map_start && !ph->found_map_end)
 		{
 			linelength = ft_strlen(line_temp);
+			if (line_temp[linelength - 1] == '\n')
+				linelength--;
 			if (linelength > ph->map_max_line_length)
 				ph->map_max_line_length = linelength;
 		}
 	}
+	ph->line_idx++;
 	return (0);
 }
 
