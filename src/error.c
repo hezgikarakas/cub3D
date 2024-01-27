@@ -21,6 +21,12 @@
 // My approach allows to collect error information before printing it, so it
 // guarantees that the first output is "Error\n" followed by some collected detailed error message.
 // I think the additional functions do not hurt, print_return is only used in main.
+//
+// We could use your method, without storing the message
+// But let's use strerror instead of perror and just print everything directly to STDERR(2), no malloc
+// I also suggest we have two functions
+//  error_return_errno(message, code) for system errors
+//  error_return(message, code) for all errors without a relevant errno
 
 //1 function instead of 3, currently in use in main
 int	error_return(int type, char *error_message, int error_code)
