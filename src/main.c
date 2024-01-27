@@ -53,8 +53,8 @@ int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->player.pos_y = 5;
 		game->player.look_x = -1;
 		game->player.look_y = 0;
-		game->scene.colors[0][0] = DEFAULT_FLOOR;
-		game->scene.colors[1][0] = DEFAULT_SKY;
+		game->scene.floor_colour = DEFAULT_FLOOR;
+		game->scene.ceiling_colour = DEFAULT_SKY;
 		game->scene.map.map_height = 20;
 		game->scene.map.map_width = 20;
 		game->scene.map.map = allocate_map(game->scene.map.map_height, game->scene.map.map_width);

@@ -36,7 +36,8 @@ typedef struct s_parse_helper
 {
 	t_game *game;
 	t_texture *textures;
-	int found_colors[2];
+	int found_floor_color;
+	int found_ceiling_color;
 	int found_map_start;
 	int found_map_end;
 	int line_idx;
@@ -57,18 +58,23 @@ static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 	char **parts;
 	int i;
 	long 	colortemp;
-	int coloridx;
+	int *found_color;
 	int *color;
 
 	if (which == 'F')
-		coloridx = 0;
+	{
+		color = &ph->game->scene.floor_colour;
+		found_color = &ph->found_floor_color;
+	}
 	else if (which == 'C')
-		coloridx = 1;
+	{
+		color = &ph->game->scene.ceiling_colour;
+		found_color = &ph->found_ceiling_color;
+	}
 	else
 		return (set_return_error(ph->game, "Unexpected color line"));
 
-	ph->found_colors[coloridx] = 1;
-	color = &ph->game->scene.colors[coloridx][0];
+	*found_color = 1;
 
 	parts = ft_split(rest, ',');
 	if (!parts)
@@ -183,7 +189,7 @@ static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
 /* set map size and map_start_line */
 static int pass1_finalize(t_parse_helper* ph, int* map_start_line)
 {
-	if (!ph->found_colors[0] || !ph->found_colors[1])
+	if (!ph->found_floor_color || !ph->found_ceiling_color)
 		return (set_return_error(ph->game, "Expect floor and ceiling colors"));
 	*map_start_line = ph->map_start_idx;
 	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;

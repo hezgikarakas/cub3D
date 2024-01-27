@@ -36,7 +36,6 @@
 # define DEFAULT_WALL 0xbebeee
 
 # define NUMBER_OF_TEXTURES 4
-# define NUMBER_OF_COLORS 2
 
 //	contains mlx and window pointers
 typedef struct	s_ptrs
@@ -94,9 +93,9 @@ typedef struct	s_scene
 	//t_player	player; // was in scene, now in game, both is fine, moving all to game
 	t_map		map;
 	t_texture	textures[NUMBER_OF_TEXTURES]; // currently: [north wall, east wall, south wall, west wall]
-	int			colors[NUMBER_OF_COLORS][3]; // [floor, ceiling][red, green, blue]
 	// i think i would prefer having seperate ceiling and floor colour variables instead of one array
 	// that way it is easier to see which is which at one glance
+	// ok, and colour is 0xRRGGBB it seems, have changed that
 	int			ceiling_colour;
 	int			floor_colour;
 }				t_scene;

@@ -61,11 +61,11 @@ static void	draw_background(t_game *game)
 		{
 			if (y < WINDOW_HEIGHT / 2)
 				img_pixel_put(&game->img, x, y,
-					gradient_increment(game->scene.colors[1][0],
+					gradient_increment(game->scene.ceiling_colour,
 						sky_colour2, WINDOW_HEIGHT / 2, y));
 			else
 				img_pixel_put(&game->img, x, y,
-					gradient_increment(floor_colour2, game->scene.colors[0][0],
+					gradient_increment(floor_colour2, game->scene.floor_colour,
 						WINDOW_HEIGHT / 2, y - WINDOW_HEIGHT / 2));
 			x++;
 		}
