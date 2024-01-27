@@ -73,7 +73,7 @@ static void	draw_background(t_game *game)
 	}
 }
 
-//	draws verticak lines
+//	draws vertical lines
 static void	ver_line(t_game *game, int x, int *strt_end, int colour)
 {
 	int	y;

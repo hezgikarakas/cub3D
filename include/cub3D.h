@@ -90,7 +90,6 @@ typedef struct	s_map
 //	contains everything that exists in the game world
 typedef struct	s_scene
 {
-	//t_player	player; // was in scene, now in game, both is fine, moving all to game
 	t_map		map;
 	t_texture	textures[NUMBER_OF_TEXTURES]; // currently: [north wall, east wall, south wall, west wall]
 	// i think i would prefer having seperate ceiling and floor colour variables instead of one array
@@ -144,9 +143,8 @@ int	set_return_error_extra(t_game *game, char *message, char *extramessage);
 int	print_return_error(t_game *game);
 //	parse_level.c
 int	process_arguments(int ac, char **av, t_game *game);
-int			parse_level(char *map_fn, t_game *game);
+int	parse_level(char *map_fn, t_game *game);
 int	**allocate_map(int rows, int cols); //this function used to be static, i changed it to be able to use it in my temporary bypass function,
 										//should be changed back to static once it is no longer needed there
-// int			init_scene(char *map_fn, t_game *game);
 
 #endif
