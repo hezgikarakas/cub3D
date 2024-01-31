@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:13:13 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/01/25 14:15:03 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/26 14:08:13 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	close_window(t_game *game)
 }
 
 //	handles keypresses for forward and backward movement
-static int	move_player(int keysym, t_game *game)
+static void	move_player(int keysym, t_game *game)
 {
 	if (keysym == XK_Up || keysym == XK_w)
 	{
@@ -42,11 +42,10 @@ static int	move_player(int keysym, t_game *game)
 				* game->player.movespeed)])
 			game->player.pos_y -= game->player.look_y * game->player.movespeed;
 	}
-	return (0);
 }
 
 //	handles keypresses for rotating the player
-static int	rotate_player(int keysym, t_player *player)
+static void	rotate_player(int keysym, t_player *player)
 {
 	double	old_dirx;
 	double	old_planex;
@@ -65,7 +64,6 @@ static int	rotate_player(int keysym, t_player *player)
 		- player->plane_y * sin(temp_rotspeed);
 	player->plane_y = old_planex * sin(temp_rotspeed)
 		+ player->plane_y * cos(temp_rotspeed);
-	return (0);
 }
 
 // handles keypresses

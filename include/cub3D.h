@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/25 15:41:20 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:08:39 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ typedef struct	s_ptrs
 //	contains everything neccessary to draw into image
 typedef struct	s_img
 {
-	void *mlx_img;
-	char *addr;
-	int bpp;
-	int line_len;
-	int endian;
+	void	*mlx_img;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
 }				t_img;
 
 //	contains all variables pertaining to the player
@@ -73,9 +73,14 @@ typedef struct	s_player
 typedef struct	s_texture
 {
 	char*	filename; // texture file name, needs to be freed on exit, is allocated by parse_level.c
-	void*	img;
+	void*	texture_img;
+	char*	texture_addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
 	int		width;
 	int		height;
+	int		*texture;
 }				t_texture;
 
 //	contains everything to do with the map
@@ -118,6 +123,10 @@ typedef struct	s_rc
 	int		step_y;
 	int		wall_hit;
 	int		side_hit;
+	int		line_height;
+	int		walldir;
+	int		tex_x;
+	int		tex_y;
 }				t_rc;
 
 //	contains everything that exists outside the game world
@@ -134,19 +143,28 @@ typedef struct	s_game
 }				t_game;
 
 //	draw.c
-int	render(t_game *game);
+int		render(t_game *game);
+//	draw_textures.c
+void	draw_textures(t_game *game, t_rc *rc, int *draw_start_end, int x);
+//	draw_utils.c
+void	img_pixel_put(t_img *img, int x, int y, int color);
+void	init_rc(t_rc *rc, t_game *game, int x);
+void	ver_line(t_game *game, int x, int *strt_end, int colour);
+int		gradient_increment(int start, int end, int stepc, int stepn);
+//	textures.c
+void	load_texture(t_game *game);
 //	controls.c
-int	handle_keypress(int keysym, t_game *game);
-int	close_window(t_game *game);
+int		handle_keypress(int keysym, t_game *game);
+int		close_window(t_game *game);
 //	error.c
-int	error_return(int type, char *error_message, int error_code);
-int	set_return_error(t_game *game, char *message);
-int	set_return_error_extra(t_game *game, char *message, char *extramessage);
-int	print_return_error(t_game *game);
+int		error_return(int type, char *error_message, int error_code);
+int		set_return_error(t_game *game, char *message);
+int		set_return_error_extra(t_game *game, char *message, char *extramessage);
+int		print_return_error(t_game *game);
 //	parse_level.c
-int			validate_arguments(int an, char **ac, t_game *game);
-int			parse_level(char *map_fn, t_game *game);
-int	**allocate_map(int rows, int cols); //this function used to be static, i changed it to be able to use it in my temporary bypass function,
+int		validate_arguments(int an, char **ac, t_game *game);
+int		parse_level(char *map_fn, t_game *game);
+int		**allocate_map(int rows, int cols); //this function used to be static, i changed it to be able to use it in my temporary bypass function,
 										//should be changed back to static once it is no longer needed there
 // int			init_scene(char *map_fn, t_game *game);
 

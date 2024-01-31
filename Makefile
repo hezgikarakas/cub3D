@@ -6,12 +6,13 @@
 #    By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/01/25 14:16:25 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/01/31 15:45:23 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
-SRCS = src/main.c src/error.c src/draw.c src/parse_level.c src/controls.c
+SRCS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
+		src/parse_level.c src/controls.c src/textures.c
 OBJS = $(SRCS:.c=.o)
 HDR = ./include/$(NAME).h
 COMPILER = cc

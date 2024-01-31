@@ -3,44 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/25 16:44:23 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:25:44 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
 
 //sets window name and inits mlx pointers
-void	initialize(t_game *game, char *mapname)
+static int	initialize(t_game *game, char *mapname)
 {
-	//need to change exit to return here to avoid leaks
 	char	*name;
 
 	game->rc = (t_rc *)malloc(sizeof(t_rc));
 	if (!game->rc)
-		exit(1);
+		error_return(1, "rc struct malloc failed", 1);
 	name = ft_strjoin("CUBE3D - ", mapname);
 	game->ptrs.mlx = mlx_init();
 	if (game->ptrs.mlx == NULL)
-	{
-		perror("mlx init failed");
-		exit(2);
-	}
+		error_return(1, "mlx_init failed", 2);
 	game->ptrs.win = mlx_new_window(game->ptrs.mlx, WINDOW_WIDTH,
 			WINDOW_HEIGHT, name);
 	free(name);
 	if (game->ptrs.win == NULL)
 	{
 		free(game->ptrs.mlx);
-		perror("window creation failed");
-		exit(3);
+		error_return(1, "mlx_new_window failed", 3);
 	}
 	game->player.plane_x = 0;
 	game->player.plane_y = 0.66;
 	game->player.movespeed = 0.1;
 	game->player.rotspeed = 0.05;
+	game->img.mlx_img = mlx_new_image(game->ptrs.mlx, WINDOW_WIDTH,
+		WINDOW_HEIGHT);
+	return (0);
 }
 // function to be removed once input parser is fully functional and connected to renderer
 static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
@@ -53,6 +51,11 @@ static void	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->player.look_y = 0;
 		game->scene.colors[0][0] = DEFAULT_FLOOR;
 		game->scene.colors[1][0] = DEFAULT_SKY;
+		game->scene.textures[0].filename = "./textures/lionwall.xpm";
+		game->scene.textures[1].filename = "./textures/patternwall.xpm";
+		game->scene.textures[2].filename = "./textures/vinewall.xpm";
+		game->scene.textures[3].filename = "./textures/pillarwall.xpm";
+		load_texture(game);
 		game->scene.map.map_height = 20;
 		game->scene.map.map_width = 20;
 		game->scene.map.map = allocate_map(game->scene.map.map_height, game->scene.map.map_width);
@@ -107,10 +110,13 @@ int	main(int argc, char **argv)
 		return (error_return(1, "game struct malloc failed", 1));
 	// ret = validate_arguments(argc, argv, game);
 	ret = 0;
-	if (ret == 0)
+	if (!ret)
+		ret = initialize(game, "test");
+	if (!ret)
 	{
+		//	temp interpreter bypass gets replaced by validate arguments
+		//	some things in bypass might need to be moved to initialize
 		temp_interpreter_bypass(argc, argv, game);
-		initialize(game, "test");
 		mlx_loop_hook(game->ptrs.mlx, &render, game);
 		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);
 		mlx_hook(game->ptrs.win, 17, 0L, &close_window, game);
