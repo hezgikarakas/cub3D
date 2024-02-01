@@ -12,45 +12,32 @@
 
 #include "./../include/cub3D.h"
 
-//	suggestion for a differently structured parser, using newly suggestend error funtion and calling subsequent functions needed to interpret arguments directly
-
-//	i wrote this while in the night i couldnt sleep, i dont remember what purpose i had in mind for it
-
-//	saves arguments to their respective variables
-// int process_arguments(int ac, char **av, t_game *game)
-// {
-// 	//map parser
-// 	//texture parser
-// 	//floor and ceiling colour parser
-// }
-
-// int		validate_arguments(int ac, char **av, t_game *game)
-// {
-// 	if (ac != 2)
-// 		return(error_return(0, "invalid number of arguments", 3));
-// 	if (ft_strncmp(av[1] + ft_strlen(av[1]) - 4, ".cub", 4))
-// 		return(error_return(0, "map file must have .cub ending", 4));
-// 	game->scene.map.map_name = av[1];
-// 	return (process_arguments(ac, av, game));
-// }
-
-
-int		interpret_arguments(int an, char **ac, t_game *game, char **map_fn)
+static int		validate_arguments(int ac, char **av, t_game *game)
 {
-	if (an != 2)
-		return (set_return_error(game, "Expecting one argument (map file)"));
-	if (ft_strncmp(ac[1] + ft_strlen(ac[1]) - 4, ".cub", 4))
-		return (set_return_error_extra(game,
-			"Expecting .cub file ending for map, found file name ", ac[1]));
-	*map_fn = ac[1];
-	return (0);
+	if (ac != 2)
+		return (set_return_error(game, "invalid number of arguments"));
+	if (ft_strncmp(av[1] + ft_strlen(av[1]) - 4, ".cub", 4))
+		return (set_return_error_extra(game, "map file must have .cub ending, found ", av[1]));
+
+	return(0);
+}
+
+int	process_arguments(int ac, char **av, t_game *game)
+{
+	if (validate_arguments(ac, av, game))
+		return (1);
+
+	game->scene.map.map_name = av[1];
+	
+	return (parse_level(game->scene.map.map_name, game));
 }
 
 typedef struct s_parse_helper
 {
 	t_game *game;
 	t_texture *textures;
-	int found_colors[2];
+	int found_floor_color;
+	int found_ceiling_color;
 	int found_map_start;
 	int found_map_end;
 	int line_idx;
@@ -71,18 +58,23 @@ static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 	char **parts;
 	int i;
 	long 	colortemp;
-	int coloridx;
+	int *found_color;
 	int *color;
 
 	if (which == 'F')
-		coloridx = 0;
+	{
+		color = &ph->game->scene.floor_colour;
+		found_color = &ph->found_floor_color;
+	}
 	else if (which == 'C')
-		coloridx = 1;
+	{
+		color = &ph->game->scene.ceiling_colour;
+		found_color = &ph->found_ceiling_color;
+	}
 	else
 		return (set_return_error(ph->game, "Unexpected color line"));
 
-	ph->found_colors[coloridx] = 1;
-	color = &ph->game->scene.colors[coloridx][0];
+	*found_color = 1;
 
 	parts = ft_split(rest, ',');
 	if (!parts)
@@ -138,7 +130,6 @@ static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
 	int		linelength;
 
 	//printf("classifying line %s", line_temp);
-	ph->line_idx++;
 	s = ft_strtrim(line_temp, " \t\r\n");
 	if (!s || s[0] == 0)
 	{
@@ -185,17 +176,20 @@ static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
 		if (ph->found_map_start && !ph->found_map_end)
 		{
 			linelength = ft_strlen(line_temp);
+			if (line_temp[linelength - 1] == '\n')
+				linelength--;
 			if (linelength > ph->map_max_line_length)
 				ph->map_max_line_length = linelength;
 		}
 	}
+	ph->line_idx++;
 	return (0);
 }
 
 /* set map size and map_start_line */
 static int pass1_finalize(t_parse_helper* ph, int* map_start_line)
 {
-	if (!ph->found_colors[0] || !ph->found_colors[1])
+	if (!ph->found_floor_color || !ph->found_ceiling_color)
 		return (set_return_error(ph->game, "Expect floor and ceiling colors"));
 	*map_start_line = ph->map_start_idx;
 	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
@@ -298,10 +292,10 @@ int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int dy)
 	if (ph2->found_player)
 		return (set_return_error(ph2->game, "Found more than one player"));
 
-	ph2->scene->player.pos_x = x;
-	ph2->scene->player.pos_y = y;
-	ph2->scene->player.look_x = dx;
-	ph2->scene->player.look_y = dy;
+	ph2->game->player.pos_x = x + 0.5; // walls are exactly on given x/y location, so move player by half a grid cell
+	ph2->game->player.pos_y = y + 0.5; // TODO there might be a better way to fix this (putting no +0.5 here and moving walls) but maybe this way is the best way
+	ph2->game->player.look_x = dx;
+	ph2->game->player.look_y = dy;
 	ph2->found_player = 1;
 
 	return (0);
@@ -389,6 +383,7 @@ int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx)
 				break;
 		ph2.line_idx++;
 		free(line_temp);
+		line_temp = NULL;
 	}
 	if (line_temp)
 		free(line_temp);

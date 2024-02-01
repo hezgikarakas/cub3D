@@ -32,11 +32,11 @@ static void	draw_background(t_game *game)
 		{
 			if (y < WINDOW_HEIGHT / 2)
 				img_pixel_put(&game->img, x, y,
-					gradient_increment(game->scene.colors[1][0],
+					gradient_increment(game->scene.ceiling_colour,
 						sky_colour2, WINDOW_HEIGHT / 2, y));
 			else
 				img_pixel_put(&game->img, x, y,
-					gradient_increment(floor_colour2, game->scene.colors[0][0],
+					gradient_increment(floor_colour2, game->scene.floor_colour,
 						WINDOW_HEIGHT / 2, y - WINDOW_HEIGHT / 2));
 			x++;
 		}
@@ -89,7 +89,7 @@ static int	dda_algorithm(t_rc *rc, t_game *game)
 			rc->map_y += rc->step_y;
 			rc->side_hit = 1;
 		}
-		if (game->scene.map.map[rc->map_x][rc->map_y] > 0)
+		if (game->scene.map.map[rc->map_y][rc->map_x] > 0)
 			rc->wall_hit = 1;
 	}
 	if (!rc->side_hit)
