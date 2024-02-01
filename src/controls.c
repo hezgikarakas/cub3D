@@ -29,10 +29,10 @@ static void	move_player(int keysym, t_game *game)
 	{
 		newy = (int)(game->player.pos_y + game->player.look_y * game->player.movespeed);
 		if (!game->scene.map.map[newy][(int)(game->player.pos_x)])
-			game->player.pos_x += game->player.look_x * game->player.movespeed;
+			game->player.pos_y += game->player.look_y * game->player.movespeed;
 		newx = (int)(game->player.pos_x + game->player.look_x * game->player.movespeed);
 		if (!game->scene.map.map[(int)(game->player.pos_y)][newx])
-			game->player.pos_y += game->player.look_y * game->player.movespeed;
+			game->player.pos_x += game->player.look_x * game->player.movespeed;
 	}
 	if (keysym == XK_Down || keysym == XK_s)
 	{
