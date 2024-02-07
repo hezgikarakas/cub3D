@@ -20,18 +20,18 @@ static int	initialize(t_game *game, char *mapname)
 	game->rc = (t_rc *)malloc(sizeof(t_rc));
 	ft_memset(game->rc, 0, sizeof(t_rc)); // otherwise valgrind will complain a lot
 	if (!game->rc)
-		error_return(1, "rc struct malloc failed", 1);
+		return(error_return(1, "rc struct malloc failed", 1));
 	name = ft_strjoin("CUBE3D - ", mapname);
 	game->ptrs.mlx = mlx_init();
 	if (game->ptrs.mlx == NULL)
-		error_return(1, "mlx_init failed", 2);
+		return (error_return(0, "mlx_init failed", 2));
 	game->ptrs.win = mlx_new_window(game->ptrs.mlx, WINDOW_WIDTH,
 			WINDOW_HEIGHT, name);
 	free(name);
 	if (game->ptrs.win == NULL)
 	{
 		free(game->ptrs.mlx);
-		error_return(1, "mlx_new_window failed", 3);
+		return(error_return(1, "mlx_new_window failed", 3));
 	}
 	game->player.plane_x = 0;
 	game->player.plane_y = 0.66;
