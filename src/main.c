@@ -17,10 +17,6 @@ static int	initialize(t_game *game, char *mapname)
 {
 	char	*name;
 
-	game->rc = (t_rc *)malloc(sizeof(t_rc));
-	ft_memset(game->rc, 0, sizeof(t_rc)); // otherwise valgrind will complain a lot
-	if (!game->rc)
-		return(error_return(1, "rc struct malloc failed", 1));
 	name = ft_strjoin("CUBE3D - ", mapname);
 	game->ptrs.mlx = mlx_init();
 	if (game->ptrs.mlx == NULL)
@@ -33,27 +29,28 @@ static int	initialize(t_game *game, char *mapname)
 		free(game->ptrs.mlx);
 		return(error_return(1, "mlx_new_window failed", 3));
 	}
-	game->player.plane_x = 0;
-	game->player.plane_y = 0.66;
-	game->player.movespeed = 0.1;
+	game->player.movespeed = 0.100001;
 	game->player.rotspeed = 0.05;
+	game->player.pos_y += 0.5;
+	game->player.pos_x += 0.5;
 	game->img.mlx_img = mlx_new_image(game->ptrs.mlx, WINDOW_WIDTH,
 		WINDOW_HEIGHT);
-
 	load_texture(game);
-
 	return (0);
 }
+
 // function to be removed once input parser is fully functional and connected to renderer
 // not static or we cannot comment it out below ;)
 int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 {
 	if (ac || av || !ac)
 	{
-		game->player.pos_x = 3;
-		game->player.pos_y = 5;
-		game->player.look_x = -1;
-		game->player.look_y = 0;
+		game->player.pos_y = 4;
+		game->player.pos_x = 4;
+		game->player.look_y = -1;
+		game->player.look_x = 0;
+		game->player.plane_y = 0;
+		game->player.plane_x = 0.66;
 		game->scene.floor_colour = DEFAULT_FLOOR;
 		game->scene.ceiling_colour = DEFAULT_SKY;
 		game->scene.textures[0].filename = "./textures/lionwall.xpm";
@@ -63,11 +60,11 @@ int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->scene.map.map_height = 20;
 		game->scene.map.map_width = 20;
 		game->scene.map.map = allocate_map(game->scene.map.map_height, game->scene.map.map_width);
-		for (int x = 0; x < game->scene.map.map_width; x++){
-			for (int y = 0; y < game->scene.map.map_height; y++){
+		for (int y = 0; y < game->scene.map.map_width; y++){
+			for (int x = 0; x < game->scene.map.map_height; x++){
 				int tile = 0;
-				if (x == 0 || x == game->scene.map.map_height-1
-					|| y == 0 || y == game->scene.map.map_width-1)
+				if (y == 0 || y == game->scene.map.map_height-1
+					|| x == 0 || x == game->scene.map.map_width-1)
 					tile = 1;
 				game->scene.map.map[y][x] = tile;
 			}
@@ -125,6 +122,7 @@ int	main(int argc, char **argv)
 		ret = temp_interpreter_bypass(argc, argv, game);
 	else
 		ret = process_arguments(argc, argv, game);
+	// ret = temp_interpreter_bypass(argc, argv, game);
 	if (ret == 0)
 	{
 		print_map_on_stdout(game);
@@ -140,7 +138,6 @@ int	main(int argc, char **argv)
 		mlx_destroy_display(game->ptrs.mlx);
 	}
 	free(game->ptrs.mlx);
-	free(game->rc);
 	free(game);
 	return (ret);
 }

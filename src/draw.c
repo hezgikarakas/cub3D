@@ -133,12 +133,16 @@ void	draw_ui(t_game *game)
 {
 	char	dirx[30];
 	char	diry[30];
+	char	planex[30];
+	char	planey[30];
 	char	posx[30];
 	char	posy[30];
 	char	move[30];
 	char	rot[30];
 	sprintf(dirx, "look x: %f", game->player.look_x);
 	sprintf(diry, "look y: %f", game->player.look_y);
+	sprintf(planex, "plane x: %f", game->player.plane_x);
+	sprintf(planey, "plane y: %f", game->player.plane_y);
 	sprintf(posx, "pos x: %f", game->player.pos_x);
 	sprintf(posy, "pos y: %f", game->player.pos_y);
 	sprintf(move, "movement speed: %f", game->player.movespeed);
@@ -146,8 +150,10 @@ void	draw_ui(t_game *game)
 	
 	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, 15, 0x000000, dirx);
 	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, 25, 0x000000, diry);
-	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, 45, 0x000000, posx);
-	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, 55, 0x000000, posy);
+	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, 45, 0x000000, planex);
+	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, 55, 0x000000, planey);
+	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, 75, 0x000000, posx);
+	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, 85, 0x000000, posy);
 	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, WINDOW_HEIGHT - 15, 0x000000, move);
 	mlx_string_put(game->ptrs.mlx, game->ptrs.win, 10, WINDOW_HEIGHT - 25, 0x000000, rot);
 }
@@ -160,7 +166,7 @@ int	render(t_game *game)
 	game->img.addr = mlx_get_data_addr(game->img.mlx_img, &game->img.bpp,
 			&game->img.line_len, &game->img.endian);
 	draw_background(game);
-	draw_objects(game, game->rc);
+	draw_objects(game, &game->rc);
 	mlx_put_image_to_window(game->ptrs.mlx, game->ptrs.win,
 		game->img.mlx_img, 0, 0);
 	// mlx_destroy_image(game->ptrs.mlx, game->img.mlx_img);
