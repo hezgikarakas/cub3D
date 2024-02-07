@@ -12,11 +12,25 @@
 
 #include "./../include/cub3D.h"
 
+void print_map_on_stdout(t_game* game)
+{
+	for (int y = 0; y < game->scene.map.map_height; y++){
+		for (int x = 0; x < game->scene.map.map_width; x++){
+			if (game->scene.map.map[y][x] == 1)
+				printf("\033[1;31;40m%i \033[0m", game->scene.map.map[y][x]);
+			else
+				printf("\033[40m%i \033[0m", game->scene.map.map[y][x]);
+		}
+		printf("\n");
+	}
+}
+
 //sets window name and inits mlx pointers
 static int	initialize(t_game *game, char *mapname)
 {
 	char	*name;
 
+	print_map_on_stdout(game);
 	name = ft_strjoin("CUBE3D - ", mapname);
 	game->ptrs.mlx = mlx_init();
 	if (game->ptrs.mlx == NULL)
@@ -93,21 +107,6 @@ int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 	return (0); // always successful
 }
 
-void print_map_on_stdout(t_game* game)
-{
-	// here it is correctly done: map[y][x] (first the lines, then the columns)
-	// (i replaced i by y and j by x)
-	for (int y = 0; y < game->scene.map.map_height; y++){
-		for (int x = 0; x < game->scene.map.map_width; x++){
-			if (game->scene.map.map[y][x] == 1)
-				printf("\033[1;31;40m%i \033[0m", game->scene.map.map[y][x]);
-			else
-				printf("\033[40m%i \033[0m", game->scene.map.map[y][x]);
-		}
-		printf("\n");
-	}
-}
-
 int	main(int argc, char **argv)
 {
 	t_game	*game;
@@ -122,12 +121,8 @@ int	main(int argc, char **argv)
 		ret = temp_interpreter_bypass(argc, argv, game);
 	else
 		ret = process_arguments(argc, argv, game);
-	// ret = temp_interpreter_bypass(argc, argv, game);
 	if (ret == 0)
-	{
-		print_map_on_stdout(game);
 		ret = initialize(game, "test");
-	}
 	if (ret == 0)
 	{
 		mlx_loop_hook(game->ptrs.mlx, &render, game);

@@ -44,6 +44,22 @@ static double	get_wallx_texx_step(t_game *game, t_rc *rc)
 	return (1.0 * (double)64 / (double)rc->line_height);
 }
 
+static void	distancefade(int x, int y, int colour, t_game *game)
+{
+	int	fadedist;
+
+	if (game->scene.map.map_height < game->scene.map.map_width)
+		fadedist = game->scene.map.map_height;
+	else
+		fadedist = game->scene.map.map_width;
+	if (game->rc.side_hit == 0)
+		colour = gradient_increment(colour, 0x000000, 7, 2);
+	if (game->rc.perpwalldist > 3)
+		colour = gradient_increment(colour, DEFAULT_DISTANCE_FADE
+			, fadedist, game->rc.perpwalldist - 3);
+	img_pixel_put(&game->img, x, y, colour);
+}
+
 void	draw_textures(t_game *game, t_rc *rc, int *draw_start_end, int x)
 {
 	double	step;
@@ -63,12 +79,7 @@ void	draw_textures(t_game *game, t_rc *rc, int *draw_start_end, int x)
 		colour = *(int *)(game->scene.textures[rc->walldir].texture_addr
 				+ (rc->tex_y * game->scene.textures[rc->walldir].line_len
 					+ rc->tex_x * (game->scene.textures[rc->walldir].bpp / 8)));
-		if (rc->side_hit == 0)
-			colour = gradient_increment(colour, 0x000000, 7, 2);
-		if (rc->perpwalldist > 3)
-			colour = gradient_increment(colour, DEFAULT_DISTANCE_FADE
-				, 20, rc->perpwalldist - 3);
-		img_pixel_put(&game->img, x, y, colour);
+		distancefade(x, y, colour, game);
 		y++;
 	}
 }

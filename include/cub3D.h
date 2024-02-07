@@ -163,5 +163,4 @@ int	process_arguments(int ac, char **av, t_game *game);
 int	parse_level(char *map_fn, t_game *game);
 int	**allocate_map(int rows, int cols); //this function used to be static, i changed it to be able to use it in my temporary bypass function,
 										//should be changed back to static once it is no longer needed there
-
 #endif
