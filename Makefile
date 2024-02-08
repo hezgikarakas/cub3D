@@ -12,7 +12,8 @@
 
 NAME = cub3D
 SRCS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
-		src/parse_level.c src/controls.c src/textures.c
+		src/parse_level.c src/parse_pass1.c src/parse_pass2.c \
+		src/map_checks.c src/controls.c src/textures.c
 OBJS = $(SRCS:.c=.o)
 HDR = ./include/$(NAME).h
 COMPILER = cc
@@ -55,4 +56,7 @@ re:	fclean all
 
 remlx:	fclean all
 
-.PHONY:	all clean fclean re
+norm:
+	norminette $(SRCS) $(HDR)
+
+.PHONY:	all clean fclean re norm
