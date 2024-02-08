@@ -22,26 +22,50 @@ int	close_window(t_game *game)
 //	handles keypresses for forward and backward movement
 static void	move_player(int keysym, t_game *game)
 {
-	int newx;
-	int newy;
-
 	if (keysym == XK_Up || keysym == XK_w)
 	{
-		newy = (int)(game->player.pos_y + game->player.look_y * game->player.movespeed);
-		if (!game->scene.map.map[newy][(int)(game->player.pos_x)])
+		if (!game->scene.map.map[(int)((game->player.pos_y + game->player.look_y
+				* game->player.movespeed))][(int)(game->player.pos_x)])
 			game->player.pos_y += game->player.look_y * game->player.movespeed;
-		newx = (int)(game->player.pos_x + game->player.look_x * game->player.movespeed);
-		if (!game->scene.map.map[(int)(game->player.pos_y)][newx])
+		if (!game->scene.map.map[(int)(game->player.pos_y)]
+				[(int)(game->player.pos_x + game->player.look_x
+				* game->player.movespeed)])
 			game->player.pos_x += game->player.look_x * game->player.movespeed;
 	}
 	if (keysym == XK_Down || keysym == XK_s)
 	{
-		newx = (int)(game->player.pos_x - game->player.look_x * game->player.movespeed);
-		if (!game->scene.map.map[(int)(game->player.pos_y)][newx])
-			game->player.pos_x -= game->player.look_x * game->player.movespeed;
-		newy = (int)(game->player.pos_y - game->player.look_y * game->player.movespeed);
-		if (!game->scene.map.map[newy][(int)(game->player.pos_x)])
+		if (!game->scene.map.map[(int)(game->player.pos_y - game->player.look_y
+				* game->player.movespeed)][(int)(game->player.pos_x)])
 			game->player.pos_y -= game->player.look_y * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y)]
+				[(int)(game->player.pos_x - game->player.look_x
+				* game->player.movespeed)])
+			game->player.pos_x -= game->player.look_x * game->player.movespeed;
+	}
+}
+
+//	handles keypresses for left and right strafing
+static void	strafe_player(int keysym, t_game *game)
+{
+	if (keysym == XK_Page_Down || keysym == XK_e)
+	{
+		if (!game->scene.map.map[(int)((game->player.pos_y + game->player.look_x
+				* game->player.movespeed))][(int)(game->player.pos_x)])
+			game->player.pos_y += game->player.look_x * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y)]
+				[(int)(game->player.pos_x - game->player.look_y
+				* game->player.movespeed)])
+			game->player.pos_x -= game->player.look_y * game->player.movespeed;
+	}
+	if (keysym == XK_Page_Up || keysym == XK_q)
+	{
+		if (!game->scene.map.map[(int)(game->player.pos_y - game->player.look_x
+				* game->player.movespeed)][(int)(game->player.pos_x)])
+			game->player.pos_y -= game->player.look_x * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y)]
+				[(int)(game->player.pos_x + game->player.look_y
+				* game->player.movespeed)])
+			game->player.pos_x += game->player.look_y * game->player.movespeed;
 	}
 }
 
@@ -53,6 +77,7 @@ static void	rotate_player(int keysym, t_player *player)
 	double	temp_rotspeed;
 
 	temp_rotspeed = player->rotspeed;
+	temp_rotspeed *= -1;
 	if (keysym == XK_Right || keysym == XK_d)
 		temp_rotspeed *= -1;
 	old_dirx = player->look_x;
@@ -75,6 +100,9 @@ int	handle_keypress(int keysym, t_game *game)
 	if (keysym == XK_Up || keysym == XK_w
 		|| keysym == XK_Down || keysym == XK_s)
 		move_player(keysym, game);
+	if (keysym == XK_Page_Up || keysym == XK_q
+		|| keysym == XK_Page_Down || keysym == XK_e)
+		strafe_player(keysym, game);
 	if (keysym == XK_Left || keysym == XK_a
 		|| keysym == XK_Right || keysym == XK_d)
 		rotate_player(keysym, &game->player);

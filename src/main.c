@@ -12,48 +12,59 @@
 
 #include "./../include/cub3D.h"
 
+void print_map_on_stdout(t_game* game)
+{
+	for (int y = 0; y < game->scene.map.map_height; y++){
+		for (int x = 0; x < game->scene.map.map_width; x++){
+			if (game->scene.map.map[y][x] == 1)
+				printf("\033[1;31;40m%i \033[0m", game->scene.map.map[y][x]);
+			else
+				printf("\033[40m%i \033[0m", game->scene.map.map[y][x]);
+		}
+		printf("\n");
+	}
+}
+
 //sets window name and inits mlx pointers
 static int	initialize(t_game *game, char *mapname)
 {
 	char	*name;
 
-	game->rc = (t_rc *)malloc(sizeof(t_rc));
-	ft_memset(game->rc, 0, sizeof(t_rc)); // otherwise valgrind will complain a lot
-	if (!game->rc)
-		error_return(1, "rc struct malloc failed", 1);
+	print_map_on_stdout(game);
 	name = ft_strjoin("CUBE3D - ", mapname);
 	game->ptrs.mlx = mlx_init();
 	if (game->ptrs.mlx == NULL)
-		error_return(1, "mlx_init failed", 2);
+		return (error_return(0, "mlx_init failed", 2));
 	game->ptrs.win = mlx_new_window(game->ptrs.mlx, WINDOW_WIDTH,
 			WINDOW_HEIGHT, name);
 	free(name);
 	if (game->ptrs.win == NULL)
 	{
 		free(game->ptrs.mlx);
-		error_return(1, "mlx_new_window failed", 3);
+		return(error_return(1, "mlx_new_window failed", 3));
 	}
-	game->player.plane_x = 0;
-	game->player.plane_y = 0.66;
-	game->player.movespeed = 0.1;
+	game->player.movespeed = 0.100001;
 	game->player.rotspeed = 0.05;
+	game->player.pos_y += 0.5;
+	game->player.pos_x += 0.5;
 	game->img.mlx_img = mlx_new_image(game->ptrs.mlx, WINDOW_WIDTH,
 		WINDOW_HEIGHT);
-
 	load_texture(game);
-
 	return (0);
 }
+
 // function to be removed once input parser is fully functional and connected to renderer
 // not static or we cannot comment it out below ;)
 int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 {
 	if (ac || av || !ac)
 	{
-		game->player.pos_x = 3;
-		game->player.pos_y = 5;
-		game->player.look_x = -1;
-		game->player.look_y = 0;
+		game->player.pos_y = 4;
+		game->player.pos_x = 4;
+		game->player.look_y = -1;
+		game->player.look_x = 0;
+		game->player.plane_y = 0;
+		game->player.plane_x = 0.66;
 		game->scene.floor_colour = DEFAULT_FLOOR;
 		game->scene.ceiling_colour = DEFAULT_SKY;
 		game->scene.textures[0].filename = "./textures/lionwall.xpm";
@@ -63,11 +74,11 @@ int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->scene.map.map_height = 20;
 		game->scene.map.map_width = 20;
 		game->scene.map.map = allocate_map(game->scene.map.map_height, game->scene.map.map_width);
-		for (int x = 0; x < game->scene.map.map_width; x++){
-			for (int y = 0; y < game->scene.map.map_height; y++){
+		for (int y = 0; y < game->scene.map.map_width; y++){
+			for (int x = 0; x < game->scene.map.map_height; x++){
 				int tile = 0;
-				if (x == 0 || x == game->scene.map.map_height-1
-					|| y == 0 || y == game->scene.map.map_width-1)
+				if (y == 0 || y == game->scene.map.map_height-1
+					|| x == 0 || x == game->scene.map.map_width-1)
 					tile = 1;
 				game->scene.map.map[y][x] = tile;
 			}
@@ -96,21 +107,6 @@ int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 	return (0); // always successful
 }
 
-void print_map_on_stdout(t_game* game)
-{
-	// here it is correctly done: map[y][x] (first the lines, then the columns)
-	// (i replaced i by y and j by x)
-	for (int y = 0; y < game->scene.map.map_height; y++){
-		for (int x = 0; x < game->scene.map.map_width; x++){
-			if (game->scene.map.map[y][x] == 1)
-				printf("\033[1;31;40m%i \033[0m", game->scene.map.map[y][x]);
-			else
-				printf("\033[40m%i \033[0m", game->scene.map.map[y][x]);
-		}
-		printf("\n");
-	}
-}
-
 int	main(int argc, char **argv)
 {
 	t_game	*game;
@@ -126,10 +122,7 @@ int	main(int argc, char **argv)
 	else
 		ret = process_arguments(argc, argv, game);
 	if (ret == 0)
-	{
-		print_map_on_stdout(game);
 		ret = initialize(game, "test");
-	}
 	if (ret == 0)
 	{
 		mlx_loop_hook(game->ptrs.mlx, &render, game);
@@ -140,7 +133,6 @@ int	main(int argc, char **argv)
 		mlx_destroy_display(game->ptrs.mlx);
 	}
 	free(game->ptrs.mlx);
-	free(game->rc);
 	free(game);
 	return (ret);
 }

@@ -25,20 +25,22 @@ void	img_pixel_put(t_img *img, int x, int y, int color)
 }
 
 //	returns color gradient increment
-int	gradient_increment(int start, int end, int stepc, int stepn)
+int	gradient_increment(int start, int end, int step_c, float step_n)
 {
 	float	step_r;
 	float	step_g;
 	float	step_b;
 
+	if (step_n > step_c)
+		step_n = step_c;
 	step_r = (float)(((end >> 16) & 0xFF)
-			- ((start >> 16) & 0xFF)) / (float)stepc;
+			- ((start >> 16) & 0xFF)) / (float)step_c;
 	step_g = (float)(((end >> 8) & 0xFF)
-			- ((start >> 8) & 0xFF)) / (float)stepc;
-	step_b = (float)((end & 0xFF) - (start & 0xFF)) / (float)stepc;
-	return (((int)(((start >> 16) & 0xFF) + stepn * step_r) << 16)
-			+ ((int)(((start >> 8) & 0xFF) + stepn * step_g) << 8)
-			+ ((int)(((start >> 0) & 0xFF) + stepn * step_b) << 0));
+			- ((start >> 8) & 0xFF)) / (float)step_c;
+	step_b = (float)((end & 0xFF) - (start & 0xFF)) / (float)step_c;
+	return (((int)(((start >> 16) & 0xFF) + step_n * step_r) << 16)
+			+ ((int)(((start >> 8) & 0xFF) + step_n * step_g) << 8)
+			+ ((int)(((start >> 0) & 0xFF) + step_n * step_b) << 0));
 }
 
 /*	calculate position and rotation of camera plane,

@@ -27,13 +27,12 @@
 # define WINDOW_HEIGHT 480
 
 //	default values
-// # define DEFAULT_FLOOR 0x37dd08
 # define DEFAULT_FLOOR 0x57f292
 # define DEFAULT_FLOOR_GRADIENT 0x07775f
-// # define DEFAULT_SKY 0x07c2ed
 # define DEFAULT_SKY 0x5f61e8
 # define DEFAULT_SKY_GRADIENT 0xf25792
 # define DEFAULT_WALL 0xbebeee
+# define DEFAULT_DISTANCE_FADE 0x2a564d
 
 # define NUMBER_OF_TEXTURES 4
 
@@ -108,8 +107,8 @@ typedef struct	s_scene
 typedef struct	s_rc
 {
 	double	camera_x;
-	double	raydir_x;
 	double	raydir_y;
+	double	raydir_x;
 	double	side_dist_x;
 	double	side_dist_y;
 	double	delta_dist_x;
@@ -134,7 +133,7 @@ typedef struct	s_game
 	t_img		img;
 	t_scene		scene;
 	t_player	player;
-	t_rc		*rc; // why pointer? why not use without * then we do not need malloc
+	t_rc		rc;
 	//if using the new error function i suggested these two variables would be redundand i think
 	char		*error_message; // no error if NULL
 	char		*error_extramessage; // no extra info if NULL
@@ -148,7 +147,7 @@ void	draw_textures(t_game *game, t_rc *rc, int *draw_start_end, int x);
 void	img_pixel_put(t_img *img, int x, int y, int color);
 void	init_rc(t_rc *rc, t_game *game, int x);
 void	ver_line(t_game *game, int x, int *strt_end, int colour);
-int		gradient_increment(int start, int end, int stepc, int stepn);
+int		gradient_increment(int start, int end, int stepc, float stepn);
 //	textures.c
 void	load_texture(t_game *game);
 //	controls.c
@@ -164,5 +163,4 @@ int	process_arguments(int ac, char **av, t_game *game);
 int	parse_level(char *map_fn, t_game *game);
 int	**allocate_map(int rows, int cols); //this function used to be static, i changed it to be able to use it in my temporary bypass function,
 										//should be changed back to static once it is no longer needed there
-
 #endif
