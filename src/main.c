@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/31 16:25:44 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:27:07 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,28 @@ void print_map_on_stdout(t_game* game)
 	for (int y = 0; y < game->scene.map.map_height; y++){
 		for (int x = 0; x < game->scene.map.map_width; x++){
 			if (game->scene.map.map[y][x] == 1)
-				printf("\033[1;31;40m%i \033[0m", game->scene.map.map[y][x]);
+				printf("\033[1;31;40m%c \033[0m", 'H');
+			else if (game->scene.map.map[y][x] == -1)
+				printf("\033[1;32;40m%c \033[0m", 'S');
+			else if (game->scene.map.map[y][x] == 0)
+				printf("\033[40m%c \033[0m", '.');
 			else
-				printf("\033[40m%i \033[0m", game->scene.map.map[y][x]);
+				printf("\033[1;33;40m%c \033[0m", 'o');
 		}
 		printf("\n");
 	}
 }
 
 //sets window name and inits mlx pointers
-static int	initialize(t_game *game, char *mapname)
+static int	initialize(t_game *game)
 {
 	char	*name;
 
 	print_map_on_stdout(game);
-	name = ft_strjoin("CUBE3D - ", mapname);
+	if (game->scene.map.map_name)
+		name = ft_strjoin("CUBE3D - ", game->scene.map.map_name);
+	else
+		name = ft_strdup("CUBE3D - DEFAULT");
 	game->ptrs.mlx = mlx_init();
 	if (game->ptrs.mlx == NULL)
 		return (error_return(0, "mlx_init failed", 2));
@@ -49,7 +56,7 @@ static int	initialize(t_game *game, char *mapname)
 	game->player.pos_x += 0.5;
 	game->img.mlx_img = mlx_new_image(game->ptrs.mlx, WINDOW_WIDTH,
 		WINDOW_HEIGHT);
-	load_texture(game);
+	load_texture2(game);
 	return (0);
 }
 
@@ -122,7 +129,7 @@ int	main(int argc, char **argv)
 	else
 		ret = process_arguments(argc, argv, game);
 	if (ret == 0)
-		ret = initialize(game, "test");
+		ret = initialize(game);
 	if (ret == 0)
 	{
 		mlx_loop_hook(game->ptrs.mlx, &render, game);

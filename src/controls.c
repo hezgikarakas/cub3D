@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:13:13 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/01/26 14:08:13 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/08 13:18:56 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,20 @@ static void	move_player(int keysym, t_game *game)
 {
 	if (keysym == XK_Up || keysym == XK_w)
 	{
-		if (!game->scene.map.map[(int)((game->player.pos_y + game->player.look_y
+		if (0 >= game->scene.map.map[(int)((game->player.pos_y + game->player.look_y
 				* game->player.movespeed))][(int)(game->player.pos_x)])
 			game->player.pos_y += game->player.look_y * game->player.movespeed;
-		if (!game->scene.map.map[(int)(game->player.pos_y)]
+		if (0 >= game->scene.map.map[(int)(game->player.pos_y)]
 				[(int)(game->player.pos_x + game->player.look_x
 				* game->player.movespeed)])
 			game->player.pos_x += game->player.look_x * game->player.movespeed;
 	}
 	if (keysym == XK_Down || keysym == XK_s)
 	{
-		if (!game->scene.map.map[(int)(game->player.pos_y - game->player.look_y
+		if (0 >= game->scene.map.map[(int)(game->player.pos_y - game->player.look_y
 				* game->player.movespeed)][(int)(game->player.pos_x)])
 			game->player.pos_y -= game->player.look_y * game->player.movespeed;
-		if (!game->scene.map.map[(int)(game->player.pos_y)]
+		if (0 >= game->scene.map.map[(int)(game->player.pos_y)]
 				[(int)(game->player.pos_x - game->player.look_x
 				* game->player.movespeed)])
 			game->player.pos_x -= game->player.look_x * game->player.movespeed;
@@ -49,20 +49,20 @@ static void	strafe_player(int keysym, t_game *game)
 {
 	if (keysym == XK_Page_Down || keysym == XK_e)
 	{
-		if (!game->scene.map.map[(int)((game->player.pos_y + game->player.look_x
+		if (0 >= game->scene.map.map[(int)((game->player.pos_y + game->player.look_x
 				* game->player.movespeed))][(int)(game->player.pos_x)])
 			game->player.pos_y += game->player.look_x * game->player.movespeed;
-		if (!game->scene.map.map[(int)(game->player.pos_y)]
+		if (0 >= game->scene.map.map[(int)(game->player.pos_y)]
 				[(int)(game->player.pos_x - game->player.look_y
 				* game->player.movespeed)])
 			game->player.pos_x -= game->player.look_y * game->player.movespeed;
 	}
 	if (keysym == XK_Page_Up || keysym == XK_q)
 	{
-		if (!game->scene.map.map[(int)(game->player.pos_y - game->player.look_x
+		if (0 >= game->scene.map.map[(int)(game->player.pos_y - game->player.look_x
 				* game->player.movespeed)][(int)(game->player.pos_x)])
 			game->player.pos_y -= game->player.look_x * game->player.movespeed;
-		if (!game->scene.map.map[(int)(game->player.pos_y)]
+		if (0 >= game->scene.map.map[(int)(game->player.pos_y)]
 				[(int)(game->player.pos_x + game->player.look_y
 				* game->player.movespeed)])
 			game->player.pos_x += game->player.look_y * game->player.movespeed;

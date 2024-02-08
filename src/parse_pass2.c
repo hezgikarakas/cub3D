@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_pass2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/24 15:00:06 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/08 13:20:33 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,34 @@ static int pass2_convert_one_field(char source, int* destination, t_convert_help
 	else if (source >= '0' && source <= '9')
 		*destination = source - '0';
 	else if (ft_strchr("NSWE", source))
-		*destination = 0;
+		*destination = -1;
 	else
 		return (set_return_error(ph2->game, "Unexpected map character, expect [0-9NSWE ]"));
 
 	return (0);
 }
 
-static int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int dy)
+static int pass2_found_player(t_convert_helper* ph2, int dx, int dy)
 {
 	// printf("found player at x %d y %d facing dx %d dy %d\n", x, y, dx, dy);
 	if (ph2->found_player)
 		return (set_return_error(ph2->game, "Found more than one player"));
 
-	ph2->game->player.pos_x = x + 0.5; // walls are exactly on given x/y location, so move player by half a grid cell
-	ph2->game->player.pos_y = y + 0.5; // TODO there might be a better way to fix this (putting no +0.5 here and moving walls) but maybe this way is the best way
+	ph2->game->player.plane_y = 0;
+	ph2->game->player.plane_x = 0;
+	// shifting player position caused crash if done at this point, for now happens in initialize
+	// ph2->game->player.pos_x += 0.5; // walls are exactly on given x/y location, so move player by half a grid cell
+	// ph2->game->player.pos_y += 0.5; // TODO there might be a better way to fix this (putting no +0.5 here and moving walls) but maybe this way is the best way
 	ph2->game->player.look_x = dx;
 	ph2->game->player.look_y = dy;
+	if (dy == -1)
+		ph2->game->player.plane_x = 0.66;
+	else if (dy == 1)
+		ph2->game->player.plane_x = -0.66;
+	else if (dx == -1)
+		ph2->game->player.plane_y = -0.66;
+	else if (dx == 1)
+		ph2->game->player.plane_y = 0.66;
 	ph2->found_player = 1;
 
 	return (0);
@@ -68,15 +79,19 @@ static int pass2_handle_player(char source, int x, int y, t_convert_helper* ph2)
 {
 	int ret;
 
+	// the smaller the y coordinate the higher north, this means -1 is looking north 1 is looking south
 	ret = 0;
 	if (source == 'N')
-		ret = pass2_found_player(ph2, x, y, 0, 1);
+		ret = pass2_found_player(ph2, 0, -1);
 	else if (source == 'S')
-		ret = pass2_found_player(ph2, x, y, 0, -1);
+		ret = pass2_found_player(ph2, 0, 1);
 	else if (source == 'W')
-		ret = pass2_found_player(ph2, x, y, -1, 0);
+		ret = pass2_found_player(ph2, -1, 0);
 	else if (source == 'E')
-		ret = pass2_found_player(ph2, x, y, 1, 0);
+		ret = pass2_found_player(ph2, 0, -1);
+	else return(ret);
+	ph2->game->player.pos_x = x;
+	ph2->game->player.pos_y = y;
 	return (ret);
 }
 

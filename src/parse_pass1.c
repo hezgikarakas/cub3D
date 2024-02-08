@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_pass1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/24 15:00:06 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:00:45 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void pass1_mark_map_end(t_parse_helper* ph)
 	ph->map_end_idx = ph->line_idx;
 }
 
-static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
+int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 {
 	char **parts;
 	int i;
@@ -70,7 +70,7 @@ static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 			// TODO free parts of parts and parts
 			return (set_return_error_extra(ph->game, "Unexpected color value, found ", parts[i]));
 		}
-		*color = (int)colortemp;
+		// *color = (int)colortemp;
 		++color;
 		i++;
 	}
@@ -93,7 +93,7 @@ static int pass1_parse_texture(t_parse_helper* ph, t_texture *texture, char *res
 	if (!s)
 		return (set_return_error(ph->game, "Unexpected empty texture string rest"));
 	// TODO test if texture has .xmp file ending
-	texture->filename = s;
+	(void)texture->filename;
 	ph->interpreted_this_line = 1;
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_textures.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 15:35:07 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/01/31 16:09:25 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:36:42 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	distancefade(int x, int y, int colour, t_game *game)
 	if (game->rc.side_hit == 0)
 		colour = gradient_increment(colour, 0x000000, 7, 2);
 	if (game->rc.perpwalldist > 3)
-		colour = gradient_increment(colour, DEFAULT_DISTANCE_FADE
+		colour = gradient_increment(colour, game->scene.fog
 			, fadedist, game->rc.perpwalldist - 3);
 	img_pixel_put(&game->img, x, y, colour);
 }

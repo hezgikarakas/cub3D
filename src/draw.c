@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:38:53 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/01/31 16:15:18 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:31:23 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,7 @@ static void	draw_background(t_game *game)
 {
 	int	x;
 	int	y;
-	int	floor_colour2;
-	int	sky_colour2;
 
-	// floor_colour2 = gradient_increment(game->scene.colours[1][0], 0xaaaaaa, 4, 4);
-	// sky_colour2 = gradient_increment(game->scene.colors[0][0],0xaaaaaa, 4, 4);
-	sky_colour2 = DEFAULT_SKY_GRADIENT;
-	floor_colour2 = DEFAULT_FLOOR_GRADIENT;
 	y = 0;
 	while (y < WINDOW_HEIGHT)
 	{
@@ -33,10 +27,10 @@ static void	draw_background(t_game *game)
 			if (y < WINDOW_HEIGHT / 2)
 				img_pixel_put(&game->img, x, y,
 					gradient_increment(game->scene.ceiling_colour,
-						sky_colour2, WINDOW_HEIGHT / 2, y));
+						game->scene.ceiling_gradient, WINDOW_HEIGHT / 2, y));
 			else
 				img_pixel_put(&game->img, x, y,
-					gradient_increment(floor_colour2, game->scene.floor_colour,
+					gradient_increment(game->scene.floor_gradient, game->scene.floor_colour,
 						WINDOW_HEIGHT / 2, y - WINDOW_HEIGHT / 2));
 			x++;
 		}

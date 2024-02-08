@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/31 16:08:39 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:35:22 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,11 @@ typedef struct	s_scene
 	// ok, and colour is 0xRRGGBB it seems, have changed that
 	int			ceiling_colour;
 	int			floor_colour;
+	int			ceiling_gradient;
+	int			floor_gradient;
+	int			fog;
+	char		*ceiling_str;
+	char		*floor_str;
 }				t_scene;
 
 //	contains all variables used in raycasting
@@ -149,7 +154,8 @@ void	init_rc(t_rc *rc, t_game *game, int x);
 void	ver_line(t_game *game, int x, int *strt_end, int colour);
 int		gradient_increment(int start, int end, int stepc, float stepn);
 //	textures.c
-void	load_texture(t_game *game);
+void	load_texture(t_game *game, int dir);
+void	load_texture2(t_game *game);
 //	controls.c
 int		handle_keypress(int keysym, t_game *game);
 int		close_window(t_game *game);
