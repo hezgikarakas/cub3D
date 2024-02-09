@@ -14,7 +14,7 @@
 
 static void	init_arguments(t_game *game)
 {
-	// game->scene.map.map_name = 0;
+	game->scene.map.map_name = 0;
 	game->scene.textures[0].filename = 0;
 	game->scene.textures[1].filename = 0;
 	game->scene.textures[2].filename = 0;
@@ -112,9 +112,13 @@ int	process_arguments(int ac, char **av, t_game *game)
 	init_arguments(game);
 	if (validate_arguments(ac, av, game))
 		return (1);
+	game->scene.map.map_name = av[1];
+	// open and read through .cub file, into array
+	// use array to get textures and colours using loop that is currently in process_arguments
+	// need to change get_textures and get_colours to read from array instead of argv because i was wrong about how arguments work in cub3d
 	get_textures(game);
 	get_colours(game);
-	game->scene.map.map_name = av[1];
+	// return (function_that_reads_the_map_makes_sure_it_is_valid_and_saves_it_into_game.scene.map.map);
 	return (parse_level(game->scene.map.map_name, game));
 }
 
