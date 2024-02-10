@@ -43,16 +43,29 @@ static int pass2_convert_one_field(char source, int* destination, t_convert_help
 	return (0);
 }
 
+/*
+ * compute plane from look direction
+ * plane is vector (lookx, looky)
+ * rotated leftwards by 90 degrees
+ * scaled down by 0.66
+ * see https://en.wikipedia.org/wiki/Rotation_matrix
+ */
 static int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int dy)
 {
+	float	fx;
+	float	fy;
+
 	// printf("found player at x %d y %d facing dx %d dy %d\n", x, y, dx, dy);
 	if (ph2->found_player)
 		return (set_return_error(ph2->game, "Found more than one player"));
-
+	fx = dx;
+	fy = dy;
 	ph2->game->player.pos_x = x + 0.5; // walls are exactly on given x/y location, so move player by half a grid cell
 	ph2->game->player.pos_y = y + 0.5; // TODO there might be a better way to fix this (putting no +0.5 here and moving walls) but maybe this way is the best way
-	ph2->game->player.look_x = dx;
-	ph2->game->player.look_y = dy;
+	ph2->game->player.look_x = fx;
+	ph2->game->player.look_y = fy;
+	ph2->game->player.plane_x = 0.66 * (fx * cos(0.5 * 3.14) - fy * sin(0.5 * 3.14));
+	ph2->game->player.plane_y = 0.66 * (fx * sin(0.5 * 3.14) + fy * cos(0.5 * 3.14));
 	ph2->found_player = 1;
 
 	return (0);
