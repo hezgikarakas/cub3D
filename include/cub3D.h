@@ -168,6 +168,6 @@ int parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line);
 // parse_pass2.c
 int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx);
 // map_checks.c
-int map_final_checks(t_scene* scn);
+int map_final_checks(t_game* game);
 
 #endif

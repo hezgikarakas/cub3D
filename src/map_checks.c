@@ -12,11 +12,55 @@
 
 #include "./../include/cub3D.h"
 
+/* if we visit outside the map, return 1 (error)
+ * if we come to a 0, we set to -100 and visit all fields around
+ * return 0 */
+static int ft_flood_fill(t_map *map, int x, int y)
+{
+	int	ret;
+
+	if (x < 0 || y < 0 || x >= map->map_width || y >= map->map_height)
+		return (1);
+	ret = 0;
+	if (map->map[y][x] == 0)
+	{
+		map->map[y][x] = -100;
+		ret = ret | ft_flood_fill(map, x - 1, y);
+		ret = ret | ft_flood_fill(map, x + 1, y);
+		ret = ret | ft_flood_fill(map, x, y - 1);
+		ret = ret | ft_flood_fill(map, x, y + 1);
+	}
+	return (ret);
+}
+
+static void	ft_flood_restore(t_game *game)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < game->scene.map.map_height)
+	{
+		x = 0;
+		while (x < game->scene.map.map_width)
+		{
+			if (game->scene.map.map[y][x] == -100)
+				game->scene.map.map[y][x] = 0;
+			x++;
+		}
+		y++;
+	}
+}
+
 /* check if player is correctly enclosed in walls in the map
    returns 1 on error else 0 */
-int map_final_checks(t_scene* scn)
+int map_final_checks(t_game* game)
 {
-	(void)scn;
-	// TODO flood fill, take from so_long (set visited areas to 100+<value> and then reset
-	return (0);
+	int ret;
+	
+	ret = ft_flood_fill(
+		&game->scene.map,
+		game->player.pos_x, game->player.pos_y);
+	ft_flood_restore(game);
+	return (ret);
 }

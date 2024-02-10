@@ -70,10 +70,10 @@ int	parse_level(char *map_fn, t_game *game)
 		// TODO deallocate?
 		return (set_return_error(game, "parsing pass 2 failed"));
 	}
-	if (map_final_checks(scn))
+	if (map_final_checks(game))
 	{
 		// TODO deallocate?
-		return (set_return_error(game, "parsing final checks failed"));
+		return (error_return(0, "map checks failed", -1));
 	}
 	return (0);
 }
