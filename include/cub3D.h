@@ -136,6 +136,24 @@ typedef struct	s_game
 	t_rc		rc;
 }				t_game;
 
+// helper structure for pass 1 of parsing
+typedef struct s_parse_helper
+{
+	int			map_fd;
+	char		*line_temp;
+	int			linelength;
+	t_game		*game;
+	int			found_floor_color;
+	int			found_ceiling_color;
+	int			found_map_start;
+	int			found_map_end;
+	int			line_idx;
+	int			map_start_idx;
+	int			map_end_idx;
+	int			map_max_line_length;
+	int			interpreted_this_line;
+} t_parse_helper;
+
 //	draw.c
 int		render(t_game *game);
 //	draw_textures.c
@@ -160,6 +178,8 @@ int	**allocate_map(int rows, int cols); //this function used to be static, i cha
 										//should be changed back to static once it is no longer needed there
 // parse_pass1.c
 int parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line);
+// parse_pass1_classify.c
+int pass1_classify_trimmed_line(t_parse_helper *ph, char *line_temp, char *s);
 // parse_pass2.c
 int parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx);
 // map_checks.c

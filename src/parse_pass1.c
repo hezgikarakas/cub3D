@@ -12,90 +12,10 @@
 
 #include "./../include/cub3D.h"
 
-typedef struct s_parse_helper
-{
-	int			map_fd;
-	char		*line_temp;
-	t_game		*game;
-	int			found_floor_color;
-	int			found_ceiling_color;
-	int			found_map_start;
-	int			found_map_end;
-	int			line_idx;
-	int			map_start_idx;
-	int			map_end_idx;
-	int			map_max_line_length;
-	int			interpreted_this_line;
-} t_parse_helper;
-
 static void	pass1_mark_map_end(t_parse_helper *ph)
 {
 	ph->found_map_end = 1;
 	ph->map_end_idx = ph->line_idx;
-}
-
-static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
-{
-	char **parts;
-	int i;
-	long 	colortemp;
-	int *found_color;
-	int *color;
-
-	if (which == 'F')
-	{
-		color = &ph->game->scene.floor_colour;
-		found_color = &ph->found_floor_color;
-	}
-	else if (which == 'C')
-	{
-		color = &ph->game->scene.ceiling_colour;
-		found_color = &ph->found_ceiling_color;
-	}
-	else
-		return (error_return(0, "Unexpected color line", -1));
-
-	*found_color = 1;
-
-	parts = ft_split(rest, ',');
-	if (!parts)
-		return (error_return(1, "malloc error", -1));
-	
-	i = 0;
-	while(parts[i] && i < 3)
-	{
-		colortemp = ft_atoi(parts[i]);
-		if (colortemp <= 0 || colortemp >= 256)
-		{
-			// TODO free parts of parts and parts
-			return (error_return_s(0, "Unexpected color value, found ", -1, parts[i]));
-		}
-		*color = (int)colortemp;
-		++color;
-		i++;
-	}
-	if (i < 3 || (i == 3 && parts[i]))
-	{
-			// TODO free parts of parts and parts
-			return (error_return_s(0, "Expect 3 color components "
-				"found the following color spec ", -1, rest));
-	}
-	// TODO free parts of parts and parts
-	ph->interpreted_this_line = 1;
-	return (0);
-}
-
-static int pass1_parse_texture(t_parse_helper* ph, t_texture *texture, char *rest)
-{
-	char *s;
-
-	s = ft_strtrim(rest, " \t\r\n");
-	if (!s)
-		return (error_return(0, "Unexpected empty texture file name!", -1));
-	// TODO test if texture has .xmp file ending
-	texture->filename = s;
-	ph->interpreted_this_line = 1;
-	return (0);
 }
 
 static void	handle_potential_map_end(t_parse_helper *ph)
@@ -114,7 +34,6 @@ static void	handle_potential_map_end(t_parse_helper *ph)
 static int	pass1_classify_line(char *line_temp, t_parse_helper *ph)
 {
 	char	*s;
-	int		linelength;
 
 	s = ft_strtrim(line_temp, " \t\r\n");
 	if (!s || s[0] == 0)
@@ -131,41 +50,8 @@ static int	pass1_classify_line(char *line_temp, t_parse_helper *ph)
 			return (error_return(0, "Empty line in map is not allowed!", -1));
 		}
 		ph->interpreted_this_line = 0;
-		if (!ph->found_map_start && s[1] != 0 && s[2] != 0)
-		{
-			if (s[0] == 'C' || s[0] == 'F')
-				if (pass1_parse_color(ph, s[0], s + 1))
-					return (1);
-			// indexes see scene.c
-			if (s[0] == 'N' && s[1] == 'O')
-				if (pass1_parse_texture(ph, &ph->game->scene.textures[0], s + 2))
-					return (1);
-			if (s[0] == 'E' && s[1] == 'A')
-				if (pass1_parse_texture(ph, &ph->game->scene.textures[1], s + 2))
-					return (1);
-			if (s[0] == 'S' && s[1] == 'O')
-				if (pass1_parse_texture(ph, &ph->game->scene.textures[2], s + 2))
-					return (1);
-			if (s[0] == 'W' && s[1] == 'E')
-				if (pass1_parse_texture(ph, &ph->game->scene.textures[3], s + 2))
-					return (1);
-		}
-		free(s);
-		if (!ph->found_map_start && !ph->interpreted_this_line)
-		{
-			// everything we cannot interpret should be a map, if it is not, we will detect in pass 2
-			// this creates maybe strange error messages, but it should accept all correct maps and reject all incorrect ones
-			ph->found_map_start = 1;
-			ph->map_start_idx = ph->line_idx;
-		}
-		if (ph->found_map_start && !ph->found_map_end)
-		{
-			linelength = ft_strlen(line_temp);
-			if (line_temp[linelength - 1] == '\n')
-				linelength--;
-			if (linelength > ph->map_max_line_length)
-				ph->map_max_line_length = linelength;
-		}
+		if (pass1_classify_trimmed_line(ph, line_temp, s))
+			return (1);
 	}
 	ph->line_idx++;
 	return (0);

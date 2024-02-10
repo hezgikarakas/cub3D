@@ -15,22 +15,20 @@
 /* if we visit outside the map, return 1 (error)
  * if we come to a 0, we set to -100 and visit all fields around
  * return 0 */
-static int ft_flood_fill(t_map *map, int x, int y)
+static int	ft_flood_fill(t_map *map, int x, int y)
 {
-	int	ret;
-
 	if (x < 0 || y < 0 || x >= map->map_width || y >= map->map_height)
-		return (1);
-	ret = 0;
+		return (error_return(0, "player is not enclosed by walls", -1));
 	if (map->map[y][x] == 0)
 	{
 		map->map[y][x] = -100;
-		ret = ret | ft_flood_fill(map, x - 1, y);
-		ret = ret | ft_flood_fill(map, x + 1, y);
-		ret = ret | ft_flood_fill(map, x, y - 1);
-		ret = ret | ft_flood_fill(map, x, y + 1);
+		if (ft_flood_fill(map, x - 1, y)
+			|| ft_flood_fill(map, x + 1, y)
+			|| ft_flood_fill(map, x, y - 1)
+			|| ft_flood_fill(map, x, y + 1))
+			return (1);
 	}
-	return (ret);
+	return (0);
 }
 
 static void	ft_flood_restore(t_game *game)
