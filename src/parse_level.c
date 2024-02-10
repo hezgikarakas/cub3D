@@ -12,19 +12,19 @@
 
 #include "./../include/cub3D.h"
 
-static int	validate_arguments(int ac, char **av, t_game *game)
+static int	validate_arguments(int ac, char **av)
 {
 	if (ac != 2)
-		return (set_return_error(game, "invalid number of arguments"));
+		return (error_return(0, "invalid number of arguments", -1));
 	if (ft_strncmp(av[1] + ft_strlen(av[1]) - 4, ".cub", 4))
-		return (set_return_error_extra(game,
-				"map file must have .cub ending, found ", av[1]));
+		return (error_return_s(0, 
+			"map file must have .cub ending, found ", -1, av[1]));
 	return (0);
 }
 
 int	process_arguments(int ac, char **av, t_game *game)
 {
-	if (validate_arguments(ac, av, game))
+	if (validate_arguments(ac, av))
 		return (1);
 	game->scene.map.map_name = av[1];
 	return (parse_level(game->scene.map.map_name, game));
@@ -61,14 +61,14 @@ int	parse_level(char *map_fn, t_game *game)
 
 	scn = &game->scene;
 	if (parse_mapfile_pass_1(map_fn, game, &map_start_line))
-		return (set_return_error(game, "parsing pass 1 failed"));
+		return (error_return_s(0, "parsing pass 1 failed for ", -1, map_fn));
 	scn->map.map = allocate_map(scn->map.map_height, scn->map.map_width);
 	if (!scn->map.map)
-		return (set_return_error(game, "allocating map failed")); 
+		return (error_return(1, "allocating map failed", -1)); 
 	if (parse_mapfile_pass_2(map_fn, game, map_start_line))
 	{
 		// TODO deallocate?
-		return (set_return_error(game, "parsing pass 2 failed"));
+		return (error_return_s(0, "parsing pass 2 failed for ", -1, map_fn));
 	}
 	if (map_final_checks(game))
 	{

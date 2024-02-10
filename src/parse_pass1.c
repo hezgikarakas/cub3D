@@ -53,13 +53,13 @@ static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 		found_color = &ph->found_ceiling_color;
 	}
 	else
-		return (set_return_error(ph->game, "Unexpected color line"));
+		return (error_return(0, "Unexpected color line", -1));
 
 	*found_color = 1;
 
 	parts = ft_split(rest, ',');
 	if (!parts)
-		return (set_return_error(ph->game, "malloc error"));
+		return (error_return(1, "malloc error", -1));
 	
 	i = 0;
 	while(parts[i] && i < 3)
@@ -68,7 +68,7 @@ static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 		if (colortemp <= 0 || colortemp >= 256)
 		{
 			// TODO free parts of parts and parts
-			return (set_return_error_extra(ph->game, "Unexpected color value, found ", parts[i]));
+			return (error_return_s(0, "Unexpected color value, found ", -1, parts[i]));
 		}
 		*color = (int)colortemp;
 		++color;
@@ -77,8 +77,8 @@ static int pass1_parse_color(t_parse_helper* ph, char which, char *rest)
 	if (i < 3 || (i == 3 && parts[i]))
 	{
 			// TODO free parts of parts and parts
-			return (set_return_error_extra(
-				ph->game, "Expect 3 color components, found the following color spec ", rest));
+			return (error_return_s(0, "Expect 3 color components "
+				"found the following color spec ", -1, rest));
 	}
 	// TODO free parts of parts and parts
 	ph->interpreted_this_line = 1;
@@ -91,7 +91,7 @@ static int pass1_parse_texture(t_parse_helper* ph, t_texture *texture, char *res
 
 	s = ft_strtrim(rest, " \t\r\n");
 	if (!s)
-		return (set_return_error(ph->game, "Unexpected empty texture string rest"));
+		return (error_return(0, "Unexpected empty texture file name!", -1));
 	// TODO test if texture has .xmp file ending
 	texture->filename = s;
 	ph->interpreted_this_line = 1;
@@ -129,7 +129,7 @@ static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
 		if (ph->found_map_end)
 		{
 			free(s);
-			return (set_return_error(ph->game, "Empty line within map is not allowed"));
+			return (error_return(0, "Empty line within map is not allowed!", -1));
 		}
 		ph->interpreted_this_line = 0;
 		if (!ph->found_map_start && s[1] != 0 && s[2] != 0)
@@ -177,7 +177,7 @@ static int pass1_finalize(t_parse_helper* ph, int* map_start_line)
 {
 	handle_potential_map_end(ph);
 	if (!ph->found_floor_color || !ph->found_ceiling_color)
-		return (set_return_error(ph->game, "Expect floor and ceiling colors"));
+		return (error_return(0, "Did not find both floor and ceiling colors!", -1));
 	*map_start_line = ph->map_start_idx;
 	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
 	ph->game->scene.map.map_width = ph->map_max_line_length;
@@ -208,7 +208,7 @@ int parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line)
 	ph.game = game;
 	ph.map_fd = open(map_fn, O_RDONLY);
 	if (ph.map_fd == -1)
-		return (set_return_error(game, "Could not open map file."));
+		return (error_return_s(1, "Could not open map file ", -1, map_fn));
 	while (1)
 	{
 		ph.line_temp = get_next_line(ph.map_fd);

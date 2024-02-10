@@ -155,9 +155,7 @@ int		handle_keypress(int keysym, t_game *game);
 int		close_window(t_game *game);
 //	error.c
 int		error_return(int type, char *error_message, int error_code);
-int		set_return_error(t_game *game, char *message);
-int		set_return_error_extra(t_game *game, char *message, char *extramessage);
-int		print_return_error(t_game *game);
+int		error_return_s(int type, char *error_message, int error_code, char *extra);
 //	parse_level.c
 int	process_arguments(int ac, char **av, t_game *game);
 int	parse_level(char *map_fn, t_game *game);

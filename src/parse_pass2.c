@@ -29,7 +29,7 @@ typedef struct s_convert_helper
    we currently only support map fields 0-9 (non-bonus is only 0 and 1)
 
    return 0 on success, 1 on error */
-static int pass2_convert_one_field(char source, int* destination, t_convert_helper* ph2)
+static int pass2_convert_one_field(char source, int* destination)
 {
 	if (source == ' ')
 		*destination = 0;
@@ -38,7 +38,7 @@ static int pass2_convert_one_field(char source, int* destination, t_convert_help
 	else if (ft_strchr("NSWE", source))
 		*destination = 0;
 	else
-		return (set_return_error(ph2->game, "Unexpected map character, expect [0-9NSWE ]"));
+		return (error_return(0, "Unexpected map character, expect [0-9NSWE ]", -1));
 
 	return (0);
 }
@@ -57,7 +57,7 @@ static int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int d
 
 	// printf("found player at x %d y %d facing dx %d dy %d\n", x, y, dx, dy);
 	if (ph2->found_player)
-		return (set_return_error(ph2->game, "Found more than one player"));
+		return (error_return(0, "Found more than one player", -1));
 	fx = dx;
 	fy = dy;
 	ph2->game->player.pos_x = x + 0.5; // walls are exactly on given x/y location, so move player by half a grid cell
@@ -72,7 +72,6 @@ static int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int d
 }
 
 /* handle the player
-
    if player (N, S, W, E)
       if player already found, deallocate and error
       else convert into 0 and initialize player in scene to current X/Y and correct direction
@@ -108,7 +107,7 @@ static int pass2_do_map_line(char *line, int y, t_convert_helper* ph2)
 		// printf("at x %d y %d converting '%c'\n", x, y, line[x]);
 		if (pass2_handle_player(line[x], x, y, ph2))
 			return(1);
-		if (pass2_convert_one_field(line[x], &ph2->scene->map.map[y][x], ph2))
+		if (pass2_convert_one_field(line[x], &ph2->scene->map.map[y][x]))
 			return(1);
 
 		x++;
@@ -137,7 +136,7 @@ int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx)
 
 	map_fd = open(map_fn, O_RDONLY);
 	if (map_fd == -1)
-		return (set_return_error(game, "Could not open map file."));
+		return (error_return_s(1, "Could not open map file: ", -1, map_fn));
 
 	ft_memset(&ph2, 0, sizeof(t_convert_helper));
 	ph2.game = game;
