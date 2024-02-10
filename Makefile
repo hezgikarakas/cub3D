@@ -27,7 +27,7 @@ MLX = $(MLX_PATH)libmlx_Linux.a
 all:	$(NAME)
 
 $(NAME):	$(MLX) $(LIBFT) $(OBJS) $(HDR)
-	@echo "\033[1;34m- compiling executable: $(NAME)\033[0m"
+	@echo "\033[1;34m- linking executable: $(NAME)\033[0m"
 	@$(COMPILER) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX) -lXext -lX11 -lm -o $@
 	@echo "\033[1;32m- complete!\033[0m"
 

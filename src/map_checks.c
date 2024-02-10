@@ -54,13 +54,13 @@ static void	ft_flood_restore(t_game *game)
 
 /* check if player is correctly enclosed in walls in the map
    returns 1 on error else 0 */
-int map_final_checks(t_game* game)
+int	map_final_checks(t_game *game)
 {
-	int ret;
-	
+	int	ret;
+
 	ret = ft_flood_fill(
-		&game->scene.map,
-		game->player.pos_x, game->player.pos_y);
+			&game->scene.map,
+			game->player.pos_x, game->player.pos_y);
 	ft_flood_restore(game);
 	return (ret);
 }

@@ -67,10 +67,10 @@ typedef struct	s_player
 }				t_player;
 
 //	contains all variables for textures
-// renamed this to avoid confusion with t_img
+//	filename needs to be freed on exit, is allocated by parse_level.c
 typedef struct	s_texture
 {
-	char*	filename; // texture file name, needs to be freed on exit, is allocated by parse_level.c
+	char*	filename;
 	void*	texture_img;
 	char*	texture_addr;
 	int		bpp;
@@ -82,23 +82,23 @@ typedef struct	s_texture
 }				t_texture;
 
 //	contains everything to do with the map
-//	created this struct because having all map related stuff in its own struct felt more intuitive but im now questioning if this might have been a mistake
+//	map_name is not dynamically allocated, it is taken from command line!
+//	map[y coordinate][x coordinate]
 typedef struct	s_map
 {
 	char	*map_name;
-	int		**map;// [y coordinate][x coordinate]
+	int		**map;
 	int		map_width;
 	int		map_height;
 }				t_map;
 
 //	contains everything that exists in the game world
+//	textures[north wall, east wall, south wall, west wall]
+//	color is encoded as 0xRRGGBB in one integer
 typedef struct	s_scene
 {
 	t_map		map;
-	t_texture	textures[NUMBER_OF_TEXTURES]; // currently: [north wall, east wall, south wall, west wall]
-	// i think i would prefer having seperate ceiling and floor colour variables instead of one array
-	// that way it is easier to see which is which at one glance
-	// ok, and colour is 0xRRGGBB it seems, have changed that
+	t_texture	textures[NUMBER_OF_TEXTURES];
 	int			ceiling_colour;
 	int			floor_colour;
 }				t_scene;
@@ -134,9 +134,6 @@ typedef struct	s_game
 	t_scene		scene;
 	t_player	player;
 	t_rc		rc;
-	//if using the new error function i suggested these two variables would be redundand i think
-	char		*error_message; // no error if NULL
-	char		*error_extramessage; // no extra info if NULL
 }				t_game;
 
 //	draw.c

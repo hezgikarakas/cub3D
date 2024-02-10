@@ -28,7 +28,7 @@ typedef struct s_parse_helper
 	int			interpreted_this_line;
 } t_parse_helper;
 
-static void pass1_mark_map_end(t_parse_helper* ph)
+static void	pass1_mark_map_end(t_parse_helper *ph)
 {
 	ph->found_map_end = 1;
 	ph->map_end_idx = ph->line_idx;
@@ -98,25 +98,24 @@ static int pass1_parse_texture(t_parse_helper* ph, t_texture *texture, char *res
 	return (0);
 }
 
-static void	handle_potential_map_end(t_parse_helper* ph)
+static void	handle_potential_map_end(t_parse_helper *ph)
 {
 	if (ph->found_map_start && !ph->found_map_end)
 		pass1_mark_map_end(ph);
 }
 
-/*
-   check if line is only spaces
+/* check if line is only spaces
      if yes and found_map_start then found_map_end = 1, record map end idx
      if yes and not found_map_start then skip
      if not and found_map_end then error
-   check if we are not in the map and the line is longer than 2 characters, then parse textures/colors
+   check if we are not in the map and the line is longer than 2 characters,
+   then parse textures/colors
    else assume it is a map part */
-static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
+static int	pass1_classify_line(char *line_temp, t_parse_helper *ph)
 {
 	char	*s;
 	int		linelength;
 
-	//printf("classifying line %s", line_temp);
 	s = ft_strtrim(line_temp, " \t\r\n");
 	if (!s || s[0] == 0)
 	{
@@ -129,7 +128,7 @@ static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
 		if (ph->found_map_end)
 		{
 			free(s);
-			return (error_return(0, "Empty line within map is not allowed!", -1));
+			return (error_return(0, "Empty line in map is not allowed!", -1));
 		}
 		ph->interpreted_this_line = 0;
 		if (!ph->found_map_start && s[1] != 0 && s[2] != 0)
@@ -173,34 +172,22 @@ static int pass1_classify_line(char* line_temp, t_parse_helper* ph)
 }
 
 /* set map size and map_start_line */
-static int pass1_finalize(t_parse_helper* ph, int* map_start_line)
+static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
 {
 	handle_potential_map_end(ph);
 	if (!ph->found_floor_color || !ph->found_ceiling_color)
-		return (error_return(0, "Did not find both floor and ceiling colors!", -1));
+		return (error_return(0,
+				"Did not find both floor and ceiling colors!", -1));
 	*map_start_line = ph->map_start_idx;
 	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
 	ph->game->scene.map.map_width = ph->map_max_line_length;
-	//printf("found a map of height %d and width %d, starting in line %d of the map file\n", ph->game->scene->map_height, ph->game->scene->map_width, *map_start_line);
 	return (0);
 }
 
 /* check if each line is something expected
    record the first line of the map
-   record map width and height into the scene
-   
-   open file
-   read with get next line library, count lines
-   check if line is only spaces
-     if yes and found_map_start then found_map_end = 1, record map height in scene
-     if yes and not found_map_start then skip
-     if not and found_map_end then error
-   check if line is longer than 2 characters, if not error
-   check if line starts with texture or floor/ceiling/(future: sprites) code or with sprite code, if not found_map_start = 1, record map_start_line
-   if found_map_start set scene map width to max(scene map with, length of current line in file)
-   close file
-   */
-int parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line)
+   record map width and height into the scene */
+int	parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line)
 {
 	t_parse_helper	ph;
 
@@ -213,7 +200,7 @@ int parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line)
 	{
 		ph.line_temp = get_next_line(ph.map_fd);
 		if (ph.line_temp == NULL || pass1_classify_line(ph.line_temp, &ph))
-			break;
+			break ;
 		free(ph.line_temp);
 	}
 	close(ph.map_fd);
