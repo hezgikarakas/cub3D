@@ -12,8 +12,9 @@
 
 NAME = cub3D
 SRCS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
-		src/parse_level.c src/parse_pass1.c src/parse_pass2.c \
-		src/map_checks.c src/controls.c src/textures.c
+		src/parse_level.c src/parse_pass1.c src/parse_pass1_classify.c \
+		src/parse_pass2.c src/map_checks.c src/util.c \
+		src/controls.c src/textures.c
 OBJS = $(SRCS:.c=.o)
 HDR = ./include/$(NAME).h
 COMPILER = cc
@@ -59,4 +60,7 @@ remlx:	fclean all
 norm:
 	norminette $(SRCS) $(HDR)
 
-.PHONY:	all clean fclean re norm
+leakcheck:
+	valgrind --leak-check=full --show-leak-kinds=all ./cub3D maps/map1_for_debug.cub
+
+.PHONY:	all clean fclean re norm leakcheck

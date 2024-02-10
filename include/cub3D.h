@@ -171,6 +171,9 @@ int		close_window(t_game *game);
 //	error.c
 int		error_return(int type, char *error_message, int error_code);
 int		error_return_s(int type, char *error_message, int error_code, char *extra);
+//	util.c
+void	free_strings(char **s);
+void	free_game(t_game *game);
 //	parse_level.c
 int	process_arguments(int ac, char **av, t_game *game);
 int	parse_level(char *map_fn, t_game *game);

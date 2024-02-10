@@ -67,10 +67,10 @@ int	temp_interpreter_bypass(int ac, char **av, t_game *game)
 		game->player.plane_x = 0.66;
 		game->scene.floor_colour = DEFAULT_FLOOR;
 		game->scene.ceiling_colour = DEFAULT_SKY;
-		game->scene.textures[0].filename = "./textures/lionwall.xpm";
-		game->scene.textures[1].filename = "./textures/patternwall.xpm";
-		game->scene.textures[2].filename = "./textures/vinewall.xpm";
-		game->scene.textures[3].filename = "./textures/pillarwall.xpm";
+		game->scene.textures[0].filename = ft_strdup("./textures/lionwall.xpm");
+		game->scene.textures[1].filename = ft_strdup("./textures/patternwall.xpm");
+		game->scene.textures[2].filename = ft_strdup("./textures/vinewall.xpm");
+		game->scene.textures[3].filename = ft_strdup("./textures/pillarwall.xpm");
 		game->scene.map.map_height = 20;
 		game->scene.map.map_width = 20;
 		game->scene.map.map = allocate_map(game->scene.map.map_height, game->scene.map.map_width);
@@ -129,10 +129,7 @@ int	main(int argc, char **argv)
 		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);
 		mlx_hook(game->ptrs.win, 17, 0L, &close_window, game);
 		mlx_loop(game->ptrs.mlx);
-		mlx_destroy_window(game->ptrs.mlx, game->ptrs.win);
-		mlx_destroy_display(game->ptrs.mlx);
 	}
-	free(game->ptrs.mlx);
-	free(game);
+	free_game(game);
 	return (ret);
 }

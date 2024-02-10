@@ -24,6 +24,7 @@ static int	pass1_parse_col_parts(
 		colortemp = ft_atoi(parts[i]);
 		if (colortemp <= 0 || colortemp >= 256)
 		{
+			free_strings(parts);
 			return (error_return_s(0, "Unexpected color: ", -1, parts[i]));
 		}
 		*col = (int)colortemp;
@@ -32,9 +33,11 @@ static int	pass1_parse_col_parts(
 	}
 	if (i < 3 || (i == 3 && parts[i]))
 	{
+		free_strings(parts);
 		return (error_return_s(0, "Expect 3 color components "
 				"found the following color spec ", -1, rest));
 	}
+	free_strings(parts);
 	ph->interpreted_this_line = 1;
 	return (0);
 }
