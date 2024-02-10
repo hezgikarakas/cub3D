@@ -83,9 +83,9 @@ static int pass2_handle_player(char source, int x, int y, t_convert_helper* ph2)
 
 	ret = 0;
 	if (source == 'N')
-		ret = pass2_found_player(ph2, x, y, 0, 1);
-	else if (source == 'S')
 		ret = pass2_found_player(ph2, x, y, 0, -1);
+	else if (source == 'S')
+		ret = pass2_found_player(ph2, x, y, 0, 1);
 	else if (source == 'W')
 		ret = pass2_found_player(ph2, x, y, -1, 0);
 	else if (source == 'E')
