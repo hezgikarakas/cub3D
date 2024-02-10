@@ -40,7 +40,7 @@ static void	free_map(t_map *map)
 	free(map->map);
 }
 
-static void	free_textures(void* mlx_ptr, t_texture *textures)
+static void	free_textures(void *mlx_ptr, t_texture *textures)
 {
 	int	i;
 
@@ -62,7 +62,6 @@ static void	free_textures(void* mlx_ptr, t_texture *textures)
  * - game itself */
 void	free_game(t_game *game)
 {
-
 	free_textures(game->ptrs.mlx, game->scene.textures);
 	if (game->scene.map.map)
 		free_map(&game->scene.map);
