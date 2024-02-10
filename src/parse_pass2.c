@@ -12,24 +12,29 @@
 
 #include "./../include/cub3D.h"
 
-typedef struct s_convert_helper
+// helper structure
+typedef struct s_parse_pass2
 {
 	int		map_fd;
+	char	*line;
 	t_game	*game;
 	int		line_idx;
 	int		found_player;
-} t_convert_helper;
+}	t_parse_pass2;
+
+typedef struct s_xy
+{
+	int	x;
+	int	y;
+}	t_xy;
 
 /* convert characters from file to map representation
-
    convert ascii to integer map content
    player position is floor
-   space is -1
-   otherwise map representation = integer of the visible character (e.g., '4' becomes 4)
-   we currently only support map fields 0-9 (non-bonus is only 0 and 1)
-
+   space is 0
+   map representation = integer of the character (e.g., '4' becomes 4)
    return 0 on success, 1 on error */
-static int pass2_convert_one_field(char source, int* destination)
+static int	pass2_convert_one_field(char source, int *destination)
 {
 	if (source == ' ')
 		*destination = 0;
@@ -38,89 +43,74 @@ static int pass2_convert_one_field(char source, int* destination)
 	else if (ft_strchr("NSWE", source))
 		*destination = 0;
 	else
-		return (error_return(0, "Unexpected map character, expect [0-9NSWE ]", -1));
-
+		return (error_return(0, "Unexpected map char, need [01NSWE ]", -1));
 	return (0);
 }
 
-/*
- * compute plane from look direction
- * plane is vector (lookx, looky)
- * rotated leftwards by 90 degrees
- * scaled down by 0.66
- * see https://en.wikipedia.org/wiki/Rotation_matrix
- */
-static int pass2_found_player(t_convert_helper* ph2, int x, int y, int dx, int dy)
+/* if player already found, this is an error
+   set player position: walls are exactly on given x/y location,
+   so we move player by half a grid cell or we might start in a wall
+   convert direction into look vector
+   compute plane from look direction
+   - plane is vector (lookx, looky) rotated leftwards by 90 degrees
+     scaled down by 0.66
+   - see https://en.wikipedia.org/wiki/Rotation_matrix */
+static int	pass2_found_player(t_parse_pass2 *ph2, t_xy pos, float fx, float fy)
 {
-	float	fx;
-	float	fy;
-
-	// printf("found player at x %d y %d facing dx %d dy %d\n", x, y, dx, dy);
 	if (ph2->found_player)
 		return (error_return(0, "Found more than one player", -1));
-	fx = dx;
-	fy = dy;
-	ph2->game->player.pos_x = x + 0.5; // walls are exactly on given x/y location, so move player by half a grid cell
-	ph2->game->player.pos_y = y + 0.5; // TODO there might be a better way to fix this (putting no +0.5 here and moving walls) but maybe this way is the best way
+	ph2->game->player.pos_x = pos.x + 0.5;
+	ph2->game->player.pos_y = pos.y + 0.5;
 	ph2->game->player.look_x = fx;
 	ph2->game->player.look_y = fy;
-	ph2->game->player.plane_x = 0.66 * (fx * cos(0.5 * 3.14) - fy * sin(0.5 * 3.14));
-	ph2->game->player.plane_y = 0.66 * (fx * sin(0.5 * 3.14) + fy * cos(0.5 * 3.14));
+	ph2->game->player.plane_x = 0.66 * (
+			fx * cos(0.5 * 3.14) - fy * sin(0.5 * 3.14));
+	ph2->game->player.plane_y = 0.66 * (
+			fx * sin(0.5 * 3.14) + fy * cos(0.5 * 3.14));
 	ph2->found_player = 1;
-
 	return (0);
 }
 
-/* handle the player
-   if player (N, S, W, E)
-      if player already found, deallocate and error
-      else convert into 0 and initialize player in scene to current X/Y and correct direction
-*/
-static int pass2_handle_player(char source, int x, int y, t_convert_helper* ph2)
+/* if encountering player character (NSWE) handle that we found a player */
+static int	pass2_handle_player(char source, int x, int y, t_parse_pass2 *ph2)
 {
-	int ret;
+	int		ret;
+	t_xy	pos;
 
 	ret = 0;
+	pos.x = x;
+	pos.y = y;
 	if (source == 'N')
-		ret = pass2_found_player(ph2, x, y, 0, -1);
+		ret = pass2_found_player(ph2, pos, 0, -1.0);
 	else if (source == 'S')
-		ret = pass2_found_player(ph2, x, y, 0, 1);
+		ret = pass2_found_player(ph2, pos, 0, 1.0);
 	else if (source == 'W')
-		ret = pass2_found_player(ph2, x, y, -1, 0);
+		ret = pass2_found_player(ph2, pos, -1.0, 0);
 	else if (source == 'E')
-		ret = pass2_found_player(ph2, x, y, 1, 0);
+		ret = pass2_found_player(ph2, pos, 1.0, 0);
 	return (ret);
 }
 
-/* go over each character, counting columns
+/* initialize map row as empty space (0)
+   go over each character, counting columns
    handle the player
    otherwise convert characters from file to map representation */
-static int pass2_do_map_line(char *line, int y, t_convert_helper* ph2)
+static int	pass2_do_map_line(char *line, int y, t_parse_pass2 *ph2)
 {
-	int x;
+	int		x;
 	t_map	*map;
 
 	map = &ph2->game->scene.map;
-	// reset line in map to -1 (space = outside of map)
 	ft_memset(map->map[y], 0, sizeof(int) * map->map_width);
 	x = 0;
 	while (line[x] && line[x] != '\n' && x < map->map_width)
 	{
-		// printf("at x %d y %d converting '%c'\n", x, y, line[x]);
 		if (pass2_handle_player(line[x], x, y, ph2))
-			return(1);
+			return (1);
 		if (pass2_convert_one_field(line[x], &map->map[y][x]))
-			return(1);
-
+			return (1);
 		x++;
 	}
-	return (0);
-}
-
-static int	error_if_not_found_player(t_convert_helper *ph)
-{
-	if (!ph->found_player)
-		return (error_return(0, "Found no player!", -1));
 	return (0);
 }
 
@@ -136,30 +126,31 @@ static int	error_if_not_found_player(t_convert_helper *ph)
    if colors not found, deallocate and error
    if textures not found, deallocate and error
    close file */
-int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx)
+int	parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx)
 {
-	char				*line_temp;
-	t_convert_helper	ph2;
+	t_parse_pass2	ph2;
 
-	ft_memset(&ph2, 0, sizeof(t_convert_helper));
+	ft_memset(&ph2, 0, sizeof(t_parse_pass2));
 	ph2.map_fd = open(map_fn, O_RDONLY);
 	if (ph2.map_fd == -1)
 		return (error_return_s(1, "Could not open map file: ", -1, map_fn));
 	ph2.game = game;
-	while (ph2.line_idx < (map_start_idx + game->scene.map.map_height))
+	while (ph2.line_idx < (start_idx + game->scene.map.map_height))
 	{
-		line_temp = get_next_line(ph2.map_fd);
-		if (line_temp == NULL)
-			break;
-		if (ph2.line_idx >= map_start_idx)
-			if (pass2_do_map_line(line_temp, ph2.line_idx - map_start_idx, &ph2))
-				break;
+		ph2.line = get_next_line(ph2.map_fd);
+		if (ph2.line == NULL)
+			break ;
+		if (ph2.line_idx >= start_idx)
+			if (pass2_do_map_line(ph2.line, ph2.line_idx - start_idx, &ph2))
+				break ;
 		ph2.line_idx++;
-		free(line_temp);
-		line_temp = NULL;
+		free(ph2.line);
+		ph2.line = NULL;
 	}
-	if (line_temp)
-		free(line_temp);
+	if (ph2.line)
+		free(ph2.line);
 	close(ph2.map_fd);
-	return (error_if_not_found_player(&ph2));
+	if (!ph2.found_player)
+		return (error_return(0, "Found no player!", -1));
+	return (0);
 }

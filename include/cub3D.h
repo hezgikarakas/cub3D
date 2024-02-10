@@ -164,7 +164,7 @@ int	**allocate_map(int rows, int cols); //this function used to be static, i cha
 // parse_pass1.c
 int parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line);
 // parse_pass2.c
-int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx);
+int parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx);
 // map_checks.c
 int map_final_checks(t_game* game);
 
