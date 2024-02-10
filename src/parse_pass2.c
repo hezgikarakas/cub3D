@@ -14,10 +14,10 @@
 
 typedef struct s_convert_helper
 {
-	t_game *game;
-	t_scene *scene;
-	int line_idx;
-	int found_player;
+	int		map_fd;
+	t_game	*game;
+	int		line_idx;
+	int		found_player;
 } t_convert_helper;
 
 /* convert characters from file to map representation
@@ -98,16 +98,18 @@ static int pass2_handle_player(char source, int x, int y, t_convert_helper* ph2)
 static int pass2_do_map_line(char *line, int y, t_convert_helper* ph2)
 {
 	int x;
+	t_map	*map;
 
+	map = &ph2->game->scene.map;
 	// reset line in map to -1 (space = outside of map)
-	ft_memset(ph2->scene->map.map[y], 0, sizeof(int) * ph2->scene->map.map_width);
+	ft_memset(map->map[y], 0, sizeof(int) * map->map_width);
 	x = 0;
-	while (line[x] && line[x] != '\n' && x < ph2->scene->map.map_width)
+	while (line[x] && line[x] != '\n' && x < map->map_width)
 	{
 		// printf("at x %d y %d converting '%c'\n", x, y, line[x]);
 		if (pass2_handle_player(line[x], x, y, ph2))
 			return(1);
-		if (pass2_convert_one_field(line[x], &ph2->scene->map.map[y][x]))
+		if (pass2_convert_one_field(line[x], &map->map[y][x]))
 			return(1);
 
 		x++;
@@ -115,6 +117,12 @@ static int pass2_do_map_line(char *line, int y, t_convert_helper* ph2)
 	return (0);
 }
 
+static int	error_if_not_found_player(t_convert_helper *ph)
+{
+	if (!ph->found_player)
+		return (error_return(0, "Found no player!", -1));
+	return (0);
+}
 
 /* parse map content into allocated map in scene
    initialize player in scene
@@ -130,21 +138,17 @@ static int pass2_do_map_line(char *line, int y, t_convert_helper* ph2)
    close file */
 int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx)
 {
-	int					map_fd;
 	char				*line_temp;
 	t_convert_helper	ph2;
 
-	map_fd = open(map_fn, O_RDONLY);
-	if (map_fd == -1)
-		return (error_return_s(1, "Could not open map file: ", -1, map_fn));
-
 	ft_memset(&ph2, 0, sizeof(t_convert_helper));
+	ph2.map_fd = open(map_fn, O_RDONLY);
+	if (ph2.map_fd == -1)
+		return (error_return_s(1, "Could not open map file: ", -1, map_fn));
 	ph2.game = game;
-	ph2.scene = &game->scene;
-
-	while (ph2.line_idx < (map_start_idx + ph2.scene->map.map_height))
+	while (ph2.line_idx < (map_start_idx + game->scene.map.map_height))
 	{
-		line_temp = get_next_line(map_fd);
+		line_temp = get_next_line(ph2.map_fd);
 		if (line_temp == NULL)
 			break;
 		if (ph2.line_idx >= map_start_idx)
@@ -156,9 +160,6 @@ int parse_mapfile_pass_2(char *map_fn, t_game *game, int map_start_idx)
 	}
 	if (line_temp)
 		free(line_temp);
-
-	// TODO final checks: found player?
-	close(map_fd);
-
-	return (0);
+	close(ph2.map_fd);
+	return (error_if_not_found_player(&ph2));
 }
