@@ -16,6 +16,7 @@
 typedef struct s_parse_pass2
 {
 	int		map_fd;
+	int		error;
 	char	*line;
 	t_game	*game;
 	int		line_idx;
@@ -135,22 +136,21 @@ int	parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx)
 	if (ph2.map_fd == -1)
 		return (error_return_s(1, "Could not open map file: ", -1, map_fn));
 	ph2.game = game;
-	while (ph2.line_idx < (start_idx + game->scene.map.map_height))
+	ph2.line = get_next_line(ph2.map_fd);
+	while (ph2.line)
 	{
-		ph2.line = get_next_line(ph2.map_fd);
-		if (ph2.line == NULL)
-			break ;
-		if (ph2.line_idx >= start_idx)
-			if (pass2_do_map_line(ph2.line, ph2.line_idx - start_idx, &ph2))
-				break ;
+		if (!ph2.error && ph2.line_idx >= start_idx && ph2.line_idx < (
+				start_idx + game->scene.map.map_height
+			) && pass2_do_map_line(ph2.line, ph2.line_idx - start_idx, &ph2))
+			ph2.error = 1;
 		ph2.line_idx++;
 		free(ph2.line);
-		ph2.line = NULL;
+		ph2.line = get_next_line(ph2.map_fd);
 	}
 	if (ph2.line)
 		free(ph2.line);
 	close(ph2.map_fd);
 	if (!ph2.found_player)
 		return (error_return(0, "Found no player!", -1));
-	return (0);
+	return (ph2.error);
 }
