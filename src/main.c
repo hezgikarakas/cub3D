@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/13 17:03:12 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/13 18:12:29 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,21 @@ void	print_map_on_stdout(t_game *game)
 		while (x < game->scene.map.map_width)
 		{
 			if (game->scene.map.map[y][x] == 1)
-				printf("\033[1;31;40m%i \033[0m", game->scene.map.map[y][x]);
+				printf("\033[1;31;40m%s \033[0m", "▄");
+			else if (game->scene.map.map[y][x] == 0)
+				printf("\033[40m%c \033[0m", '.');
 			else
-				printf("\033[40m%i \033[0m", game->scene.map.map[y][x]);
+				printf("\033[1;33;40m%c \033[0m", 'o');
 			x++;
 		}
 		printf("\n");
 		y++;
 	}
+	printf("map:	%s\n", game->scene.map.map_name);
+	printf("north:	%s\n", game->scene.textures[0].filename);
+	printf("east:	%s\n", game->scene.textures[1].filename);
+	printf("south	%s\n", game->scene.textures[2].filename);
+	printf("west:	%s\n", game->scene.textures[3].filename);
 }
 
 //sets window name and inits mlx pointers
@@ -40,6 +47,8 @@ static int	initialize(t_game *game, char *mapname)
 	char	*name;
 
 	print_map_on_stdout(game);
+	printf("sky:	0x%x\n", game->scene.ceiling_colour);
+	printf("floor:	0x%x\n", game->scene.floor_colour);
 	name = ft_strjoin("CUBE3D - ", mapname);
 	game->ptrs.mlx = mlx_init();
 	if (game->ptrs.mlx == NULL)
@@ -76,14 +85,6 @@ int	main(int argc, char **argv)
 		ret = initialize(game, "test");
 	if (ret == 0)
 	{
-		printf("%s\n", game->scene.map.map_name);
-		printf("%s\n", game->scene.textures[0].filename);
-		printf("%s\n", game->scene.textures[1].filename);
-		printf("%s\n", game->scene.textures[2].filename);
-		printf("%s\n", game->scene.textures[3].filename);
-		printf("%x\n", game->scene.ceiling_colour);
-		printf("%x\n", game->scene.floor_colour);
-		printf("%x\n", DEFAULT_FLOOR);
 		mlx_loop_hook(game->ptrs.mlx, &render, game);
 		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);
 		mlx_hook(game->ptrs.win, 17, 0L, &close_window, game);

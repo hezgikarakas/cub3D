@@ -6,41 +6,11 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/13 17:40:16 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/13 18:21:48 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
-
-int	pass1_parse_col_parts(
-	t_parse_helper *ph, int *col, char *rest, char **parts)
-{
-	int		i;
-	long	colortemp;
-
-	i = 0;
-	while (parts[i] && i < 3)
-	{
-		colortemp = ft_atoi(parts[i]);
-		if (colortemp <= 0 || colortemp >= 256)
-		{
-			free_strings(parts);
-			return (error_return_s(0, "Unexpected color: ", -1, parts[i]));
-		}
-		*col = (int)colortemp;
-		++col;
-		i++;
-	}
-	if (i < 3 || (i == 3 && parts[i]))
-	{
-		free_strings(parts);
-		return (error_return_s(0, "Expect 3 color components "
-				"found the following color spec ", -1, rest));
-	}
-	free_strings(parts);
-	ph->interpreted_this_line = 1;
-	return (0);
-}
 
 int	convert_colour(char *colour_str)
 {
@@ -92,29 +62,17 @@ void	get_colours(t_game *game)
 
 int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 {
-	char	**parts;
-	int		*found_color;
-	int		*color;
-
+	ph->game->scene.fog = DEFAULT_DISTANCE_FADE;
 	if (which == 'F')
-	{
-		// ph->game->scene.floor_colour = convert_colour(rest);
-		color = &ph->game->scene.floor_colour;
-		found_color = &ph->found_floor_color;
-	}
+		ph->game->scene.floor_colour = convert_colour(rest);
 	else if (which == 'C')
-	{
-		// ph->game->scene.ceiling_colour = convert_colour(rest);
-		color = &ph->game->scene.ceiling_colour;
-		found_color = &ph->found_ceiling_color;
-	}
+		ph->game->scene.ceiling_colour = convert_colour(rest);
 	else
 		return (error_return(0, "Unexpected color line", -1));
-	*found_color = 1;
-	parts = ft_split(rest, ',');
-	if (!parts)
-		return (error_return(1, "malloc error", -1));
-	return (pass1_parse_col_parts(ph, color, rest, parts));
+	ph->found_ceiling_color = 1;
+	ph->found_floor_color = 1;
+	ph->interpreted_this_line = 1;
+	return 0;
 }
 
 static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
