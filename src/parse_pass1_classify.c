@@ -6,13 +6,13 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/24 15:00:06 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/13 17:40:16 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
 
-static int	pass1_parse_col_parts(
+int	pass1_parse_col_parts(
 	t_parse_helper *ph, int *col, char *rest, char **parts)
 {
 	int		i;
@@ -42,7 +42,55 @@ static int	pass1_parse_col_parts(
 	return (0);
 }
 
-static int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
+int	convert_colour(char *colour_str)
+{
+	char	**rgb;
+	int		r;
+	int		g;
+	int		b;
+
+	rgb = ft_split(colour_str, ',');
+	r = ft_atoi(rgb[0]);
+	g = ft_atoi(rgb[1]);
+	b = ft_atoi(rgb[2]);
+	free (rgb[0]);
+	free (rgb[1]);
+	free (rgb[2]);
+	free (rgb);
+	return (r << 16 | g << 8 | b);
+}
+/*
+void	get_colours(t_game *game)
+{
+	game->scene.fog = DEFAULT_DISTANCE_FADE;
+	if (!game->scene.ceiling_str)
+	{
+		printf("couldn't find ceiling colour, using default\n");
+		game->scene.ceiling_colour = DEFAULT_SKY;
+		game->scene.ceiling_gradient = DEFAULT_SKY_GRADIENT;
+	}
+	else
+	{
+		game->scene.ceiling_colour = convert_colour(game->scene.ceiling_str);
+		game->scene.ceiling_gradient = 0x95c1c1;
+		game->scene.fog = 0x95c1c1;
+	}
+	if (!game->scene.floor_str)
+	{
+		printf("couldn't find floor colour, using default\n");
+		game->scene.floor_colour = DEFAULT_FLOOR;
+		game->scene.floor_gradient = DEFAULT_FLOOR_GRADIENT;
+	}
+	else
+	{
+		game->scene.floor_colour = convert_colour(game->scene.floor_str);
+		game->scene.floor_gradient = 0x95c1c1;
+		game->scene.fog = 0x95c1c1;
+	}
+}
+*/
+
+int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 {
 	char	**parts;
 	int		*found_color;
@@ -50,11 +98,13 @@ static int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 
 	if (which == 'F')
 	{
+		// ph->game->scene.floor_colour = convert_colour(rest);
 		color = &ph->game->scene.floor_colour;
 		found_color = &ph->found_floor_color;
 	}
 	else if (which == 'C')
 	{
+		// ph->game->scene.ceiling_colour = convert_colour(rest);
 		color = &ph->game->scene.ceiling_colour;
 		found_color = &ph->found_ceiling_color;
 	}

@@ -6,22 +6,31 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/31 16:25:44 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/13 17:03:12 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
 
-void print_map_on_stdout(t_game* game)
+void	print_map_on_stdout(t_game *game)
 {
-	for (int y = 0; y < game->scene.map.map_height; y++){
-		for (int x = 0; x < game->scene.map.map_width; x++){
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < game->scene.map.map_height)
+	{
+		x = 0;
+		while (x < game->scene.map.map_width)
+		{
 			if (game->scene.map.map[y][x] == 1)
 				printf("\033[1;31;40m%i \033[0m", game->scene.map.map[y][x]);
 			else
 				printf("\033[40m%i \033[0m", game->scene.map.map[y][x]);
+			x++;
 		}
 		printf("\n");
+		y++;
 	}
 }
 
@@ -41,70 +50,16 @@ static int	initialize(t_game *game, char *mapname)
 	if (game->ptrs.win == NULL)
 	{
 		free(game->ptrs.mlx);
-		return(error_return(1, "mlx_new_window failed", 3));
+		return (error_return(1, "mlx_new_window failed", 3));
 	}
 	game->player.movespeed = 0.100001;
 	game->player.rotspeed = 0.05;
-	game->player.pos_y += 0.5;
-	game->player.pos_x += 0.5;
+	// game->player.pos_y += 0.5;
+	// game->player.pos_x += 0.5;
 	game->img.mlx_img = mlx_new_image(game->ptrs.mlx, WINDOW_WIDTH,
-		WINDOW_HEIGHT);
+			WINDOW_HEIGHT);
 	load_texture(game);
 	return (0);
-}
-
-// function to be removed once input parser is fully functional and connected to renderer
-// not static or we cannot comment it out below ;)
-int	temp_interpreter_bypass(int ac, char **av, t_game *game)
-{
-	if (ac || av || !ac)
-	{
-		game->player.pos_y = 4;
-		game->player.pos_x = 4;
-		game->player.look_y = -1;
-		game->player.look_x = 0;
-		game->player.plane_y = 0;
-		game->player.plane_x = 0.66;
-		game->scene.floor_colour = DEFAULT_FLOOR;
-		game->scene.ceiling_colour = DEFAULT_SKY;
-		game->scene.textures[0].filename = ft_strdup("./textures/lionwall.xpm");
-		game->scene.textures[1].filename = ft_strdup("./textures/patternwall.xpm");
-		game->scene.textures[2].filename = ft_strdup("./textures/vinewall.xpm");
-		game->scene.textures[3].filename = ft_strdup("./textures/pillarwall.xpm");
-		game->scene.map.map_height = 20;
-		game->scene.map.map_width = 20;
-		game->scene.map.map = allocate_map(game->scene.map.map_height, game->scene.map.map_width);
-		for (int y = 0; y < game->scene.map.map_width; y++){
-			for (int x = 0; x < game->scene.map.map_height; x++){
-				int tile = 0;
-				if (y == 0 || y == game->scene.map.map_height-1
-					|| x == 0 || x == game->scene.map.map_width-1)
-					tile = 1;
-				game->scene.map.map[y][x] = tile;
-			}
-		}
-		game->scene.map.map[2][1] = 1;
-		game->scene.map.map[2][2] = 1;
-		game->scene.map.map[1][2] = 1;
-		game->scene.map.map[14][1] = 1;
-		game->scene.map.map[14][2] = 1;
-		game->scene.map.map[14][4] = 1;
-		game->scene.map.map[14][5] = 1;
-		game->scene.map.map[14][6] = 1;
-		game->scene.map.map[15][6] = 1;
-		game->scene.map.map[16][6] = 1;
-		game->scene.map.map[17][6] = 1;
-		game->scene.map.map[18][6] = 1;
-		game->scene.map.map[5][13] = 1;
-		game->scene.map.map[5][14] = 1;
-		game->scene.map.map[6][13] = 1;
-		game->scene.map.map[6][14] = 1;
-		game->scene.map.map[13][16] = 1;
-		game->scene.map.map[13][13] = 1;
-		game->scene.map.map[16][13] = 1;
-		game->scene.map.map[16][16] = 1;
-	}
-	return (0); // always successful
 }
 
 int	main(int argc, char **argv)
@@ -113,18 +68,22 @@ int	main(int argc, char **argv)
 	int		ret;
 
 	game = (t_game *)malloc(sizeof(t_game));
-	ft_memset(game, 0, sizeof(t_game)); // otherwise valgrind will complain a lot
+	ft_memset(game, 0, sizeof(t_game));
 	if (!game)
 		return (error_return(1, "game struct malloc failed", 1));
-	// for now we do the temporary hardcoded map if there are no arguments, otherwise the map parsing
-	if (argc == 1)
-		ret = temp_interpreter_bypass(argc, argv, game);
-	else
-		ret = process_arguments(argc, argv, game);
+	ret = process_arguments(argc, argv, game);
 	if (ret == 0)
 		ret = initialize(game, "test");
 	if (ret == 0)
 	{
+		printf("%s\n", game->scene.map.map_name);
+		printf("%s\n", game->scene.textures[0].filename);
+		printf("%s\n", game->scene.textures[1].filename);
+		printf("%s\n", game->scene.textures[2].filename);
+		printf("%s\n", game->scene.textures[3].filename);
+		printf("%x\n", game->scene.ceiling_colour);
+		printf("%x\n", game->scene.floor_colour);
+		printf("%x\n", DEFAULT_FLOOR);
 		mlx_loop_hook(game->ptrs.mlx, &render, game);
 		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);
 		mlx_hook(game->ptrs.win, 17, 0L, &close_window, game);

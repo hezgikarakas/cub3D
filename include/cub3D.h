@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/31 16:08:39 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/13 17:29:47 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ typedef struct	s_scene
 	t_texture	textures[NUMBER_OF_TEXTURES];
 	int			ceiling_colour;
 	int			floor_colour;
+	int			ceiling_gradient;
+	int			floor_gradient;
+	int			fog;
 }				t_scene;
 
 //	contains all variables used in raycasting

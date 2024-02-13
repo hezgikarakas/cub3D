@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/24 15:00:06 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/13 17:38:47 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ static int	pass1_classify_line(char *line_temp, t_parse_helper *ph)
 static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
 {
 	handle_potential_map_end(ph);
-	if (!ph->found_floor_color || !ph->found_ceiling_color)
-		return (error_return(0,
-				"Did not find both floor and ceiling colors!", -1));
+	// if (!ph->found_floor_color || !ph->found_ceiling_color)
+	// 	return (error_return(0,
+	// 			"Did not find both floor and ceiling colors!", -1));
 	*map_start_line = ph->map_start_idx;
 	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
 	ph->game->scene.map.map_width = ph->map_max_line_length;

@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:13:13 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/01/26 14:08:13 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:39:46 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	move_player(int keysym, t_game *game)
 	if (keysym == XK_Up || keysym == XK_w)
 	{
 		if (!game->scene.map.map[(int)((game->player.pos_y + game->player.look_y
-				* game->player.movespeed))][(int)(game->player.pos_x)])
+					* game->player.movespeed))][(int)(game->player.pos_x)])
 			game->player.pos_y += game->player.look_y * game->player.movespeed;
 		if (!game->scene.map.map[(int)(game->player.pos_y)]
 				[(int)(game->player.pos_x + game->player.look_x
@@ -50,7 +50,7 @@ static void	strafe_player(int keysym, t_game *game)
 	if (keysym == XK_Page_Down || keysym == XK_e)
 	{
 		if (!game->scene.map.map[(int)((game->player.pos_y + game->player.look_x
-				* game->player.movespeed))][(int)(game->player.pos_x)])
+					* game->player.movespeed))][(int)(game->player.pos_x)])
 			game->player.pos_y += game->player.look_x * game->player.movespeed;
 		if (!game->scene.map.map[(int)(game->player.pos_y)]
 				[(int)(game->player.pos_x - game->player.look_y

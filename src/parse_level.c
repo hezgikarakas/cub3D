@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/01/24 15:00:06 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:46:12 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	validate_arguments(int ac, char **av)
 	if (ac != 2)
 		return (error_return(0, "invalid number of arguments", -1));
 	if (ft_strncmp(av[1] + ft_strlen(av[1]) - 4, ".cub", 4))
-		return (error_return_s(0, 
+		return (error_return_s(0,
 				"map file must have .cub ending, found ", -1, av[1]));
 	return (0);
 }
@@ -66,7 +66,7 @@ int	parse_level(char *map_fn, t_game *game)
 		return (1);
 	scn->map.map = allocate_map(scn->map.map_height, scn->map.map_width);
 	if (!scn->map.map)
-		return (error_return(1, "allocating map failed", -1)); 
+		return (error_return(1, "allocating map failed", -1));
 	if (parse_mapfile_pass_2(map_fn, game, map_start_line))
 		return (1);
 	if (map_final_checks(game))
