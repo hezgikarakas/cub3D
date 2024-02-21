@@ -6,20 +6,20 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:13:13 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/02/13 16:39:46 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:47:59 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../include/cub3D.h"
 
-//	called when closing window
+/*	called when closing window	*/
 int	close_window(t_game *game)
 {
 	mlx_loop_end(game->ptrs.mlx);
 	return (0);
 }
 
-//	handles keypresses for forward and backward movement
+/*	handles keypresses for forward and backward movement	*/
 static void	move_player(int keysym, t_game *game)
 {
 	if (keysym == XK_Up || keysym == XK_w)
@@ -44,7 +44,7 @@ static void	move_player(int keysym, t_game *game)
 	}
 }
 
-//	handles keypresses for left and right strafing
+/*	handles keypresses for left and right strafing	*/
 static void	strafe_player(int keysym, t_game *game)
 {
 	if (keysym == XK_Page_Down || keysym == XK_e)
@@ -69,7 +69,7 @@ static void	strafe_player(int keysym, t_game *game)
 	}
 }
 
-//	handles keypresses for rotating the player
+/*	handles keypresses for rotating the player	*/
 static void	rotate_player(int keysym, t_player *player)
 {
 	double	old_dirx;
@@ -92,7 +92,7 @@ static void	rotate_player(int keysym, t_player *player)
 		+ player->plane_y * cos(temp_rotspeed);
 }
 
-// handles keypresses
+/* handles keypresses	*/
 int	handle_keypress(int keysym, t_game *game)
 {
 	if (keysym == XK_Escape)

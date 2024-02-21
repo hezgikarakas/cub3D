@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/13 16:46:12 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:56:57 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	process_arguments(int ac, char **av, t_game *game)
 	return (parse_level(game->scene.map.map_name, game));
 }
 
-int	**allocate_map(int rows, int cols)
+static int	**allocate_map(int rows, int cols)
 {
 	int	i;
 	int	**m;

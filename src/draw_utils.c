@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 15:42:50 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/01/31 16:08:25 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:43:37 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,16 @@ void	init_rc(t_rc *rc, t_game *game, int x)
 	rc->raydir_y = game->player.look_y + game->player.plane_y * rc->camera_x;
 	rc->map_x = (int)game->player.pos_x;
 	rc->map_y = (int)game->player.pos_y;
-	rc->delta_dist_x = fabs(1 / rc->raydir_x);
-	rc->delta_dist_y = fabs(1 / rc->raydir_y);
+	if (rc->raydir_x != 0)
+		rc->delta_dist_x = fabs(1.0 / rc->raydir_x);
+	else
+		rc->delta_dist_x = DBL_MAX;
+	if (rc->raydir_y != 0)
+		rc->delta_dist_y = fabs(1.0 / rc->raydir_y);
+	else
+		rc->delta_dist_y = DBL_MAX;
 	rc->wall_hit = 0;
+	rc->perpwalldist = 0;
 }
 
 //	draws verticak lines
@@ -68,4 +75,15 @@ void	ver_line(t_game *game, int x, int *strt_end, int colour)
 		img_pixel_put(&game->img, x, y, colour);
 		y++;
 	}
+}
+
+int	outofbounds(t_rc *rc, t_game *game)
+{
+	if ((rc->map_x < 0 || rc->map_x > game->scene.map.map_width - 1)
+		|| (rc->map_y < 0 || rc->map_y > game->scene.map.map_height - 1))
+	{
+		rc->perpwalldist = DBL_MAX;
+		return (1);
+	}
+	return (0);
 }

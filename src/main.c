@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/13 18:12:29 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/21 12:18:22 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ static int	initialize(t_game *game, char *mapname)
 	}
 	game->player.movespeed = 0.100001;
 	game->player.rotspeed = 0.05;
-	// game->player.pos_y += 0.5;
-	// game->player.pos_x += 0.5;
 	game->img.mlx_img = mlx_new_image(game->ptrs.mlx, WINDOW_WIDTH,
 			WINDOW_HEIGHT);
 	load_texture(game);

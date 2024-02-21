@@ -6,7 +6,7 @@
 #    By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/01/31 15:45:23 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/02/21 15:49:30 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
 OBJS = $(SRCS:.c=.o)
 HDR = ./include/$(NAME).h
 COMPILER = cc
-CFLAGS = -Wall -Wextra -Werror -ggdb
+CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -f
 LIBFT_PATH = ./include/libft_gio/
 LIBFT = $(LIBFT_PATH)libft.a
@@ -61,6 +61,6 @@ norm:
 	norminette $(SRCS) $(HDR)
 
 leakcheck:
-	valgrind --leak-check=full --show-leak-kinds=all ./cub3D maps/map1_for_debug.cub
+	clear; valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes --show-leak-kinds=all --error-limit=no -s ./cub3D maps/test1.cub
 
 .PHONY:	all clean fclean re norm leakcheck

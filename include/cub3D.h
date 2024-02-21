@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/13 17:29:47 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:57:23 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <stdio.h>
 # include <math.h>
 # include <X11/keysym.h>
+# include <limits.h>
+# include <float.h>
 
 //	screen resolution
 # define WINDOW_WIDTH 640
@@ -33,18 +35,19 @@
 # define DEFAULT_SKY_GRADIENT 0xf25792
 # define DEFAULT_WALL 0xbebeee
 # define DEFAULT_DISTANCE_FADE 0x2a564d
+// 0x578f40
 
 # define NUMBER_OF_TEXTURES 4
 
 //	contains mlx and window pointers
-typedef struct	s_ptrs
+typedef struct s_ptrs
 {
-	void *mlx;
-	void *win;
+	void	*mlx;
+	void	*win;
 }				t_ptrs;
 
 //	contains everything neccessary to draw into image
-typedef struct	s_img
+typedef struct s_img
 {
 	void	*mlx_img;
 	char	*addr;
@@ -54,7 +57,7 @@ typedef struct	s_img
 }				t_img;
 
 //	contains all variables pertaining to the player
-typedef struct	s_player
+typedef struct s_player
 {
 	double	pos_x;
 	double	pos_y;
@@ -68,11 +71,11 @@ typedef struct	s_player
 
 //	contains all variables for textures
 //	filename needs to be freed on exit, is allocated by parse_level.c
-typedef struct	s_texture
+typedef struct s_texture
 {
-	char*	filename;
-	void*	texture_img;
-	char*	texture_addr;
+	char	*filename;
+	void	*texture_img;
+	char	*texture_addr;
 	int		bpp;
 	int		line_len;
 	int		endian;
@@ -84,7 +87,7 @@ typedef struct	s_texture
 //	contains everything to do with the map
 //	map_name is not dynamically allocated, it is taken from command line!
 //	map[y coordinate][x coordinate]
-typedef struct	s_map
+typedef struct s_map
 {
 	char	*map_name;
 	int		**map;
@@ -95,7 +98,7 @@ typedef struct	s_map
 //	contains everything that exists in the game world
 //	textures[north wall, east wall, south wall, west wall]
 //	color is encoded as 0xRRGGBB in one integer
-typedef struct	s_scene
+typedef struct s_scene
 {
 	t_map		map;
 	t_texture	textures[NUMBER_OF_TEXTURES];
@@ -107,7 +110,7 @@ typedef struct	s_scene
 }				t_scene;
 
 //	contains all variables used in raycasting
-typedef struct	s_rc
+typedef struct s_rc
 {
 	double	camera_x;
 	double	raydir_y;
@@ -130,7 +133,7 @@ typedef struct	s_rc
 }				t_rc;
 
 //	contains everything that exists outside the game world
-typedef struct	s_game
+typedef struct s_game
 {
 	t_ptrs		ptrs;
 	t_img		img;
@@ -155,40 +158,52 @@ typedef struct s_parse_helper
 	int			map_end_idx;
 	int			map_max_line_length;
 	int			interpreted_this_line;
-} t_parse_helper;
+}				t_parse_helper;
 
 //	draw.c
 int		render(t_game *game);
+
 //	draw_textures.c
 void	draw_textures(t_game *game, t_rc *rc, int *draw_start_end, int x);
+
 //	draw_utils.c
 void	img_pixel_put(t_img *img, int x, int y, int color);
 void	init_rc(t_rc *rc, t_game *game, int x);
 void	ver_line(t_game *game, int x, int *strt_end, int colour);
 int		gradient_increment(int start, int end, int stepc, float stepn);
+int		outofbounds(t_rc *rc, t_game *game);
+
 //	textures.c
 void	load_texture(t_game *game);
+
 //	controls.c
 int		handle_keypress(int keysym, t_game *game);
 int		close_window(t_game *game);
+
 //	error.c
 int		error_return(int type, char *error_message, int error_code);
-int		error_return_s(int type, char *error_message, int error_code, char *extra);
+int		error_return_s(int type,
+			char *error_message, int error_code, char *extra);
+
 //	util.c
 void	free_strings(char **s);
 void	free_game(t_game *game);
+
 //	parse_level.c
-int	process_arguments(int ac, char **av, t_game *game);
-int	parse_level(char *map_fn, t_game *game);
-int	**allocate_map(int rows, int cols); //this function used to be static, i changed it to be able to use it in my temporary bypass function,
-										//should be changed back to static once it is no longer needed there
+int		process_arguments(int ac, char **av, t_game *game);
+int		parse_level(char *map_fn, t_game *game);
+
 // parse_pass1.c
-int parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line);
+int		parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line);
+
 // parse_pass1_classify.c
-int pass1_classify_trimmed_line(t_parse_helper *ph, char *line_temp, char *s);
+int		pass1_classify_trimmed_line(t_parse_helper *ph,
+			char *line_temp, char *s);
+
 // parse_pass2.c
-int parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx);
+int		parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx);
+
 // map_checks.c
-int map_final_checks(t_game* game);
+int		map_final_checks(t_game *game);
 
 #endif

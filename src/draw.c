@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:38:53 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/02/13 16:44:31 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:41:44 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,9 @@ static int	dda_algorithm(t_rc *rc, t_game *game)
 			rc->map_y += rc->step_y;
 			rc->side_hit = 1;
 		}
-		if (game->scene.map.map[rc->map_y][rc->map_x] > 0)
+		if (outofbounds(rc, game))
+			return ((int)(WINDOW_HEIGHT / rc->perpwalldist));
+		if ((game->scene.map.map[rc->map_y][rc->map_x] > 0))
 			rc->wall_hit = 1;
 	}
 	if (!rc->side_hit)

@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/13 18:21:48 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:58:04 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,55 +29,39 @@ int	convert_colour(char *colour_str)
 	free (rgb);
 	return (r << 16 | g << 8 | b);
 }
-/*
-void	get_colours(t_game *game)
-{
-	game->scene.fog = DEFAULT_DISTANCE_FADE;
-	if (!game->scene.ceiling_str)
-	{
-		printf("couldn't find ceiling colour, using default\n");
-		game->scene.ceiling_colour = DEFAULT_SKY;
-		game->scene.ceiling_gradient = DEFAULT_SKY_GRADIENT;
-	}
-	else
-	{
-		game->scene.ceiling_colour = convert_colour(game->scene.ceiling_str);
-		game->scene.ceiling_gradient = 0x95c1c1;
-		game->scene.fog = 0x95c1c1;
-	}
-	if (!game->scene.floor_str)
-	{
-		printf("couldn't find floor colour, using default\n");
-		game->scene.floor_colour = DEFAULT_FLOOR;
-		game->scene.floor_gradient = DEFAULT_FLOOR_GRADIENT;
-	}
-	else
-	{
-		game->scene.floor_colour = convert_colour(game->scene.floor_str);
-		game->scene.floor_gradient = 0x95c1c1;
-		game->scene.fog = 0x95c1c1;
-	}
-}
-*/
 
 int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 {
-	ph->game->scene.fog = DEFAULT_DISTANCE_FADE;
 	if (which == 'F')
 		ph->game->scene.floor_colour = convert_colour(rest);
 	else if (which == 'C')
 		ph->game->scene.ceiling_colour = convert_colour(rest);
 	else
 		return (error_return(0, "Unexpected color line", -1));
+	ph->game->scene.floor_gradient
+		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 4);
+	ph->game->scene.fog
+		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 1);
+	ph->game->scene.ceiling_gradient
+		= gradient_increment(ph->game->scene.ceiling_colour, 0xffffff, 20, 4);
+	if (ph->game->scene.ceiling_colour == DEFAULT_SKY)
+		ph->game->scene.ceiling_gradient = DEFAULT_SKY_GRADIENT;
+	if (ph->game->scene.floor_colour == DEFAULT_FLOOR)
+	{
+		ph->game->scene.floor_gradient = DEFAULT_FLOOR_GRADIENT;
+		ph->game->scene.fog = DEFAULT_DISTANCE_FADE;
+	}
 	ph->found_ceiling_color = 1;
 	ph->found_floor_color = 1;
 	ph->interpreted_this_line = 1;
-	return 0;
+	return (0);
 }
 
 static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 {
 	char	*s;
+	int		notfound;
+	int		fd;
 
 	s = ft_strtrim(rest, " \t\r\n");
 	if (!s)
@@ -85,6 +69,13 @@ static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 	if (ft_strncmp(s + ft_strlen(s) - 4, ".xpm", 4))
 		return (error_return_s(0,
 				"texture file must have .xpm ending, found ", -1, s));
+	fd = open(s, O_RDONLY);
+	notfound = 0;
+	if (!s || fd == -1)
+		notfound = 1;
+	close(fd);
+	if (notfound == 1)
+		return (error_return_s(0, "could not find texture ", -1, s));
 	tex->filename = s;
 	ph->interpreted_this_line = 1;
 	return (0);
