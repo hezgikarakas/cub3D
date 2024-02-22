@@ -22,7 +22,6 @@
 # include <math.h>
 # include <X11/keysym.h>
 # include <limits.h>
-# include <float.h>
 
 //	screen resolution
 # define WINDOW_WIDTH 640
@@ -160,6 +159,23 @@ typedef struct s_parse_helper
 	int			interpreted_this_line;
 }				t_parse_helper;
 
+// helper structure
+typedef struct s_parse_pass2
+{
+	int		map_fd;
+	int		error;
+	char	*line;
+	t_game	*game;
+	int		line_idx;
+	int		found_player;
+}	t_parse_pass2;
+
+typedef struct s_xy
+{
+	int	x;
+	int	y;
+}	t_xy;
+
 //	draw.c
 int		render(t_game *game);
 
@@ -188,6 +204,7 @@ int		error_return_s(int type,
 //	util.c
 void	free_strings(char **s);
 void	free_game(t_game *game);
+void	setmaxlinelen(t_parse_helper *ph, char *line_temp);
 
 //	parse_level.c
 int		process_arguments(int ac, char **av, t_game *game);

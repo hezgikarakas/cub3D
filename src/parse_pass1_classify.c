@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_pass1_classify.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/21 15:58:04 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:03:21 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,11 @@ static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 	if (!s)
 		return (error_return(0, "Unexpected empty texture file name!", -1));
 	if (ft_strncmp(s + ft_strlen(s) - 4, ".xpm", 4))
+	{
+		tex->filename = s;
 		return (error_return_s(0,
 				"texture file must have .xpm ending, found ", -1, s));
+	}
 	fd = open(s, O_RDONLY);
 	notfound = 0;
 	if (!s || fd == -1)
@@ -108,24 +111,20 @@ int	pass1_classify_trimmed_line(t_parse_helper *ph, char *line_temp, char *s)
 	if (!ph->found_map_start && s[1] != 0 && s[2] != 0)
 	{
 		if (s[0] == 'C' || s[0] == 'F')
+		{
 			if (pass1_parse_color(ph, s[0], s + 1))
+			{
+				free(s);
 				return (1);
+			}
+		}
 		if (pass1_parse_potential_texture(ph, s))
+		{
+			free(s);
 			return (1);
+		}
 	}
 	free(s);
-	if (!ph->found_map_start && !ph->interpreted_this_line)
-	{
-		ph->found_map_start = 1;
-		ph->map_start_idx = ph->line_idx;
-	}
-	if (ph->found_map_start && !ph->found_map_end)
-	{
-		ph->linelength = ft_strlen(line_temp);
-		if (line_temp[ph->linelength - 1] == '\n')
-			ph->linelength--;
-		if (ph->linelength > ph->map_max_line_length)
-			ph->map_max_line_length = ph->linelength;
-	}
+	setmaxlinelen(ph, line_temp);
 	return (0);
 }

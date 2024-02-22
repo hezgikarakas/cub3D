@@ -55,11 +55,11 @@ void	init_rc(t_rc *rc, t_game *game, int x)
 	if (rc->raydir_x != 0)
 		rc->delta_dist_x = fabs(1.0 / rc->raydir_x);
 	else
-		rc->delta_dist_x = DBL_MAX;
+		rc->delta_dist_x = __DBL_MAX__;
 	if (rc->raydir_y != 0)
 		rc->delta_dist_y = fabs(1.0 / rc->raydir_y);
 	else
-		rc->delta_dist_y = DBL_MAX;
+		rc->delta_dist_y = __DBL_MAX__;
 	rc->wall_hit = 0;
 	rc->perpwalldist = 0;
 }
@@ -82,7 +82,7 @@ int	outofbounds(t_rc *rc, t_game *game)
 	if ((rc->map_x < 0 || rc->map_x > game->scene.map.map_width - 1)
 		|| (rc->map_y < 0 || rc->map_y > game->scene.map.map_height - 1))
 	{
-		rc->perpwalldist = DBL_MAX;
+		rc->perpwalldist = __DBL_MAX__;
 		return (1);
 	}
 	return (0);

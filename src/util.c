@@ -76,3 +76,20 @@ void	free_game(t_game *game)
 	}
 	free(game);
 }
+
+void	setmaxlinelen(t_parse_helper *ph, char *line_temp)
+{
+	if (!ph->found_map_start && !ph->interpreted_this_line)
+	{
+		ph->found_map_start = 1;
+		ph->map_start_idx = ph->line_idx;
+	}
+	if (ph->found_map_start && !ph->found_map_end)
+	{
+		ph->linelength = ft_strlen(line_temp);
+		if (line_temp[ph->linelength - 1] == '\n')
+			ph->linelength--;
+		if (ph->linelength > ph->map_max_line_length)
+			ph->map_max_line_length = ph->linelength;
+	}
+}

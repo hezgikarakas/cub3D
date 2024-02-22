@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+         #
+#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/02/21 15:49:30 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/02/22 14:53:49 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

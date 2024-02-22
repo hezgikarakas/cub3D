@@ -12,23 +12,6 @@
 
 #include "./../include/cub3D.h"
 
-// helper structure
-typedef struct s_parse_pass2
-{
-	int		map_fd;
-	int		error;
-	char	*line;
-	t_game	*game;
-	int		line_idx;
-	int		found_player;
-}	t_parse_pass2;
-
-typedef struct s_xy
-{
-	int	x;
-	int	y;
-}	t_xy;
-
 /* convert characters from file to map representation
    convert ascii to integer map content
    player position is floor
