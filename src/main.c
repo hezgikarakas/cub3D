@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/21 12:18:22 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/23 16:47:15 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,23 +48,25 @@ static int	initialize(t_game *game, char *mapname)
 
 	print_map_on_stdout(game);
 	printf("sky:	0x%x\n", game->scene.ceiling_colour);
-	printf("floor:	0x%x\n", game->scene.floor_colour);
+	printf("sky2:	0x%x\n", game->scene.ceiling_gradient);
 	name = ft_strjoin("CUBE3D - ", mapname);
 	game->ptrs.mlx = mlx_init();
 	if (game->ptrs.mlx == NULL)
+	{
+		free (name);
 		return (error_return(0, "mlx_init failed", 2));
+	}
 	game->ptrs.win = mlx_new_window(game->ptrs.mlx, WINDOW_WIDTH,
 			WINDOW_HEIGHT, name);
 	free(name);
 	if (game->ptrs.win == NULL)
-	{
-		free(game->ptrs.mlx);
 		return (error_return(1, "mlx_new_window failed", 3));
-	}
 	game->player.movespeed = 0.100001;
 	game->player.rotspeed = 0.05;
 	game->img.mlx_img = mlx_new_image(game->ptrs.mlx, WINDOW_WIDTH,
 			WINDOW_HEIGHT);
+	if (game->img.mlx_img == NULL)
+		return (error_return(1, "image creation failed", 4));
 	load_texture(game);
 	return (0);
 }
@@ -81,6 +83,9 @@ int	main(int argc, char **argv)
 	ret = process_arguments(argc, argv, game);
 	if (ret == 0)
 		ret = initialize(game, "test");
+	printf("floor:	0x%x\n", game->scene.floor_colour);
+	printf("floor2:	0x%x\n", game->scene.floor_gradient);
+	printf("fog:	0x%x\n", game->scene.fog);
 	if (ret == 0)
 	{
 		mlx_loop_hook(game->ptrs.mlx, &render, game);

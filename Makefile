@@ -6,7 +6,7 @@
 #    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/02/22 14:53:49 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/02/23 16:15:27 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,6 @@ norm:
 	norminette $(SRCS) $(HDR)
 
 leakcheck:
-	clear; valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes --show-leak-kinds=all --error-limit=no -s ./cub3D maps/test1.cub
+	clear; valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes --show-leak-kinds=all --error-limit=no -s ./cub3D maps/garden.cub
 
 .PHONY:	all clean fclean re norm leakcheck
