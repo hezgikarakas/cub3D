@@ -64,6 +64,19 @@ static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
 	*map_start_line = ph->map_start_idx;
 	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
 	ph->game->scene.map.map_width = ph->map_max_line_length;
+	ph->game->scene.floor_gradient
+		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 4);
+	ph->game->scene.fog
+		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 1);
+	ph->game->scene.ceiling_gradient
+		= gradient_increment(ph->game->scene.ceiling_colour, 0xffffff, 20, 4);
+	if (ph->game->scene.ceiling_colour == DEFAULT_SKY)
+		ph->game->scene.ceiling_gradient = DEFAULT_SKY_GRADIENT;
+	if (ph->game->scene.floor_colour == DEFAULT_FLOOR)
+	{
+		ph->game->scene.floor_gradient = DEFAULT_FLOOR_GRADIENT;
+		ph->game->scene.fog = DEFAULT_DISTANCE_FADE;
+	}
 	return (0);
 }
 

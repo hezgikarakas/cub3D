@@ -18,41 +18,44 @@ int	convert_colour(char *colour_str)
 	int		r;
 	int		g;
 	int		b;
+	int		error;
 
+	error = 0;
 	rgb = ft_split(colour_str, ',');
 	r = ft_atoi(rgb[0]);
 	g = ft_atoi(rgb[1]);
 	b = ft_atoi(rgb[2]);
+	if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
+		error = 1;
 	free (rgb[0]);
 	free (rgb[1]);
 	free (rgb[2]);
 	free (rgb);
-	return (r << 16 | g << 8 | b);
+	if (error)
+		return (error_return(0, "Unexpected color value (expect 0..255)", -1));
+	else
+		return (r << 16 | g << 8 | b);
 }
 
 int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 {
-	if (which == 'F')
-		ph->game->scene.floor_colour = convert_colour(rest);
-	else if (which == 'C')
-		ph->game->scene.ceiling_colour = convert_colour(rest);
-	else
-		return (error_return(0, "Unexpected color line", -1));
-	ph->game->scene.floor_gradient
-		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 4);
-	ph->game->scene.fog
-		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 1);
-	ph->game->scene.ceiling_gradient
-		= gradient_increment(ph->game->scene.ceiling_colour, 0xffffff, 20, 4);
-	if (ph->game->scene.ceiling_colour == DEFAULT_SKY)
-		ph->game->scene.ceiling_gradient = DEFAULT_SKY_GRADIENT;
-	if (ph->game->scene.floor_colour == DEFAULT_FLOOR)
+	int	converted;
+
+	converted = convert_colour(rest);
+	if (converted < 0)
+		return (converted);
+	if (which == 'F' && !ph->found_floor_color)
 	{
-		ph->game->scene.floor_gradient = DEFAULT_FLOOR_GRADIENT;
-		ph->game->scene.fog = DEFAULT_DISTANCE_FADE;
+		ph->found_floor_color = 1;
+		ph->game->scene.floor_colour = converted;
 	}
-	ph->found_ceiling_color = 1;
-	ph->found_floor_color = 1;
+	else if (which == 'C' && !ph->found_ceiling_color)
+	{
+		ph->found_ceiling_color = 1;
+		ph->game->scene.ceiling_colour = converted;
+	}
+	else
+		return (error_return(0, "Unexpected or duplicate color line", -1));
 	ph->interpreted_this_line = 1;
 	return (0);
 }
