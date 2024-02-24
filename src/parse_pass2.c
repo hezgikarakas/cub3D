@@ -22,7 +22,7 @@ static int	pass2_convert_one_field(char source, int *destination)
 {
 	if (source == ' ')
 		*destination = 0;
-	else if (source >= '0' && source <= '9')
+	else if (source >= '0' && source <= '1')
 		*destination = source - '0';
 	else if (ft_strchr("NSWE", source))
 		*destination = 0;
