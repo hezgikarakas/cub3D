@@ -67,14 +67,16 @@ static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 	int		fd;
 
 	s = ft_strtrim(rest, " \t\r\n");
-	if (!s)
-		return (error_return(0, "Unexpected empty texture file name!", -1));
-	if (ft_strncmp(s + ft_strlen(s) - 4, ".xpm", 4))
+	if (tex->filename != NULL)
 	{
-		tex->filename = s;
-		return (error_return_s(0,
-				"texture file must have .xpm ending, found ", -1, s));
+		free(s);
+		return (error_return(0, "Unexpected duplicate texture!", -1));
 	}
+	tex->filename = s;
+	if (!s || s[0] == 0)
+		return (error_return(0, "Unexpected empty texture file name!", -1));
+	if (ft_strlen(s) < 4 || ft_strncmp(s + ft_strlen(s) - 4, ".xpm", 4))
+		return (error_return_s(0, "Bad texture format (need .xpm) ", -1, s));
 	fd = open(s, O_RDONLY);
 	notfound = 0;
 	if (!s || fd == -1)
@@ -82,8 +84,7 @@ static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 	else
 		close(fd);
 	if (notfound == 1)
-		return (error_return_s(0, "could not find texture ", -1, s));
-	tex->filename = s;
+		return (error_return_s(0, "Could not open texture file ", -1, s));
 	ph->interpreted_this_line = 1;
 	return (0);
 }
