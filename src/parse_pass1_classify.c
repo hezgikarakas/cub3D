@@ -79,7 +79,8 @@ static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 	notfound = 0;
 	if (!s || fd == -1)
 		notfound = 1;
-	close(fd);
+	else
+		close(fd);
 	if (notfound == 1)
 		return (error_return_s(0, "could not find texture ", -1, s));
 	tex->filename = s;
