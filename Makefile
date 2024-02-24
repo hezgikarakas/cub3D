@@ -63,4 +63,27 @@ norm:
 leakcheck:
 	clear; valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes --show-leak-kinds=all --error-limit=no -s ./cub3D maps/garden.cub
 
-.PHONY:	all clean fclean re norm leakcheck
+leakcheckerrors:
+	clear ; \
+	for f in \
+		maps/empty_texture_name.cub maps/empty.cub maps/empty_line_in_map.cub \
+		maps/multiple_players.cub maps/wrong_texture_ext.cub maps/wrong_texture_name.cub \
+		maps/wrong_chars.cub maps/wrong_color.cub maps/one_color_doubled.cub maps/one_texture_doubled.cub \
+		maps/one_missing.cub maps/no_map.cub maps/no_args.cub \
+		maps/garb1.cub maps/garb2.cub maps/luca_map.cub maps/tab.cub; do \
+			echo "=== CHECKING $$f ===" ; \
+			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
+				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
+	done
+
+leakcheckgoodmaps:
+	clear ; \
+	for f in \
+		maps/garden.cub maps/map1_for_debug.cub maps/map1.cub maps/map2.cub \
+		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub; do \
+			echo "=== CHECKING $$f ===" ; \
+			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
+				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
+	done
+
+.PHONY:	all clean fclean re norm leakcheck leakcheckerrors leakcheckgoodmaps

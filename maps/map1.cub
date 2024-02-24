@@ -2,7 +2,7 @@
 
 SO ./textures/south.xpm 
 
-WE ./textures/exit.xpm
+WE ./textures/lionwall.xpm
 
 EA ./textures/east.xpm
 
