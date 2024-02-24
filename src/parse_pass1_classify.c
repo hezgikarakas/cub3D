@@ -111,7 +111,7 @@ static int	pass1_parse_potential_texture(t_parse_helper *ph, char *s)
  * if this is not the case, we will detect in pass 2 */
 int	pass1_classify_trimmed_line(t_parse_helper *ph, char *line_temp, char *s)
 {
-	if (!ph->found_map_start && s[1] != 0 && s[2] != 0)
+	if (!ph->found_map_start && s[1] != 0)
 	{
 		if (s[0] == 'C' || s[0] == 'F')
 		{
