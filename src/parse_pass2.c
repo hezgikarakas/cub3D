@@ -133,7 +133,7 @@ int	parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx)
 	if (ph2.line)
 		free(ph2.line);
 	close(ph2.map_fd);
-	if (!ph2.found_player)
+	if (!ph2.found_player && !ph2.error)
 		return (error_return(0, "Found no player!", -1));
 	return (ph2.error);
 }
