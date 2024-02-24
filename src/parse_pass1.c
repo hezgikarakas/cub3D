@@ -60,10 +60,16 @@ static int	pass1_classify_line(char *line_temp, t_parse_helper *ph)
 /* set map size and map_start_line */
 static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
 {
+	int	i;
+
 	handle_potential_map_end(ph);
 	*map_start_line = ph->map_start_idx;
 	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
 	ph->game->scene.map.map_width = ph->map_max_line_length;
+	i = 0;
+	while (i++ < 4)
+		if (!ph->game->scene.textures[i].filename)
+			return (error_return(0, "Missing texture!", -1));
 	ph->game->scene.floor_gradient
 		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 4);
 	ph->game->scene.fog
