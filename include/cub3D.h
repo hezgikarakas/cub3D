@@ -15,7 +15,6 @@
 
 # include "./minilibx-linux/mlx.h"
 # include "./libft_gio/libft.h"
-//	# include "./libft/get_next_line_bonus.h"
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h>
