@@ -86,4 +86,4 @@ leakcheckgoodmaps:
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
 	done
 
-.PHONY:	all clean fclean re norm leakcheck leakcheckerrors leakcheckgoodmaps
+.PHONY:	all clean fclean re remlx norm leakcheck leakcheckerrors leakcheckgoodmaps
