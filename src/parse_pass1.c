@@ -111,8 +111,6 @@ int	parse_mapfile_pass_1(char *map_fn, t_game *game, int *map_start_line)
 	}
 	close(ph.map_fd);
 	if (ph.line_temp == NULL && skip == 0)
-	{
 		return (pass1_finalize(&ph, map_start_line));
-	}
 	return (1);
 }
