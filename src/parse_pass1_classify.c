@@ -22,17 +22,19 @@ int	convert_colour(char *colour_str)
 
 	error = 0;
 	rgb = ft_split(colour_str, ',');
-	r = ft_atoi(rgb[0]);
-	g = ft_atoi(rgb[1]);
-	b = ft_atoi(rgb[2]);
-	if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
+	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
 		error = 1;
-	free (rgb[0]);
-	free (rgb[1]);
-	free (rgb[2]);
-	free (rgb);
+	else
+	{
+		r = ft_atoi(rgb[0]);
+		g = ft_atoi(rgb[1]);
+		b = ft_atoi(rgb[2]);
+		if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
+			error = 1;
+	}
+	free_strings(rgb);
 	if (error)
-		return (error_return(0, "Unexpected color value (expect 0..255)", -1));
+		return (error_return(0, "Unexpected color (expect 3x 0..255)", -1));
 	else
 		return (r << 16 | g << 8 | b);
 }
