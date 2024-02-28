@@ -18,12 +18,12 @@ SRCS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
 OBJS = $(SRCS:.c=.o)
 HDR = ./include/$(NAME).h
 COMPILER = cc
-CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -f
 LIBFT_PATH = ./include/libft_gio/
 LIBFT = $(LIBFT_PATH)libft.a
 MLX_PATH = ./include/minilibx-linux/
 MLX = $(MLX_PATH)libmlx_Linux.a
+CFLAGS = -Wall -Wextra -Werror -g -I$(MLX_PATH)
 
 all:	$(NAME)
 
