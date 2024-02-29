@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 12:47:02 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/21 15:57:23 by jkatzenb         ###   ########.fr       */
+/*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
+/*   Updated: 2024/02/29 13:17:56 by hakaraka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
+#    By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/02/23 16:15:27 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/02/29 13:17:43 by hakaraka         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,15 +21,15 @@ COMPILER = cc
 RM = rm -f
 LIBFT_PATH = ./include/libft_gio/
 LIBFT = $(LIBFT_PATH)libft.a
-MLX_PATH = ./include/minilibx-linux/
-MLX = $(MLX_PATH)libmlx_Linux.a
-CFLAGS = -Wall -Wextra -Werror -g -I$(MLX_PATH)
+#MLX_PATH = ./include/minilibx-linux/
+#MLX = $(MLX_PATH)libmlx_Linux.a
+CFLAGS = -Wall -Wextra -Werror -g #-I$(MLX_PATH)
 
 all:	$(NAME)
 
 $(NAME):	$(MLX) $(LIBFT) $(OBJS) $(HDR)
 	@echo "\033[1;34m- linking executable: $(NAME)\033[0m"
-	@$(COMPILER) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX) -lXext -lX11 -lm -o $@
+	@$(COMPILER) $(CFLAGS) $(OBJS) $(LIBFT) -lXext -lX11 -lmlx -lm -o $@
 	@echo "\033[1;32m- complete!\033[0m"
 
 %.o:	%.cpp
@@ -39,8 +39,8 @@ $(NAME):	$(MLX) $(LIBFT) $(OBJS) $(HDR)
 $(LIBFT):
 	@make --no-print-directory all -C $(LIBFT_PATH)
 
-$(MLX):
-	@make --no-print-directory -C $(MLX_PATH)
+#$(MLX):
+#	@make --no-print-directory -C $(MLX_PATH)
 
 clean:
 	@make --no-print-directory clean -C $(LIBFT_PATH)
@@ -53,7 +53,7 @@ fclean:	clean
 	@echo "\033[1;31m- $(NAME) removed\033[0m"
 
 re:	fclean all
-	@make --no-print-directory clean -C $(MLX_PATH)
+#	@make --no-print-directory clean -C $(MLX_PATH)
 
 remlx:	fclean all
 
@@ -86,4 +86,4 @@ leakcheckgoodmaps:
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
 	done
 
-.PHONY:	all clean fclean re remlx norm leakcheck leakcheckerrors leakcheckgoodmaps
+.PHONY:	all clean fclean re norm leakcheck leakcheckerrors leakcheckgoodmaps

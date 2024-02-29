@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 15:42:50 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/02/21 14:43:37 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/29 13:17:54 by hakaraka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

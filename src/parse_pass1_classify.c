@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_pass1_classify.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 11:53:54 by karakasschu       #+#    #+#             */
-/*   Updated: 2024/02/22 15:03:21 by jkatzenb         ###   ########.fr       */
+/*   Created: 2024/01/19 11:53:54 by hakaraka          #+#    #+#             */
+/*   Updated: 2024/02/29 13:17:50 by hakaraka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

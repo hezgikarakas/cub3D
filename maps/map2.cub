@@ -1,9 +1,9 @@
-NO ./textures/north.xpm
-SO ./textures/south.xpm
+NO ./textures/patternwall.xpm
+SO ./textures/pillarwall.xpm
 F 128,128,128
-C 98, 47, 34
-WE ./textures/west.xpm
-EA ./textures/east.xpm
+C 63, 122, 77
+WE ./textures/vinewall.xpm
+EA ./textures/lionwall.xpm
 1111111111111111111111
 1010010000100001110001
 1000111010001011100001

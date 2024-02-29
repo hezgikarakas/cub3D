@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:05:23 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/01/31 15:50:27 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/29 13:17:47 by hakaraka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

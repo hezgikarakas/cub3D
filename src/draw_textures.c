@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_textures.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 15:35:07 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/02/19 16:10:52 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/02/29 13:17:55 by hakaraka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
