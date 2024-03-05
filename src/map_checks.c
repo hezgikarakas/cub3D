@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_checks.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/02/29 13:17:52 by hakaraka         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:10:46 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,21 @@ int	map_final_checks(t_game *game)
 			game->player.pos_x, game->player.pos_y);
 	ft_flood_restore(game);
 	return (ret);
+}
+
+int string_is_digit(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]) && str[i] != ' ')
+		{
+			printf("illegal character found in colour string\n");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
 }

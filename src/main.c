@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/02/29 13:16:39 by hakaraka         ###   ########.fr       */
+/*   Updated: 2024/03/05 13:44:43 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,12 @@ int	main(int argc, char **argv)
 		return (error_return(1, "game struct malloc failed", 1));
 	ret = process_arguments(argc, argv, game);
 	if (ret == 0)
+	{
 		ret = initialize(game, "test");
-	printf("floor:	0x%x\n", game->scene.floor_colour);
-	printf("floor2:	0x%x\n", game->scene.floor_gradient);
-	printf("fog:	0x%x\n", game->scene.fog);
+		printf("floor:	0x%x\n", game->scene.floor_colour);
+		printf("floor2:	0x%x\n", game->scene.floor_gradient);
+		printf("fog:	0x%x\n", game->scene.fog);
+	}
 	if (ret == 0)
 	{
 		mlx_loop_hook(game->ptrs.mlx, &render, game);

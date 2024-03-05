@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_pass1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/02/29 13:17:49 by hakaraka         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:11:00 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,14 @@ static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
 	ph->game->scene.map.map_width = ph->map_max_line_length;
 	i = 0;
 	while (i++ < 4)
-		if (!ph->game->scene.textures[i].filename)
+		if (!ph->game->scene.textures[i].filename || ph->found_ceiling_color)
 			return (error_return(0, "Missing texture!", -1));
 	ph->game->scene.floor_gradient
-		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 4);
+		= gradient_increment(ph->game->scene.floor_colour, 0x000000, 100, 20);
 	ph->game->scene.fog
-		= gradient_increment(ph->game->scene.floor_colour, 0xffffff, 20, 1);
+		= gradient_increment(ph->game->scene.floor_colour, 0x000000, 100, 25);
 	ph->game->scene.ceiling_gradient
-		= gradient_increment(ph->game->scene.ceiling_colour, 0xffffff, 20, 4);
+		= gradient_increment(ph->game->scene.ceiling_colour, 0x000000, 100, 20);
 	if (ph->game->scene.ceiling_colour == DEFAULT_SKY)
 		ph->game->scene.ceiling_gradient = DEFAULT_SKY_GRADIENT;
 	if (ph->game->scene.floor_colour == DEFAULT_FLOOR)
