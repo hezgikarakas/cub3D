@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/05 15:10:46 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:16:47 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	map_final_checks(t_game *game)
 	return (ret);
 }
 
-int string_is_digit(char *str)
+int	string_is_digit(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
