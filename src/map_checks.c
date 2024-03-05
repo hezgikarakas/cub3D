@@ -71,10 +71,7 @@ int	string_is_digit(char *str)
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]) && str[i] != ' ')
-		{
-			printf("illegal character found in colour string\n");
 			return (1);
-		}
 		i++;
 	}
 	return (0);
