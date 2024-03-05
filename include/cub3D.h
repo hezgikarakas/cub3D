@@ -222,5 +222,6 @@ int		parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx);
 // map_checks.c
 int		map_final_checks(t_game *game);
 int		string_is_digit(char *str);
+int		is_ws(char c);
 
 #endif

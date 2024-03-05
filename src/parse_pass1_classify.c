@@ -45,6 +45,8 @@ int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 {
 	int	converted;
 
+	if (!is_ws(rest[0]))
+		return (error_return(0, "Malformed color line!", -1));
 	converted = convert_colour(rest);
 	if (converted < 0)
 		return (converted);
@@ -64,7 +66,7 @@ int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 	return (0);
 }
 
-static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
+static int	interpret_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 {
 	char	*s;
 	int		notfound;
@@ -95,20 +97,24 @@ static int	pass1_parse_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 
 /* detect and parse textures
    indexes see scene.c */
-static int	pass1_parse_potential_texture(t_parse_helper *ph, char *s)
+static int	pass1_parse_texture(t_parse_helper *ph, char *s)
 {
-	if (s[0] == 'N' && s[1] == 'O')
-		if (pass1_parse_texture(ph, &ph->game->scene.textures[0], s + 2))
-			return (1);
-	if (s[0] == 'E' && s[1] == 'A')
-		if (pass1_parse_texture(ph, &ph->game->scene.textures[1], s + 2))
-			return (1);
-	if (s[0] == 'S' && s[1] == 'O')
-		if (pass1_parse_texture(ph, &ph->game->scene.textures[2], s + 2))
-			return (1);
-	if (s[0] == 'W' && s[1] == 'E')
-		if (pass1_parse_texture(ph, &ph->game->scene.textures[3], s + 2))
-			return (1);
+	if (s[0] == 'N' && (
+			s[1] != 'O' || !is_ws(s[2])
+			|| interpret_texture(ph, &ph->game->scene.textures[0], s + 3)))
+		return (error_return(0, "Malformed NO texture line!", -1));
+	if (s[0] == 'E' && (
+			s[1] != 'A' || !is_ws(s[2])
+			|| interpret_texture(ph, &ph->game->scene.textures[1], s + 3)))
+		return (error_return(0, "Malformed EA texture line!", -1));
+	if (s[0] == 'S' && (
+			s[1] != 'O' || !is_ws(s[2])
+			|| interpret_texture(ph, &ph->game->scene.textures[2], s + 3)))
+		return (error_return(0, "Malformed SO texture line!", -1));
+	if (s[0] == 'W' && (
+			s[1] != 'E' || !is_ws(s[2])
+			|| interpret_texture(ph, &ph->game->scene.textures[3], s + 3)))
+		return (error_return(0, "Malformed WE texture line!", -1));
 	return (0);
 }
 
@@ -117,20 +123,22 @@ static int	pass1_parse_potential_texture(t_parse_helper *ph, char *s)
  * if this is not the case, we will detect in pass 2 */
 int	pass1_classify_trimmed_line(t_parse_helper *ph, char *line_temp, char *s)
 {
-	if (!ph->found_map_start && s[1] != 0)
+	if (!ph->found_map_start)
 	{
 		if (s[0] == 'C' || s[0] == 'F')
 		{
 			if (pass1_parse_color(ph, s[0], s + 1))
-			{
-				free(s);
-				return (1);
-			}
+				return (free(s), 1);
 		}
-		if (pass1_parse_potential_texture(ph, s))
+		else if (s[0] == 'N' || s[0] == 'S' || s[0] == 'W' || s[0] == 'E')
+		{
+			if (pass1_parse_texture(ph, s))
+				return (free(s), 1);
+		}
+		else if (s[0] != '1')
 		{
 			free(s);
-			return (1);
+			return (error_return(0, "Unexpected line!", -1));
 		}
 	}
 	free(s);

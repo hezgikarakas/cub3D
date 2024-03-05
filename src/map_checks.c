@@ -76,3 +76,8 @@ int	string_is_digit(char *str)
 	}
 	return (0);
 }
+
+int	is_ws(char c)
+{
+	return (c == ' ' || c == '\t');
+}

@@ -76,11 +76,12 @@ leakcheck:
 leakcheckerrors:
 	clear ; \
 	for f in \
-		maps/empty_texture_name.cub maps/empty.cub maps/empty_line_in_map.cub \
-		maps/multiple_players.cub maps/wrong_texture_ext.cub maps/wrong_texture_name.cub \
+		maps/garb2.cub maps/luca_map.cub maps/tab.cub maps/few_colors.cub maps/wrong_color2.cub \
+		maps/empty_texture_name.cub maps/empty.cub maps/empty_line_in_map.cub maps/texture_wrongline.cub \
+		maps/multiple_players.cub maps/wrong_texture_ext.cub maps/wrong_texture_name.cub maps\wrong_chars2.cub \
 		maps/wrong_chars.cub maps/wrong_color.cub maps/one_color_doubled.cub maps/one_texture_doubled.cub \
 		maps/texture_missing.cub maps/color_missing.cub maps/no_map.cub maps/no_args.cub maps/many_colors.cub \
-		maps/garb1.cub maps/garb2.cub maps/luca_map.cub maps/tab.cub maps/few_colors.cub maps/wrong_color2.cub; do \
+		maps/garb1.cub maps/wrong_color3.cub; do \
 			echo "=== CHECKING $$f ===" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
