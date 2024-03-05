@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/05 15:11:00 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:29:39 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
 	ph->game->scene.map.map_width = ph->map_max_line_length;
 	i = 0;
 	while (i++ < 4)
-		if (!ph->game->scene.textures[i].filename || ph->found_ceiling_color)
+		if (!ph->game->scene.textures[i].filename)
 			return (error_return(0, "Missing texture!", -1));
 	ph->game->scene.floor_gradient
 		= gradient_increment(ph->game->scene.floor_colour, 0x000000, 100, 20);

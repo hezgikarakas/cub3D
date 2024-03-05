@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by hakaraka          #+#    #+#             */
-/*   Updated: 2024/03/05 15:17:47 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:26:40 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	convert_colour(char *colour_str)
 	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3]
 		|| string_is_digit(rgb[0]) || string_is_digit(rgb[1])
 		|| string_is_digit(rgb[2]))
-		error = 1;
+		error = 1; 
 	else
 	{
 		r = ft_atoi(rgb[0]);
