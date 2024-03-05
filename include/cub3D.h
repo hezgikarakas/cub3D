@@ -6,7 +6,7 @@
 /*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/02/29 13:17:56 by hakaraka         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:17:02 by hakaraka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,5 +221,6 @@ int		parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx);
 
 // map_checks.c
 int		map_final_checks(t_game *game);
+int		string_is_digit(char *str);
 
 #endif
