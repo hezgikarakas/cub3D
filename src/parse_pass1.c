@@ -12,16 +12,13 @@
 
 #include "./../include/cub3D.h"
 
-static void	pass1_mark_map_end(t_parse_helper *ph)
-{
-	ph->found_map_end = 1;
-	ph->map_end_idx = ph->line_idx;
-}
-
 static void	handle_potential_map_end(t_parse_helper *ph)
 {
 	if (ph->found_map_start && !ph->found_map_end)
-		pass1_mark_map_end(ph);
+	{
+		ph->found_map_end = 1;
+		ph->map_end_idx = ph->line_idx;
+	}
 }
 
 /* check if line is only spaces
@@ -57,19 +54,8 @@ static int	pass1_classify_line(char *line_temp, t_parse_helper *ph)
 	return (0);
 }
 
-/* set map size and map_start_line */
-static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
+static void	finalize_gradients_and_fog(t_parse_helper *ph)
 {
-	int	i;
-
-	handle_potential_map_end(ph);
-	*map_start_line = ph->map_start_idx;
-	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
-	ph->game->scene.map.map_width = ph->map_max_line_length;
-	i = 0;
-	while (i++ < 4)
-		if (!ph->game->scene.textures[i].filename)
-			return (error_return(0, "Missing texture!", -1));
 	ph->game->scene.floor_gradient
 		= gradient_increment(ph->game->scene.floor_colour, 0x000000, 100, 20);
 	ph->game->scene.fog
@@ -83,6 +69,25 @@ static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
 		ph->game->scene.floor_gradient = DEFAULT_FLOOR_GRADIENT;
 		ph->game->scene.fog = DEFAULT_DISTANCE_FADE;
 	}
+}
+
+/* set map size and map_start_line
+ * validate existence of textures and colors */
+static int	pass1_finalize(t_parse_helper *ph, int *map_start_line)
+{
+	int	i;
+
+	handle_potential_map_end(ph);
+	*map_start_line = ph->map_start_idx;
+	ph->game->scene.map.map_height = ph->map_end_idx - ph->map_start_idx;
+	ph->game->scene.map.map_width = ph->map_max_line_length;
+	i = 0;
+	while (i++ < 4)
+		if (!ph->game->scene.textures[i].filename)
+			return (error_return(0, "Missing texture!", -1));
+	if (!ph->found_ceiling_color || !ph->found_floor_color)
+		return (error_return(0, "Missing ceiling or floor color!", -1));
+	finalize_gradients_and_fog(ph);
 	return (0);
 }
 
