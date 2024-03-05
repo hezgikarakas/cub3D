@@ -6,7 +6,7 @@
 #    By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/02/29 13:17:43 by hakaraka         ###   ########.fr        #
+#    Updated: 2024/03/05 10:10:47 by hakaraka         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,12 @@ SRCS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
 		src/parse_level.c src/parse_pass1.c src/parse_pass1_classify.c \
 		src/parse_pass2.c src/map_checks.c src/util.c \
 		src/controls.c src/textures.c
+SRCS_BONUS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
+				src/parse_level.c src/parse_pass1.c src/parse_pass1_classify.c \
+				src/parse_pass2.c src/map_checks.c src/util.c \
+				src/controls_bonus.c src/textures.c
 OBJS = $(SRCS:.c=.o)
+OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 HDR = ./include/$(NAME).h
 COMPILER = cc
 RM = rm -f
@@ -27,9 +32,14 @@ CFLAGS = -Wall -Wextra -Werror -g #-I$(MLX_PATH)
 
 all:	$(NAME)
 
-$(NAME):	$(MLX) $(LIBFT) $(OBJS) $(HDR)
+$(NAME):	$(LIBFT) $(OBJS) $(HDR)
 	@echo "\033[1;34m- linking executable: $(NAME)\033[0m"
 	@$(COMPILER) $(CFLAGS) $(OBJS) $(LIBFT) -lXext -lX11 -lmlx -lm -o $@
+	@echo "\033[1;32m- complete!\033[0m"
+
+bonus:	$(LIBFT) $(OBJS_BONUS) $(HDR)
+	@echo "\033[1;34m- linking executable: $(NAME)\033[0m"
+	@$(COMPILER) $(CFLAGS) $(OBJS_BONUS) $(LIBFT) -lXext -lX11 -lmlx -lm -o $(NAME)
 	@echo "\033[1;32m- complete!\033[0m"
 
 %.o:	%.cpp
@@ -44,7 +54,7 @@ $(LIBFT):
 
 clean:
 	@make --no-print-directory clean -C $(LIBFT_PATH)
-	@$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(OBJS_BONUS)
 	@echo "\033[1;31m- objects removed\033[0m"
 
 fclean:	clean
@@ -55,10 +65,10 @@ fclean:	clean
 re:	fclean all
 #	@make --no-print-directory clean -C $(MLX_PATH)
 
-remlx:	fclean all
+#remlx:	fclean all
 
 norm:
-	norminette $(SRCS) $(HDR)
+	norminette $(SRCS) $(HDR) controls_bonus.c
 
 leakcheck:
 	clear; valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes --show-leak-kinds=all --error-limit=no -s ./cub3D maps/garden.cub

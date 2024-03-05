@@ -6,7 +6,7 @@
 /*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:13:13 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/05 09:46:24 by hakaraka         ###   ########.fr       */
+/*   Updated: 2024/02/29 13:17:56 by hakaraka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,23 @@ static void	move_player(int keysym, t_game *game)
 {
 	if (keysym == XK_Up || keysym == XK_w)
 	{
-		game->player.pos_y += game->player.look_y * game->player.movespeed;
-		game->player.pos_x += game->player.look_x * game->player.movespeed;
+		if (!game->scene.map.map[(int)((game->player.pos_y + game->player.look_y
+					* game->player.movespeed))][(int)(game->player.pos_x)])
+			game->player.pos_y += game->player.look_y * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y)]
+				[(int)(game->player.pos_x + game->player.look_x
+				* game->player.movespeed)])
+			game->player.pos_x += game->player.look_x * game->player.movespeed;
 	}
 	if (keysym == XK_Down || keysym == XK_s)
 	{
-		game->player.pos_y -= game->player.look_y * game->player.movespeed;
-		game->player.pos_x -= game->player.look_x * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y - game->player.look_y
+				* game->player.movespeed)][(int)(game->player.pos_x)])
+			game->player.pos_y -= game->player.look_y * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y)]
+				[(int)(game->player.pos_x - game->player.look_x
+				* game->player.movespeed)])
+			game->player.pos_x -= game->player.look_x * game->player.movespeed;
 	}
 }
 
@@ -39,13 +49,23 @@ static void	strafe_player(int keysym, t_game *game)
 {
 	if (keysym == XK_Page_Down || keysym == XK_e)
 	{
-		game->player.pos_y += game->player.look_x * game->player.movespeed;
-		game->player.pos_x -= game->player.look_y * game->player.movespeed;
+		if (!game->scene.map.map[(int)((game->player.pos_y + game->player.look_x
+					* game->player.movespeed))][(int)(game->player.pos_x)])
+			game->player.pos_y += game->player.look_x * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y)]
+				[(int)(game->player.pos_x - game->player.look_y
+				* game->player.movespeed)])
+			game->player.pos_x -= game->player.look_y * game->player.movespeed;
 	}
 	if (keysym == XK_Page_Up || keysym == XK_q)
 	{
-		game->player.pos_y -= game->player.look_x * game->player.movespeed;
-		game->player.pos_x += game->player.look_y * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y - game->player.look_x
+				* game->player.movespeed)][(int)(game->player.pos_x)])
+			game->player.pos_y -= game->player.look_x * game->player.movespeed;
+		if (!game->scene.map.map[(int)(game->player.pos_y)]
+				[(int)(game->player.pos_x + game->player.look_y
+				* game->player.movespeed)])
+			game->player.pos_x += game->player.look_y * game->player.movespeed;
 	}
 }
 
