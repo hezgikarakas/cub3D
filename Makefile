@@ -3,72 +3,105 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+         #
+#    By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/03/05 10:10:47 by hakaraka         ###   ########.fr        #
+#    Updated: 2024/03/11 19:38:07 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
-SRCS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
-		src/parse_level.c src/parse_pass1.c src/parse_pass1_classify.c \
-		src/parse_pass2.c src/map_checks.c src/util.c \
-		src/controls.c src/textures.c
-SRCS_BONUS = src/main.c src/error.c src/draw.c src/draw_textures.c src/draw_utils.c \
-				src/parse_level.c src/parse_pass1.c src/parse_pass1_classify.c \
-				src/parse_pass2.c src/map_checks.c src/util.c \
-				src/controls_bonus.c src/textures.c
-OBJS = $(SRCS:.c=.o)
-OBJS_BONUS = $(SRCS_BONUS:.c=.o)
-HDR = ./include/$(NAME).h
+BONUS_NAME = cub3D_bonus
 COMPILER = cc
 RM = rm -f
-LIBFT_PATH = ./include/libft_gio/
+
+SDIR = ./src/
+SFILES =	main.c\
+			error.c\
+			draw.c\
+			draw_textures.c\
+			draw_utils.c\
+			parse_level.c\
+			parse_pass1.c\
+			parse_pass1_classify.c\
+			parse_pass2.c\
+			map_checks.c\
+			util.c\
+			controls.c\
+			textures.c
+BONUS_SFILES = $(SFILES:.c=_bonus.c)
+SRCS = $(addprefix ${SDIR}, ${SFILES})
+BONUS_SRCS = $(addprefix ${SDIR}, ${BONUS_SFILES})
+
+ODIR = ./obj/
+OFILES = $(SFILES:.c=.o)
+OBJS = $(addprefix ${ODIR}, ${OFILES})
+BONUS_OFILES = $(BONUS_SFILES:.c=.o)
+BONUS_OBJS = $(addprefix ${ODIR}, ${BONUS_OFILES})
+
+IDIR = ./include/
+
+LIBFT_PATH = $(IDIR)libft_gio/
 LIBFT = $(LIBFT_PATH)libft.a
-#MLX_PATH = ./include/minilibx-linux/
-#MLX = $(MLX_PATH)libmlx_Linux.a
-CFLAGS = -Wall -Wextra -Werror -g #-I$(MLX_PATH)
+
+HDR = $(IDIR)$(NAME).h
+
+CFLAGS = -Wall -Wextra -Werror
+INCLUDE = -I $(IDIR) -I $(LIBFT_PATH)
+DEBUG = -g
+LIBRARIES = -lXext -lX11 -lmlx -lm
+
+STD = \033[0m
+RED = \033[1;31m
+GREEN = \033[1;32m
+YELLOW = \033[1;33m
+BLUE = \033[1;34m
+PINK = \033[1;35m
+CYAN = \033[1;36m
+CREAM = \033[1;37m
 
 all:	$(NAME)
 
-$(NAME):	$(LIBFT) $(OBJS) $(HDR)
-	@echo "\033[1;34m- linking executable: $(NAME)\033[0m"
-	@$(COMPILER) $(CFLAGS) $(OBJS) $(LIBFT) -lXext -lX11 -lmlx -lm -o $@
-	@echo "\033[1;32m- complete!\033[0m"
+$(NAME):	$(LIBFT) $(ODIR) $(OBJS) $(HDR)
+	@echo -e "$(CYAN)- linking executable: $(NAME)$(STD)"
+	@$(COMPILER) $(CFLAGS) $(INCLUDE) $(DEBUG) $(OBJS) $(LIBFT) $(LIBRARIES) -o $@
+	@echo -e "$(GREEN)- complete!$(STD)"
 
-bonus:	$(LIBFT) $(OBJS_BONUS) $(HDR)
-	@echo "\033[1;34m- linking executable: $(NAME)\033[0m"
-	@$(COMPILER) $(CFLAGS) $(OBJS_BONUS) $(LIBFT) -lXext -lX11 -lmlx -lm -o $(NAME)
-	@echo "\033[1;32m- complete!\033[0m"
+$(BONUS_NAME):	$(LIBFT) $(ODIR) $(BONUS_OBJS) $(HDR)
+	@echo -e "$(CYAN)- linking executable: $(NAME)_$@$(STD)"
+	@$(COMPILER) $(CFLAGS) $(INCLUDE) $(DEBUG) $(BONUS_OBJS) $(LIBFT) $(LIBRARIES) -o $(BONUS_NAME)
+	@echo -e "$(GREEN)- complete!$(STD)"
 
-%.o:	%.cpp
-	@echo "\033[1;34m- compiling object: $<\033[0m"
-	@$(COMPILER) $(CFLAGS) -o $@ -c $<
+$(ODIR)%.o:	$(SDIR)%.c
+	@echo -e "$(BLUE)- compiling object from: $<$(STD)"
+	@$(COMPILER) $(CFLAGS) $(INCLUDE) $(DEBUG) -o $@ -c $<
+
+$(ODIR):
+	@echo -e "$(PINK)- creating obj directory$(STD)"
+	@mkdir -p $(ODIR)
 
 $(LIBFT):
 	@make --no-print-directory all -C $(LIBFT_PATH)
 
-#$(MLX):
-#	@make --no-print-directory -C $(MLX_PATH)
-
 clean:
 	@make --no-print-directory clean -C $(LIBFT_PATH)
-	@$(RM) $(OBJS) $(OBJS_BONUS)
-	@echo "\033[1;31m- objects removed\033[0m"
+	@if [ -d "$(ODIR)" ]; then \
+		$(RM) -r $(ODIR); echo -e "$(RED)- objects removed$(STD)"; \
+	fi
 
 fclean:	clean
 	@make --no-print-directory fclean -C $(LIBFT_PATH)
-	@$(RM) $(NAME)
-	@echo "\033[1;31m- $(NAME) removed\033[0m"
+	@if [ -f "$(NAME)" ]; then \
+		$(RM) $(NAME); echo -e "$(RED)- $(NAME) removed$(STD)"; \
+	fi
+	@if [ -f "$(BONUS_NAME)" ]; then \
+		$(RM) $(BONUS_NAME); echo -e "$(RED)- $(BONUS_NAME) removed$(STD)"; \
+	fi
 
 re:	fclean all
-#	@make --no-print-directory clean -C $(MLX_PATH)
-
-#remlx:	fclean all
 
 norm:
-	norminette $(SRCS) $(HDR) controls_bonus.c
+	norminette $(SRCS) $(BONUS_SRCS) $(HDR)
 
 leakcheck:
 	clear; valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes --show-leak-kinds=all --error-limit=no -s ./cub3D maps/garden.cub
@@ -82,7 +115,7 @@ leakcheckerrors:
 		maps/wrong_chars.cub maps/wrong_color.cub maps/one_color_doubled.cub maps/one_texture_doubled.cub \
 		maps/texture_missing.cub maps/color_missing.cub maps/no_map.cub maps/no_args.cub maps/many_colors.cub \
 		maps/garb1.cub maps/wrong_color3.cub; do \
-			echo "=== CHECKING $$f ===" ; \
+			echo -e "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
 	done
@@ -92,7 +125,7 @@ leakcheckgoodmaps:
 	for f in \
 		maps/garden.cub maps/map1_for_debug.cub maps/map1.cub maps/map2.cub \
 		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub; do \
-			echo "=== CHECKING $$f ===" ; \
+			echo -e "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
 	done

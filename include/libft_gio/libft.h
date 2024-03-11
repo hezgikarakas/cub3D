@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 11:08:14 by jkatzenb          #+#    #+#             */
-/*   Updated: 2023/09/26 16:20:24 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/11 18:56:00 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,16 @@ char	*ft_uitoa(unsigned int n);
 
 /*	get_next_line	*/
 char	*get_next_line(int fd);
+
+/*	ft_fprintf	*/
+int		ft_fprintf(int fd, const char *str, ...);
+int		fprintf_check(char c, va_list args, int count, int fd);
+int		fprintf_c(va_list args, int count, int fd);
+int		fprintf_s(va_list args, int count, int fd);
+int		fprintf_d_i(va_list args, int count, int fd);
+int		fprintf_u(va_list args, int count, int fd);
+int		fprintf_x(va_list args, int count, int case_check, int fd);
+int		fprintf_p(va_list args, int count, int fd);
 
 /*	extra	*/
 long	ft_atol(const char *str);

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/05 15:17:02 by hakaraka         ###   ########.fr       */
+/*   Updated: 2024/03/11 19:29:43 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include "libft.h"
 # include <mlx.h>
-# include "./libft_gio/libft.h"
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -26,14 +26,18 @@
 # define WINDOW_WIDTH 640
 # define WINDOW_HEIGHT 480
 
-//	default values
+//	default colours
 # define DEFAULT_FLOOR 0x57f292
 # define DEFAULT_FLOOR_GRADIENT 0x07775f
 # define DEFAULT_SKY 0x5f61e8
 # define DEFAULT_SKY_GRADIENT 0xf25792
 # define DEFAULT_WALL 0xbebeee
 # define DEFAULT_DISTANCE_FADE 0x2a564d
-// 0x578f40
+
+/*	text colours	*/
+# define TXT_RED "\033[1;31;40m"
+# define TXT_BG "\033[40m"
+# define TXT_STD "\033[0m"
 
 # define NUMBER_OF_TEXTURES 4
 

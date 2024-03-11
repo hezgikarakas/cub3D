@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:13:13 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/05 09:46:24 by hakaraka         ###   ########.fr       */
+/*   Updated: 2024/03/11 17:22:51 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../include/cub3D.h"
+#include "cub3D.h"
 
 /*	called when closing window	*/
 int	close_window(t_game *game)
