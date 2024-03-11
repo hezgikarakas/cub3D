@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/11 17:22:51 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/11 20:04:22 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@ int	error_return(int type, char *error_message, int error_code)
 	if (type == 1)
 		perror(error_message);
 	else
+	{
 		ft_putstr_fd(error_message, 2);
-	if (error_message[sizeof(error_message)] != '\n')
-		ft_putchar_fd('\n', 2);
+		if (error_message[sizeof(error_message)] != '\n')
+			ft_putchar_fd('\n', 2);
+	}
 	return (error_code);
 }
 
@@ -30,9 +32,11 @@ int	error_return_s(int type, char *error_message, int error_code, char *extra)
 	if (type == 1)
 		perror(error_message);
 	else
+	{
 		ft_putstr_fd(error_message, 2);
-	if (error_message[sizeof(error_message)] != '\n')
-		ft_putchar_fd('\n', 2);
+		if (error_message[sizeof(error_message)] != '\n')
+			ft_putchar_fd('\n', 2);
+	}
 	ft_putstr_fd(extra, 2);
 	if (extra[sizeof(extra)] != '\n')
 		ft_putchar_fd('\n', 2);

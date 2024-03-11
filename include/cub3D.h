@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/11 19:29:43 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/11 19:58:12 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int		gradient_increment(int start, int end, int stepc, float stepn);
 int		outofbounds(t_rc *rc, t_game *game);
 
 //	textures.c
-void	load_texture(t_game *game);
+int	load_texture(t_game *game);
 
 //	controls.c
 int		handle_keypress(int keysym, t_game *game);

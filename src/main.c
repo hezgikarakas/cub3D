@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/11 19:44:18 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/11 20:12:49 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,35 +64,36 @@ static int	initialize(t_game *game, char *mapname)
 			WINDOW_HEIGHT);
 	if (game->img.mlx_img == NULL)
 		return (error_return(1, "image creation failed", 4));
-	load_texture(game);
+	if (load_texture(game))
+		return (error_return(1, "loading texture failed", 5));
 	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	static t_game	game;
-	int				ret;
+	static t_game	*game;
+	int		ret;
 
-	// game = (t_game *)malloc(sizeof(t_game));
-	// ft_memset(game, 0, sizeof(t_game));
-	ret = process_arguments(argc, argv, &game);
+	game = (t_game *)malloc(sizeof(t_game));
+	ft_memset(game, 0, sizeof(t_game));
+	ret = process_arguments(argc, argv, game);
 	if (ret == 0)
 	{
-		ret = initialize(&game, "test");
-		// print_map_on_stdout(&game);
-		// printf("sky:	0x%x\n", &game.scene.ceiling_colour);
-		// printf("sky2:	0x%x\n", &game.scene.ceiling_gradient);
-		// printf("floor:	0x%x\n", &game.scene.floor_colour);
-		// printf("floor2:	0x%x\n", &game.scene.floor_gradient);
-		// printf("fog:	0x%x\n", &game.scene.fog);
+		ret = initialize(game, "test");
 	}
 	if (ret == 0)
 	{
-		mlx_loop_hook(&game.ptrs.mlx, &render, &game);
-		mlx_hook(&game.ptrs.win, 2, 1L << 0, &handle_keypress, &game);
-		mlx_hook(&game.ptrs.win, 17, 0L, &close_window, &game);
-		mlx_loop(&game.ptrs.mlx);
+		print_map_on_stdout(game);
+		printf("sky:	0x%x\n", game->scene.ceiling_colour);
+		printf("sky2:	0x%x\n", game->scene.ceiling_gradient);
+		printf("floor:	0x%x\n", game->scene.floor_colour);
+		printf("floor2:	0x%x\n", game->scene.floor_gradient);
+		printf("fog:	0x%x\n", game->scene.fog);
+		mlx_loop_hook(game->ptrs.mlx, &render, game);
+		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);
+		mlx_hook(game->ptrs.win, 17, 0L, &close_window, game);
+		mlx_loop(game->ptrs.mlx);
 	}
-	free_game(&game);
+	free_game(game);
 	return (ret);
 }
