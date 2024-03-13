@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/13 18:08:53 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:21:47 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define PRESS 2
 # define MOTION 6
 # define DESTROY 17
-# define NO_EVENT_MA 0L
+# define NO_EVENT_M 0L
 /*	cant use due to norm
 # define PRESS_M 1L << 0
 # define MOTION_M 1L << 6

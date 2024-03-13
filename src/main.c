@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/13 18:09:42 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:21:59 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	main(int argc, char **argv)
 		printf("fog:	0x%x\n", game->scene.fog);
 		mlx_loop_hook(game->ptrs.mlx, &render, game);
 		mlx_hook(game->ptrs.win, PRESS, 1L << 0, &handle_keypress, game);
-		mlx_hook(game->ptrs.win, DESTROY, NO_EVENT_MA, &close_window, game);
+		mlx_hook(game->ptrs.win, DESTROY, NO_EVENT_M, &close_window, game);
 		mlx_loop(game->ptrs.mlx);
 	}
 	free_game(game);
