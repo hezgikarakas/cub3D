@@ -6,18 +6,11 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:13:13 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/11 17:22:51 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 17:40:09 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-
-/*	called when closing window	*/
-int	close_window(t_game *game)
-{
-	mlx_loop_end(game->ptrs.mlx);
-	return (0);
-}
 
 /*	handles keypresses for forward and backward movement	*/
 static void	move_player(int keysym, t_game *game)

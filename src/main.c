@@ -6,11 +6,18 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/11 20:12:49 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:09:42 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+/*	called when closing window	*/
+int	close_window(t_game *game)
+{
+	mlx_loop_end(game->ptrs.mlx);
+	return (0);
+}
 
 void	print_map_on_stdout(t_game *game)
 {
@@ -90,8 +97,8 @@ int	main(int argc, char **argv)
 		printf("floor2:	0x%x\n", game->scene.floor_gradient);
 		printf("fog:	0x%x\n", game->scene.fog);
 		mlx_loop_hook(game->ptrs.mlx, &render, game);
-		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);
-		mlx_hook(game->ptrs.win, 17, 0L, &close_window, game);
+		mlx_hook(game->ptrs.win, PRESS, 1L << 0, &handle_keypress, game);
+		mlx_hook(game->ptrs.win, DESTROY, NO_EVENT_MA, &close_window, game);
 		mlx_loop(game->ptrs.mlx);
 	}
 	free_game(game);

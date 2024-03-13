@@ -6,11 +6,18 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/13 16:47:00 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:09:16 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+/*	called when closing window	*/
+int	close_window(t_game *game)
+{
+	mlx_loop_end(game->ptrs.mlx);
+	return (0);
+}
 
 void	print_map_on_stdout(t_game *game)
 {
@@ -32,11 +39,13 @@ void	print_map_on_stdout(t_game *game)
 		printf("\n");
 		y++;
 	}
-	printf("map:	%s\n", game->scene.map.map_name);
-	printf("north:	%s\n", game->scene.textures[0].filename);
-	printf("east:	%s\n", game->scene.textures[1].filename);
-	printf("south	%s\n", game->scene.textures[2].filename);
-	printf("west:	%s\n", game->scene.textures[3].filename);
+	printf("map:	%s\nnorth:	%s\neast:	%s\nsouth	%s\nwest:	%s\n",
+		game->scene.map.map_name, game->scene.textures[0].filename,
+		game->scene.textures[2].filename, game->scene.textures[2].filename,
+		game->scene.textures[3].filename);
+	printf("sky:	0x%x\nsky2:	0x%x\nfloor:	0x%x\nfloor2:	0x%x\n",
+		game->scene.ceiling_colour, game->scene.ceiling_gradient,
+		game->scene.floor_colour, game->scene.floor_gradient);
 }
 
 //sets window name and inits mlx pointers
@@ -84,15 +93,15 @@ int	main(int argc, char **argv)
 	if (ret == 0)
 	{
 		print_map_on_stdout(game);
-		printf("sky:	0x%x\n", game->scene.ceiling_colour);
-		printf("sky2:	0x%x\n", game->scene.ceiling_gradient);
-		printf("floor:	0x%x\n", game->scene.floor_colour);
-		printf("floor2:	0x%x\n", game->scene.floor_gradient);
 		printf("fog:	0x%x\n", game->scene.fog);
 		mlx_loop_hook(game->ptrs.mlx, &render, game);
-		mlx_hook(game->ptrs.win, 2, 1L << 0, &handle_keypress, game);
-		mlx_hook(game->ptrs.win, 17, 0L, &close_window, game);
+		mlx_hook(game->ptrs.win, PRESS, 1L << 0, &handle_keypress, game);
+		mlx_hook(game->ptrs.win, DESTROY, NO_EVENT_MA, &close_window, game);
+		mlx_hook(game->ptrs.win, MOTION, 1L << 6, &handle_mouse, game);
+		mlx_mouse_move(game->ptrs.mlx, game->ptrs.win,
+			WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 		mlx_loop(game->ptrs.mlx);
+		mlx_do_sync(game->ptrs.mlx);
 	}
 	free_game(game);
 	return (ret);

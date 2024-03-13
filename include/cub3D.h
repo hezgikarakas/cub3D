@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/13 16:47:24 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:08:53 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@
 # define TXT_RED "\033[1;31;40m"
 # define TXT_BG "\033[40m"
 # define TXT_STD "\033[0m"
+
+/*	mlx events and masks	*/
+# define PRESS 2
+# define MOTION 6
+# define DESTROY 17
+# define NO_EVENT_MA 0L
+/*	cant use due to norm
+# define PRESS_M 1L << 0
+# define MOTION_M 1L << 6
+*/
 
 # define NUMBER_OF_TEXTURES 4
 
@@ -227,5 +237,8 @@ int		parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx);
 int		map_final_checks(t_game *game);
 int		string_is_digit(char *str);
 int		is_ws(char c);
+
+/*	bonus	*/
+int		handle_mouse(int x, int y, t_game *game);
 
 #endif

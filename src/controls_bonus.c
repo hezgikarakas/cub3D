@@ -6,18 +6,11 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:13:13 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/11 18:25:21 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:19:09 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-
-/*	called when closing window	*/
-int	close_window(t_game *game)
-{
-	mlx_loop_end(game->ptrs.mlx);
-	return (0);
-}
 
 /*	handles keypresses for forward and backward movement	*/
 static void	move_player(int keysym, t_game *game)
@@ -106,5 +99,24 @@ int	handle_keypress(int keysym, t_game *game)
 	if (keysym == XK_Left || keysym == XK_a
 		|| keysym == XK_Right || keysym == XK_d)
 		rotate_player(keysym, &game->player);
+	return (0);
+}
+
+/* handles mouse input	*/
+int	handle_mouse(int x, int y, t_game *game)
+{
+	(void)y;
+	if (x > (WINDOW_WIDTH / 2))
+	{
+		rotate_player(XK_Right, &game->player);
+		mlx_mouse_move(game->ptrs.mlx, game->ptrs.win,
+			WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+	}
+	if (x < (WINDOW_WIDTH / 2))
+	{
+		rotate_player(XK_Left, &game->player);
+		mlx_mouse_move(game->ptrs.mlx, game->ptrs.win,
+			WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+	}
 	return (0);
 }
