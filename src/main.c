@@ -71,7 +71,7 @@ static int	initialize(t_game *game, char *mapname)
 
 int	main(int argc, char **argv)
 {
-	static t_game	*game;
+	t_game	*game;
 	int		ret;
 
 	game = (t_game *)malloc(sizeof(t_game));

@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by hakaraka          #+#    #+#             */
-/*   Updated: 2024/03/11 18:18:19 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:46:34 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int	convert_colour(char *colour_str)
 	}
 	free_strings(rgb);
 	if (error)
-		return (error_return(0, "Unexpected color (expect 3x 0..255)", -1));
+		return (error_return(0, "Unexpected color\
+			\n(expect 3x 0..255 separated by commas, no whitespaces)", -1));
 	else
 		return (r << 16 | g << 8 | b);
 }
@@ -46,8 +47,9 @@ int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 	int	converted;
 
 	if (!is_ws(rest[0]))
-		return (error_return(0, "Malformed color line!", -1));
-	converted = convert_colour(rest);
+		return (error_return(0, "Malformed color line!\
+			\nMust be one space between letter and color values", -1));
+	converted = convert_colour(rest + 1);
 	if (converted < 0)
 		return (converted);
 	if (which == 'F' && !ph->found_floor_color)

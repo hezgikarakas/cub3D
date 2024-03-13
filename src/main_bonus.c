@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/11 20:13:20 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:47:00 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	initialize(t_game *game, char *mapname)
 
 int	main(int argc, char **argv)
 {
-	static t_game	*game;
+	t_game	*game;
 	int		ret;
 
 	game = (t_game *)malloc(sizeof(t_game));
