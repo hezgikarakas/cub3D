@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/13 18:21:54 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:30:40 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,7 @@ int	main(int argc, char **argv)
 	ft_memset(game, 0, sizeof(t_game));
 	ret = process_arguments(argc, argv, game);
 	if (ret == 0)
-	{
 		ret = initialize(game, "test");
-	}
 	if (ret == 0)
 	{
 		print_map_on_stdout(game);
