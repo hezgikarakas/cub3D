@@ -38,7 +38,7 @@ int	error_return_s(int type, char *error_message, int error_code, char *extra)
 			ft_putchar_fd('\n', 2);
 	}
 	ft_putstr_fd(extra, 2);
-	if (extra[sizeof(extra)] != '\n')
+	if (extra[ft_strlen(extra) - 1] != '\n')
 		ft_putchar_fd('\n', 2);
 	return (error_code);
 }
