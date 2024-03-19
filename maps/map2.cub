@@ -1,7 +1,7 @@
 NO ./textures/patternwall.xpm
 SO ./textures/pillarwall.xpm
 F 128,128,128
-C 63, 122, 77
+C 63,122,77
 WE ./textures/vinewall.xpm
 EA ./textures/lionwall.xpm
 1111111111111111111111
