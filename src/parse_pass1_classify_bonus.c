@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_pass1_classify_bonus.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by hakaraka          #+#    #+#             */
-/*   Updated: 2024/03/13 16:46:34 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/03/20 13:50:55 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,19 +102,19 @@ static int	interpret_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 static int	pass1_parse_texture(t_parse_helper *ph, char *s)
 {
 	if (s[0] == 'N' && (
-			s[1] != 'O' || !is_ws(s[2])
+			s[1] != 'O' || !is_ws(s[2]) || is_ws(s[3])
 			|| interpret_texture(ph, &ph->game->scene.textures[0], s + 3)))
 		return (error_return(0, "Malformed NO texture line!", -1));
 	if (s[0] == 'E' && (
-			s[1] != 'A' || !is_ws(s[2])
+			s[1] != 'A' || !is_ws(s[2]) || is_ws(s[3])
 			|| interpret_texture(ph, &ph->game->scene.textures[1], s + 3)))
 		return (error_return(0, "Malformed EA texture line!", -1));
 	if (s[0] == 'S' && (
-			s[1] != 'O' || !is_ws(s[2])
+			s[1] != 'O' || !is_ws(s[2]) || is_ws(s[3])
 			|| interpret_texture(ph, &ph->game->scene.textures[2], s + 3)))
 		return (error_return(0, "Malformed SO texture line!", -1));
 	if (s[0] == 'W' && (
-			s[1] != 'E' || !is_ws(s[2])
+			s[1] != 'E' || !is_ws(s[2]) || is_ws(s[3])
 			|| interpret_texture(ph, &ph->game->scene.textures[3], s + 3)))
 		return (error_return(0, "Malformed WE texture line!", -1));
 	return (0);

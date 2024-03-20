@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+         #
+#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/03/13 17:50:01 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/03/20 13:47:43 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,21 +63,21 @@ CREAM = \033[1;37m
 all:	$(NAME)
 
 $(NAME):	$(LIBFT) $(ODIR) $(OBJS) $(HDR)
-	@echo -e "$(CYAN)- linking executable: $(NAME)$(STD)"
+	@echo "$(CYAN)- linking executable: $(NAME)$(STD)"
 	@$(COMPILER) $(CFLAGS) $(INCLUDE) $(DEBUG) $(OBJS) $(LIBFT) $(LIBRARIES) -o $@
-	@echo -e "$(GREEN)- complete!$(STD)"
+	@echo "$(GREEN)- complete!$(STD)"
 
 $(BONUS_NAME):	$(LIBFT) $(ODIR) $(BONUS_OBJS) $(HDR)
-	@echo -e "$(CYAN)- linking executable: $(NAME)_$@$(STD)"
+	@echo "$(CYAN)- linking executable: $(NAME)_$@$(STD)"
 	@$(COMPILER) $(CFLAGS) $(INCLUDE) $(DEBUG) $(BONUS_OBJS) $(LIBFT) $(LIBRARIES) -o $(BONUS_NAME)
-	@echo -e "$(GREEN)- complete!$(STD)"
+	@echo "$(GREEN)- complete!$(STD)"
 
 $(ODIR)%.o:	$(SDIR)%.c
-	@echo -e "$(BLUE)- compiling object from: $<$(STD)"
+	@echo "$(BLUE)- compiling object from: $<$(STD)"
 	@$(COMPILER) $(CFLAGS) $(INCLUDE) $(DEBUG) -o $@ -c $<
 
 $(ODIR):
-	@echo -e "$(PINK)- creating obj directory$(STD)"
+	@echo "$(PINK)- creating obj directory$(STD)"
 	@mkdir -p $(ODIR)
 
 $(LIBFT):
@@ -86,16 +86,16 @@ $(LIBFT):
 clean:
 	@make --no-print-directory clean -C $(LIBFT_PATH)
 	@if [ -d "$(ODIR)" ]; then \
-		$(RM) -r $(ODIR); echo -e "$(RED)- objects removed$(STD)"; \
+		$(RM) -r $(ODIR); echo "$(RED)- objects removed$(STD)"; \
 	fi
 
 fclean:	clean
 	@make --no-print-directory fclean -C $(LIBFT_PATH)
 	@if [ -f "$(NAME)" ]; then \
-		$(RM) $(NAME); echo -e "$(RED)- $(NAME) removed$(STD)"; \
+		$(RM) $(NAME); echo "$(RED)- $(NAME) removed$(STD)"; \
 	fi
 	@if [ -f "$(BONUS_NAME)" ]; then \
-		$(RM) $(BONUS_NAME); echo -e "$(RED)- $(BONUS_NAME) removed$(STD)"; \
+		$(RM) $(BONUS_NAME); echo "$(RED)- $(BONUS_NAME) removed$(STD)"; \
 	fi
 
 re:	fclean all
@@ -115,7 +115,7 @@ leakcheckerrors:
 		maps/wrong_chars.cub maps/wrong_color.cub maps/one_color_doubled.cub maps/one_texture_doubled.cub \
 		maps/texture_missing.cub maps/color_missing.cub maps/no_map.cub maps/no_args.cub maps/many_colors.cub \
 		maps/garb1.cub maps/wrong_color3.cub; do \
-			echo -e "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
+			echo "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
 	done
@@ -125,7 +125,7 @@ leakcheckgoodmaps:
 	for f in \
 		maps/garden.cub maps/map1_for_debug.cub maps/map1.cub maps/map2.cub \
 		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub; do \
-			echo -e "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
+			echo "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
 	done

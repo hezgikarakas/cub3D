@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+         #
+#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/11 18:28:22 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/03/11 19:19:06 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/03/20 13:47:38 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,26 +61,26 @@ CREAM = \033[3;37m
 all:	$(NAME)
 
 $(NAME):	$(ODIR) $(OBJS) $(HDR)
-	@echo -e "$(CYAN)- linking $@$(STD)"
+	@echo "$(CYAN)- linking $@$(STD)"
 	@ar crs $@ $(OBJS)
-	@echo -e "$(GREEN)- libft complete!$(STD)"
+	@echo "$(GREEN)- libft complete!$(STD)"
 
 $(ODIR)%.o:	$(SDIR)%.c
-	@echo -e "$(BLUE)- compiling libft object: $@$(STD)"
+	@echo "$(BLUE)- compiling libft object: $@$(STD)"
 	@$(COMPILER) $(CFLAGS) $(INCLUDE) $(DEBUG) -o $@ -c $<
 
 $(ODIR):
-	@echo -e "$(PINK)- creating libft_obj directory$(STD)"
+	@echo "$(PINK)- creating libft_obj directory$(STD)"
 	@mkdir -p $(ODIR)
 
 clean:
 	@if [ -d "$(ODIR)" ]; then \
-		$(RM) -r $(ODIR); echo -e "$(RED)- libft objects removed$(STD)"; \
+		$(RM) -r $(ODIR); echo "$(RED)- libft objects removed$(STD)"; \
 	fi
 
 fclean:	clean
 	@if [ -f "$(NAME)" ]; then \
-		$(RM) $(NAME); echo -e "$(RED)- $(NAME) removed$(STD)"; \
+		$(RM) $(NAME); echo "$(RED)- $(NAME) removed$(STD)"; \
 	fi
 
 re:	fclean all
