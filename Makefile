@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
+#    By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/03/20 13:47:43 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/03/21 13:05:08 by hakaraka         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,12 +109,14 @@ leakcheck:
 leakcheckerrors:
 	clear ; \
 	for f in \
-		maps/garb2.cub maps/luca_map.cub maps/tab.cub maps/few_colors.cub maps/wrong_color2.cub \
-		maps/empty_texture_name.cub maps/empty.cub maps/empty_line_in_map.cub maps/texture_wrongline.cub \
-		maps/multiple_players.cub maps/wrong_texture_ext.cub maps/wrong_texture_name.cub maps\wrong_chars2.cub \
-		maps/wrong_chars.cub maps/wrong_color.cub maps/one_color_doubled.cub maps/one_texture_doubled.cub \
-		maps/texture_missing.cub maps/color_missing.cub maps/no_map.cub maps/no_args.cub maps/many_colors.cub \
-		maps/garb1.cub maps/wrong_color3.cub; do \
+		maps/broken_texture.cub maps/color_missing.cub maps/empty.cub \
+		maps/empty_line_in_map.cub maps/empty_texture_name.cub maps/few_colors.cub \
+		maps/garb1.cub maps/garb2.cub maps/luca_map.cub maps/many_colors.cub \
+		maps/multiple_players.cub maps/no_args.cub maps/no_map.cub \
+		maps/one_color_doubled.cub maps/one_texture_doubled.cub maps/tab.cub \
+		maps/texture_missing.cub maps/texture_wrongline.cub maps/wrong_chars.cub \
+		maps/wrong_chars2.cub maps/wrong_color.cub maps/wrong_color2.cub \
+		maps/wrong_color3.cub maps/wrong_texture_ext.cub maps/wrong_texture_name.cub; do \
 			echo "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
@@ -123,8 +125,8 @@ leakcheckerrors:
 leakcheckgoodmaps:
 	clear ; \
 	for f in \
-		maps/garden.cub maps/map1_for_debug.cub maps/map1.cub maps/map2.cub \
-		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub; do \
+		maps/garden.cub maps/long.cub maps/map1_for_debug.cub maps/map1.cub maps/map2.cub \
+		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub maps/no_corner.cub; do\
 			echo "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
