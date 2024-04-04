@@ -6,7 +6,7 @@
 #    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/04/04 16:22:53 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/04/04 17:48:09 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,14 +31,14 @@ SFILES =	main.c\
 			controls.c\
 			textures.c
 BONUS_SFILES = $(SFILES:.c=_bonus.c)
-SRCS = $(addprefix ${SDIR}, ${SFILES})
-BONUS_SRCS = $(addprefix ${SDIR}, ${BONUS_SFILES})
+SRCS = $(addprefix $(SDIR), $(SFILES))
+BONUS_SRCS = $(addprefix $(SDIR), $(BONUS_SFILES))
 
 ODIR = ./obj/
 OFILES = $(SFILES:.c=.o)
-OBJS = $(addprefix ${ODIR}, ${OFILES})
+OBJS = $(addprefix $(ODIR), $(OFILES))
 BONUS_OFILES = $(BONUS_SFILES:.c=.o)
-BONUS_OBJS = $(addprefix ${ODIR}, ${BONUS_OFILES})
+BONUS_OBJS = $(addprefix $(ODIR), $(BONUS_OFILES))
 
 IDIR = ./include/
 
