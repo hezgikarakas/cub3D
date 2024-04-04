@@ -47,7 +47,7 @@ int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 
 	if (!is_ws(rest[0]))
 		return (error_return(0, "Malformed color line!\
-			\nMust be one space between letter and color values", -1));
+			\nMust be whitespace between letter and color values", -1));
 	converted = convert_colour(rest + nmbr_ws(rest));
 	if (converted < 0)
 		return (converted);
