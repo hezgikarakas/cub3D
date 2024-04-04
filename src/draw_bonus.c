@@ -126,6 +126,8 @@ int	render(t_game *game)
 {
 	game->img.addr = mlx_get_data_addr(game->img.mlx_img, &game->img.bpp,
 			&game->img.line_len, &game->img.endian);
+	if (!game->img.addr)
+		return (0);
 	draw_background(game);
 	draw_objects(game, &game->rc);
 	mlx_put_image_to_window(game->ptrs.mlx, game->ptrs.win,
