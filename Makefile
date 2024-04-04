@@ -160,7 +160,7 @@ leakcheckgoodmapsforbonus:
 		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub maps/no_corner.cub; do\
 			echo "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
-				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
+				--show-leak-kinds=all --error-limit=no -s ./cub3D_bonus $$f; \
 	done
 
 
