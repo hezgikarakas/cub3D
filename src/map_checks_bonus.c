@@ -6,11 +6,11 @@
 /*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/04/04 16:43:02 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:36:14 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "cub3D_bonus.h"
 
 /* if we visit outside the map, return 1 (error)
  * if we come to a 0, we set to -100 and visit all fields around

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   draw_textures_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 15:35:07 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/11 18:17:12 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:36:14 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "cub3D_bonus.h"
 
 static int	get_wall_direction(t_rc *rc)
 {

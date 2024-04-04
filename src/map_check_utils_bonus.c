@@ -6,11 +6,11 @@
 /*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:21:45 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/04/04 16:42:24 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:36:14 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "cub3D_bonus.h"
 
 int	str_is_digit(char *str)
 {

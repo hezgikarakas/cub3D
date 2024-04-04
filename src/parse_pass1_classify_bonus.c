@@ -6,11 +6,11 @@
 /*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by hakaraka          #+#    #+#             */
-/*   Updated: 2024/04/04 16:45:07 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:36:14 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "cub3D_bonus.h"
 
 int	convert_colour(char *colour_str)
 {
