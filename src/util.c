@@ -58,8 +58,7 @@ static void	free_textures(void *mlx_ptr, t_texture *textures)
 /* free everything that is not NULL and was dynamically allocated
  * - texture names
  * - map
- * - mlx
- * - game itself */
+ * - mlx */
 void	free_game(t_game *game)
 {
 	free_textures(game->ptrs.mlx, game->scene.textures);
@@ -74,7 +73,6 @@ void	free_game(t_game *game)
 		mlx_destroy_display(game->ptrs.mlx);
 		free(game->ptrs.mlx);
 	}
-	free(game);
 }
 
 void	setmaxlinelen(t_parse_helper *ph, char *line_temp)

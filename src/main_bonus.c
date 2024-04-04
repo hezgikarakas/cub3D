@@ -80,27 +80,26 @@ static int	initialize(t_game *game, char *mapname)
 
 int	main(int argc, char **argv)
 {
-	t_game	*game;
+	t_game	game;
 	int		ret;
 
-	game = (t_game *)malloc(sizeof(t_game));
-	ft_memset(game, 0, sizeof(t_game));
-	ret = process_arguments(argc, argv, game);
+	ft_memset(&game, 0, sizeof(t_game));
+	ret = process_arguments(argc, argv, &game);
 	if (ret == 0)
-		ret = initialize(game, game->scene.map.map_name);
+		ret = initialize(&game, game.scene.map.map_name);
 	if (ret == 0)
 	{
-		print_map_on_stdout(game);
-		printf("fog:	0x%x\n", game->scene.fog);
-		mlx_loop_hook(game->ptrs.mlx, &render, game);
-		mlx_hook(game->ptrs.win, PRESS, 1L << 0, &handle_keypress, game);
-		mlx_hook(game->ptrs.win, DESTROY, NO_EVENT_M, &close_window, game);
-		mlx_hook(game->ptrs.win, MOTION, 1L << 6, &handle_mouse, game);
-		mlx_mouse_move(game->ptrs.mlx, game->ptrs.win,
+		print_map_on_stdout(&game);
+		printf("fog:	0x%x\n", game.scene.fog);
+		mlx_loop_hook(game.ptrs.mlx, &render, &game);
+		mlx_hook(game.ptrs.win, PRESS, 1L << 0, &handle_keypress, &game);
+		mlx_hook(game.ptrs.win, DESTROY, NO_EVENT_M, &close_window, &game);
+		mlx_hook(game.ptrs.win, MOTION, 1L << 6, &handle_mouse, &game);
+		mlx_mouse_move(game.ptrs.mlx, game.ptrs.win,
 			WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-		mlx_loop(game->ptrs.mlx);
-		mlx_do_sync(game->ptrs.mlx);
+		mlx_loop(game.ptrs.mlx);
+		mlx_do_sync(game.ptrs.mlx);
 	}
-	free_game(game);
+	free_game(&game);
 	return (ret);
 }

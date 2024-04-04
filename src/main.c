@@ -78,27 +78,26 @@ static int	initialize(t_game *game, char *mapname)
 
 int	main(int argc, char **argv)
 {
-	t_game	*game;
+	t_game	game;
 	int		ret;
 
-	game = (t_game *)malloc(sizeof(t_game));
-	ft_memset(game, 0, sizeof(t_game));
-	ret = process_arguments(argc, argv, game);
+	ft_memset(&game, 0, sizeof(t_game));
+	ret = process_arguments(argc, argv, &game);
 	if (ret == 0)
-		ret = initialize(game, game->scene.map.map_name);
+		ret = initialize(&game, game.scene.map.map_name);
 	if (ret == 0)
 	{
-		print_map_on_stdout(game);
-		printf("sky:	0x%x\n", game->scene.ceiling_colour);
-		printf("sky2:	0x%x\n", game->scene.ceiling_gradient);
-		printf("floor:	0x%x\n", game->scene.floor_colour);
-		printf("floor2:	0x%x\n", game->scene.floor_gradient);
-		printf("fog:	0x%x\n", game->scene.fog);
-		mlx_loop_hook(game->ptrs.mlx, &render, game);
-		mlx_hook(game->ptrs.win, PRESS, 1L << 0, &handle_keypress, game);
-		mlx_hook(game->ptrs.win, DESTROY, NO_EVENT_M, &close_window, game);
-		mlx_loop(game->ptrs.mlx);
+		print_map_on_stdout(&game);
+		printf("sky:	0x%x\n", game.scene.ceiling_colour);
+		printf("sky2:	0x%x\n", game.scene.ceiling_gradient);
+		printf("floor:	0x%x\n", game.scene.floor_colour);
+		printf("floor2:	0x%x\n", game.scene.floor_gradient);
+		printf("fog:	0x%x\n", game.scene.fog);
+		mlx_loop_hook(game.ptrs.mlx, &render, &game);
+		mlx_hook(game.ptrs.win, PRESS, 1L << 0, &handle_keypress, &game);
+		mlx_hook(game.ptrs.win, DESTROY, NO_EVENT_M, &close_window, &game);
+		mlx_loop(game.ptrs.mlx);
 	}
-	free_game(game);
+	free_game(&game);
 	return (ret);
 }
