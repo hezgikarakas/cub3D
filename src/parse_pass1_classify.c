@@ -73,15 +73,12 @@ static int	interpret_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 	int		notfound;
 	int		fd;
 
-	s = ft_strtrim(rest, " \t\r\n");
 	if (tex->filename != NULL)
-	{
-		free(s);
 		return (error_return(0, "Unexpected duplicate texture!", -1));
-	}
+	s = ft_strtrim(rest, " \t\r\n");
 	tex->filename = s;
 	if (!s || s[0] == 0)
-		return (error_return(0, "Unexpected empty texture file name!", -1));
+		return (error_return(0, "OOM or empty texture file name!", -1));
 	if (ft_strlen(s) < 4 || ft_strncmp(s + ft_strlen(s) - 4, ".xpm", 4))
 		return (error_return_s(0, "Bad texture format (need .xpm) ", -1, s));
 	fd = open(s, O_RDONLY);
