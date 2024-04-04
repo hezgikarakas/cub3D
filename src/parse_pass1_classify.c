@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by hakaraka          #+#    #+#             */
-/*   Updated: 2024/03/20 13:43:56 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:41:59 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int	convert_colour(char *colour_str)
 	error = 0;
 	rgb = ft_split(colour_str, ',');
 	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3]
-		|| string_is_digit(rgb[0]) || string_is_digit(rgb[1])
-		|| string_is_digit(rgb[2]))
+		|| str_is_digit(rgb[0]) || str_is_digit(rgb[1]) || str_is_digit(rgb[2]))
 		error = 1;
 	else
 	{
@@ -49,7 +48,7 @@ int	pass1_parse_color(t_parse_helper *ph, char which, char *rest)
 	if (!is_ws(rest[0]))
 		return (error_return(0, "Malformed color line!\
 			\nMust be one space between letter and color values", -1));
-	converted = convert_colour(rest + 1);
+	converted = convert_colour(rest + nmbr_ws(rest));
 	if (converted < 0)
 		return (converted);
 	if (which == 'F' && !ph->found_floor_color)
@@ -102,19 +101,19 @@ static int	interpret_texture(t_parse_helper *ph, t_texture *tex, char *rest)
 static int	pass1_parse_texture(t_parse_helper *ph, char *s)
 {
 	if (s[0] == 'N' && (
-			s[1] != 'O' || !is_ws(s[2]) || is_ws(s[3])
+			s[1] != 'O' || !is_ws(s[2])
 			|| interpret_texture(ph, &ph->game->scene.textures[0], s + 3)))
 		return (error_return(0, "Malformed NO texture line!", -1));
 	if (s[0] == 'E' && (
-			s[1] != 'A' || !is_ws(s[2]) || is_ws(s[3])
+			s[1] != 'A' || !is_ws(s[2])
 			|| interpret_texture(ph, &ph->game->scene.textures[1], s + 3)))
 		return (error_return(0, "Malformed EA texture line!", -1));
 	if (s[0] == 'S' && (
-			s[1] != 'O' || !is_ws(s[2]) || is_ws(s[3])
+			s[1] != 'O' || !is_ws(s[2])
 			|| interpret_texture(ph, &ph->game->scene.textures[2], s + 3)))
 		return (error_return(0, "Malformed SO texture line!", -1));
 	if (s[0] == 'W' && (
-			s[1] != 'E' || !is_ws(s[2]) || is_ws(s[3])
+			s[1] != 'E' || !is_ws(s[2])
 			|| interpret_texture(ph, &ph->game->scene.textures[3], s + 3)))
 		return (error_return(0, "Malformed WE texture line!", -1));
 	return (0);

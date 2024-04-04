@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/13 18:21:47 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:39:53 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,8 +235,11 @@ int		parse_mapfile_pass_2(char *map_fn, t_game *game, int start_idx);
 
 // map_checks.c
 int		map_final_checks(t_game *game);
-int		string_is_digit(char *str);
+int		str_is_digit(char *str);
 int		is_ws(char c);
+
+/*	map_check_utils.c	*/
+int		nmbr_ws(char *str);
 
 /*	bonus	*/
 int		handle_mouse(int x, int y, t_game *game);

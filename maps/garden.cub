@@ -1,10 +1,10 @@
-NO ./textures/lionwall.xpm
-SO ./textures/vinewall.xpm
-EA ./textures/patternwall.xpm
-WE ./textures/pillarwall.xpm
+NO  ./textures/lionwall.xpm
+SO  ./textures/vinewall.xpm
+EA  ./textures/patternwall.xpm
+WE  ./textures/pillarwall.xpm
 
-F 87,242,146
-C 95,97,232
+F  87,242,146
+C  95,97,232
 
   111111111
   100000001

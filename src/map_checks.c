@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_checks.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkatzenb <jkatzenb@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 11:53:54 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/03/13 16:28:26 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:22:16 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,4 @@ int	map_final_checks(t_game *game)
 			game->player.pos_x, game->player.pos_y);
 	ft_flood_restore(game);
 	return (ret);
-}
-
-int	string_is_digit(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	is_ws(char c)
-{
-	return (c == ' ' || c == '\t');
 }

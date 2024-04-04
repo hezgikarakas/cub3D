@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+         #
+#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/04/04 13:14:23 by hakaraka         ###   ########.fr        #
+#    Updated: 2024/04/04 16:22:53 by jkatzenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SFILES =	main.c\
 			parse_pass1_classify.c\
 			parse_pass2.c\
 			map_checks.c\
+			map_check_utils.c\
 			util.c\
 			controls.c\
 			textures.c
