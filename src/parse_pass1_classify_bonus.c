@@ -22,7 +22,7 @@ int	convert_colour(char *colour_str)
 
 	error = 0;
 	rgb = ft_split(colour_str, ',');
-	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3]
+	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3]
 		|| str_is_digit(rgb[0]) || str_is_digit(rgb[1]) || str_is_digit(rgb[2]))
 		error = 1;
 	else
@@ -35,7 +35,7 @@ int	convert_colour(char *colour_str)
 	}
 	free_strings(rgb);
 	if (error)
-		return (error_return(0, "Unexpected color\
+		return (error_return(0, "OOM or unexpected color\
 			\n(expect 3x 0..255 separated by commas, no whitespaces)", -1));
 	else
 		return (r << 16 | g << 8 | b);
