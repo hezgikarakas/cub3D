@@ -6,7 +6,7 @@
 /*   By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:47:02 by jkatzenb          #+#    #+#             */
-/*   Updated: 2024/04/04 16:39:53 by jkatzenb         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:39:33 by jkatzenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,8 +240,5 @@ int		is_ws(char c);
 
 /*	map_check_utils.c	*/
 int		nmbr_ws(char *str);
-
-/*	bonus	*/
-int		handle_mouse(int x, int y, t_game *game);
 
 #endif
