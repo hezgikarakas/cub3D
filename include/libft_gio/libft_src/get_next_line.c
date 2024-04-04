@@ -58,6 +58,8 @@ static char	*readthrough(int fd, char *readout, char **buffer)
 		readout[bytes] = 0;
 		temp = ft_strjoin(*buffer, readout);
 		free(*buffer);
+		if (temp == NULL)
+			return (NULL);
 		*buffer = temp;
 		nl = ft_strchr(*buffer, '\n');
 	}
