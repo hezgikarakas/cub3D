@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jkatzenb <jkatzenb@student.42.fr>          +#+  +:+       +#+         #
+#    By: hakaraka <hakaraka@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 21:39:25 by jkatzenb          #+#    #+#              #
-#    Updated: 2024/04/04 17:48:09 by jkatzenb         ###   ########.fr        #
+#    Updated: 2024/04/05 10:04:01 by hakaraka         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -147,7 +147,7 @@ leakcheckgoodmaps:
 	clear ; \
 	for f in \
 		maps/garden.cub maps/long.cub maps/map1_for_debug.cub maps/map1.cub maps/map2.cub \
-		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub maps/no_corner.cub; do\
+		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub maps/garden_2.cub; do\
 			echo "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D $$f; \
@@ -157,7 +157,7 @@ leakcheckgoodmapsforbonus:
 	clear ; \
 	for f in \
 		maps/garden.cub maps/long.cub maps/map1_for_debug.cub maps/map1.cub maps/map2.cub \
-		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub maps/no_corner.cub; do\
+		maps/map3.cub maps/map4.cub maps/map5.cub maps/map6.cub maps/map7.cub maps/garden_2.cub; do\
 			echo "$(YELLOW)=== CHECKING $$f ===$(STD)" ; \
 			valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-reachable=yes \
 				--show-leak-kinds=all --error-limit=no -s ./cub3D_bonus $$f; \
